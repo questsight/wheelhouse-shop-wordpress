@@ -1,0 +1,21 @@
+{
+  "name": "questsight",
+  "description": "",
+  "main": "gulpfile.js",
+  "authors": [
+    "ngubina <questsight@gmail.com>"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/assets/libs",
+    "app/assets/vendor",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "^3.2.1"
+  }
+}

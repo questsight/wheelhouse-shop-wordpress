@@ -1,0 +1,12 @@
+extends ../layouts/default.pug
+
+block site__content
+  .main
+    picture
+      source(srcset='assets/images/main.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
+      img.main__background-image(src='assets/images/main.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+    .main__name
+      picture
+        source(srcset='assets/images/name.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.main__name-image(src='assets/images/name.png' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      h1.title Студия авторской мебели
