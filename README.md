@@ -1,4 +1,4 @@
-# "WheelHouse": project for WordPress
+# "WheelHouse": project for WordPress, https://wheelhousedesign.ru/
 
 ## Installation
 
