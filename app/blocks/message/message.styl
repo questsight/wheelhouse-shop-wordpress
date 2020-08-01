@@ -1,0 +1,21 @@
+.message
+  display flex
+  justify-content center
+  align-items center
+  height calc(100vh - 225px)
+  overflow hidden
+  font-size titleSize
+  color accentColor
+  font-family subtitleFont
+  text-transform uppercase
+  flex-direction column
+  @media only screen and (min-width: 322px)
+    height calc(100vh - 210px)
+  @media only screen and (min-width: 346px)
+    height calc(100vh - 185px)
+  @media only screen and (min-width: 506px)
+    height calc(100vh - 165px)
+  @media only screen and (min-width: 843px)
+    height calc(100vh - 140px)
+  @media only screen and (min-width: navigationBreakPoint)
+    height calc(100vh - 150px)

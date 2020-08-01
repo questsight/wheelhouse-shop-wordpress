@@ -1,0 +1,40 @@
+extends ../layouts/default.pug
+
+block site__content
+  .cart
+    form.cart__goods
+      div
+        .cart__item
+          .catr__product
+            a(href="")
+              img.cart__img(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse" data-src='assets/images/krd-2-blossom_03.jpg')
+          .cart__description
+            p.cart__title детская кровать Блоссом
+            .cart__meta
+              .cart__meta-title Ткань 
+                span такая-то
+              .cart__meta-title Ткань 
+                span такая-то
+              .cart__meta-title Ткань 
+                span такая-то
+            input.cart__count(type="number" id="quantity_5ec2587d47dbd" class="input-text qty text" step="1" min="0" max="" name="cart[a828efd8523a7d6b18ea239669fd5ea9][qty]" value="1" title="Кол-во" size="4" placeholder="" inputmode="numeric")
+            p.cart__price 100000
+            a(href="").cart__remove Удалить
+        .cart__item
+          a(href="").catr__product
+            img.cart__img(src='assets/images/krd-2-blossom_01.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse" data-src='assets/images/krd-2-blossom_01.jpg')
+          .cart__description
+            p.cart__title детская кровать Блоссом
+            .cart__meta
+              .cart__meta-title Ткань 
+                span такая-то
+              .cart__meta-title Ткань 
+                span такая-то
+              .cart__meta-title Ткань 
+                span такая-то
+            input.cart__count(type="number" id="quantity_5ec2587d47dbd" class="input-text qty text" step="1" min="0" max="" name="cart[a828efd8523a7d6b18ea239669fd5ea9][qty]" value="1" title="Кол-во" size="4" placeholder="" inputmode="numeric")
+            p.cart__price 100000
+            a(href="").cart__remove Удалить
+    .cart__ordering
+      .cart__result Общая стоимость: 600000
+      a(href="").cart__button Оформить заказ

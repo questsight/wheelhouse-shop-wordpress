@@ -1,0 +1,41 @@
+.header__form
+  background iconColor
+  height 33px
+  margin-right -15px
+  margin-left 10px
+  justify-content center
+  align-items center
+  padding 0 2px 0 10px
+  border-bottom-left-radius 16.5px
+  border-top-left-radius 16.5px
+  position absolute
+  right 130px
+  z-index 2
+  display none
+  max-width calc(100% - 110px)
+  @media only screen and (min-width: 390px)
+    right 148px
+    max-width none
+  @media only screen and (min-width: 600px)
+    position static
+    right auto
+  input
+    background themeColor
+    border-radius 16.5px
+    border none
+    outline 0
+    padding-left 5px
+    max-width 100%
+    @media only screen and (min-width: 390px)
+      max-width none
+    &:active
+      outline 0
+      border non
+    &:focus
+      outline 0
+      border none
+    &:hover
+      outline 0
+      border none
+.header__form.active
+  display flex

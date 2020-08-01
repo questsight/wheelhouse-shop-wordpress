@@ -1,0 +1,14 @@
+.filter__title
+  color accentColor
+  text-transform uppercase
+  font-family subtitleFont
+  font-size 16px
+  padding 30px 0 10px
+.filter__title:after
+  content "\02C5"
+  padding-left 5px
+  @media only screen and (min-width: navigationBreakPoint)
+    content ''
+.filter__title.open:after   
+   content "\02C4" 
+    

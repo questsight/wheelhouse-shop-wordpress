@@ -1,0 +1,30 @@
+.header__call
+  text-transform uppercase
+  cursor pointer
+  margin-bottom 15px
+  text-align right
+  display flex
+  align-items center
+  justify-content flex-end
+  @media only screen and (min-width: xs)
+    width calc(50% - 17.5px)
+  @media only screen and (min-width: sm)
+    margin-right 60px
+    width auto
+    margin-bottom 0
+.header__call
+  i
+    border 2px solid headerColor
+    border-radius 50%
+    width 35px
+    height 35px
+    display flex
+    justify-content center
+    align-items center
+    margin-right 5px
+.header__call:hover
+.header__call:active
+.header__call:focus
+  color lightColor
+  i
+    border 2px solid lightColor

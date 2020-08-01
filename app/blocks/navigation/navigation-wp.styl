@@ -1,0 +1,34 @@
+.current-menu-item
+.current-category-ancestor
+.current-post-ancestor
+.current_page_item
+.current-menu-ancestor
+.current-menu-parent
+  a
+    font-family titleFont!important
+    text-decoration underline!important
+  ul
+    li
+      a
+        font-family baseFont!important
+        text-decoration none!important
+      a:hover
+        font-family titleFont!important
+        text-decoration underline!important
+ul
+  li
+    ul
+      li.current_page_item
+      li.current-menu-item
+      li.current-post-ancestor
+      li.current-category-ancestor
+        a
+          color accentColor!important
+          text-decoration underline!important
+          font-family titleFont!important
+        img
+          filter none!important
+.menu-image-title-after.menu-image-title
+  padding 10px 35px 25px 20px
+.menu-image-title-after.menu-image-not-hovered img
+  padding-right 0

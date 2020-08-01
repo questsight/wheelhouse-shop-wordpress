@@ -1,0 +1,32 @@
+.shop__main
+  margin 15px
+  width calc(100% - 30px)
+  @media only screen and (min-width: md)
+    width calc(100% - 440px)
+    margin 15px 45px 15px 15px
+  table
+    width: 100%;
+    a
+      color accentColor
+      display block
+      &:active
+        color accentColor
+      &:focus
+        color accentColor
+      &:hover
+        color accentColor
+        text-decoration underline
+    thead
+      font-family titleFont
+      color accentColor
+      tr
+        background darkOverlay
+    tbody
+      tr:nth-child(even)
+        background darkOverlay
+    td
+      font-weight normal
+      padding 15px
+    th
+      font-weight normal
+      padding 15px

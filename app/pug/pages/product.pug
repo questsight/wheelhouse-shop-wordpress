@@ -1,0 +1,168 @@
+extends ../layouts/default.pug
+
+block site__content
+  nav.breadcrumb
+    a(href='https://wheelhousedesign.ru/katalog?v=f9308c5d0596') &Kcy;&acy;&tcy;&acy;&lcy;&ocy;&gcy;
+    | &nbsp;/&nbsp;
+    a(href='https://wheelhousedesign.ru/product-category/divany/?v=f9308c5d0596') &Dcy;&icy;&vcy;&acy;&ncy;&ycy;
+    | &nbsp;/BLOSSOM
+  .product
+    .product__gallery
+      img.product_first.magniflier(src='' alt="Студия авторской мебели WheelHouse")
+      img.product__img(src='assets/images/krd-2-blossom_01.jpg' data-src='assets/images/krd-2-blossom_01.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      img.product__img(src='assets/images/krd-2-blossom_02.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse" data-src='assets/images/krd-2-blossom_02.jpg')
+      img.product__img(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse" data-src='assets/images/krd-2-blossom_03.jpg')
+      img.product__img(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse" data-src='assets/images/krd-2-blossom_03.jpg')
+    .product__description
+      h1.product__title Детская кровать BLOSSOM
+      .description
+        p Каждый раз, когда мы воплощаем в жизнь ваши проекты, у нас обязательно появляются новые идеи и решения.
+        p Поэтому благодаря вам мы непрерывно создаём.
+        p Например, детская кроватка BLOSSOM родилась сама собой - в нежной палитре микровелюра, самого уютного и тактильного материала для детской комнаты.
+      .product__meta
+        .product__meta-title Размер 
+          a(href="") 800 * 2000
+          span , 
+          a(href="") 900 * 2000
+          span , 
+          a(href="") 1200 * 2000
+        .product__meta-title Функции 
+          a(href="") выдвижные ящики
+          span , 
+          a(href="") подъемный механизм
+        .product__meta-title Назначение 
+          a(href="") для детской
+        .product__meta-title Коллекция 
+          a(href="") BLOSSOM
+      form.product__form
+        .product__price 100000руб
+        .product__cloth Выбрать ткань
+        select#pa_size-krd
+          option(value='') Выбрать размер матраса
+          option(value='1200-2000') 1200 * 2000
+          option(value='800-2000') 800 * 2000
+          option(value='900-2000') 900 * 2000
+        .product__variation
+          .product__variation-text
+          .product__variation-choice(data-id="pa_size-krd")
+            span Выбрать размер матраса
+            .product__variation-select.hidden
+              .product__variation-option(value='Выбрать размер матраса') Выбрать размер матраса
+              .product__variation-option(value='1200-2000') 1200 * 2000
+              .product__variation-option(value='800-2000') 800 * 2000
+              .product__variation-option(value='900-2000') 900 * 2000
+        .product__variation
+          .product__variation-text
+          .product__variation-choice 
+            span Выбрать опции
+            .product__variation-select.hidden
+              .product__variation-input
+                input(type="checkbox" data-ids="pa_dust-free" id="input_pa_dust-free")
+                label(for="input_pa_dust-free") dust-free – проходит робот-пылесос
+        select#pa_dust-free.product__variation-choice(name='attribute_pa_dust-free' data-attribute_name='attribute_pa_dust-free' data-show_option_none='yes')
+          option(value='') dust-free &ndash; &pcy;&rcy;&ocy;&khcy;&ocy;&dcy;&icy;&tcy; &rcy;&ocy;&bcy;&ocy;&tcy;-&pcy;&ycy;&lcy;&iecy;&scy;&ocy;&scy;
+          option(value='true') true
+          option(value='false') false
+
+        select
+          option(value='') Выбрать размер матраса
+          option(value='1200-2000') 1200 * 2000
+          option(value='800-2000') 800 * 2000
+          option(value='900-2000') 900 * 2000
+        select
+          option(value='') Выбрать опции
+          option(value='vykatnye-yashhichki-dlya-hraneniya-belya-ili-igrushek') выкатные ящики
+          option(value='podemnyj-mehanizm') подъемный механизм
+        div
+          button.single_add_to_cart_button.button.alt.disabled.wc-variation-selection-needed(type='submit') В корзину
+    .product__popup.cloth.hidden
+      .cloth__close &times;
+      .listing#cloth__color
+        .cloth__title Выберите цвет ткани
+        .listing__item.cloth__color(data-color="white")
+          .listing__title Нейтральный
+        .listing__item.cloth__color(data-color="neutral")
+          .listing__title Синий
+        .listing__item.cloth__color(data-color="turquoise")
+          .listing__title Бирюзовый, голубой
+        .listing__item.cloth__color(data-color="orange")
+          .listing__title Оранжевый, терракотовый
+        .listing__item.cloth__color(data-color="green")
+          .listing__title Изумрудный, зелёный, травяной
+        .listing__item.cloth__color(data-color="pink")
+          .listing__title Розовый, сиреневый
+        .listing__item.cloth__color(data-color="vinous")
+          .listing__title Бордовый, фуксия, фиолетовый
+        .listing__item.cloth__color(data-color="red")
+          .listing__title Красный
+        .listing__item.cloth__color(data-color="yellow")
+          .listing__title Желтый, горчичный
+        form
+          input(type="hidden" name="marker" value='')
+          input(type="hidden" name="collection" value='')
+      .listing.hidden#result-cloth
+        .cloth__title Категория №1
+        .cloth__item(data-item="1" data=price='1')
+          picture
+            source(srcset='assets/images/unique01.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title Микровелюр - Unsdhks
+        .cloth__item(data-item="2")
+          picture
+            source(srcset='assets/images/unique02.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        .cloth__item(data-item="3")
+          picture
+            source(srcset='assets/images/unique03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        .cloth__title Категория №2
+        .cloth__item(data-item="4")
+          picture
+            source(srcset='assets/images/unique04.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        .cloth__item(data-item="5")
+          picture
+            source(srcset='assets/images/unique01.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        .cloth__item(data-item="6")
+          picture
+            source(srcset='assets/images/unique02.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        p.cloth__link Мы не угадали? Вы можете оформить 
+          a(href="") индивидуальный заказ
+        .cloth__popup.hidden
+          .cloth__popup-title Микровелюр - Ggjsgd2
+          .cloth__button#choice Выбрать
+          .cloth__button#exit Посмотреть еще
+  .listing
+    .product__subtitle Похожие товары:
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/krd-2-blossom_03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/krd-2-blossom_03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/krd-2-blossom_03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/krd-2-blossom_03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/krd-2-blossom_03.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/krd-2-blossom_03.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1        

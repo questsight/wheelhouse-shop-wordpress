@@ -1,0 +1,49 @@
+.listing__item
+  position relative
+  width 265px
+  overflow hidden
+  border-radius 15px
+  display flex
+  color baseColor
+  cursor pointer
+  max-width calc(50% - 10px)
+  margin 5px
+  @media only screen and (min-width: sm)
+    max-width calc(50% - 30px)
+    margin 15px
+  &:hover
+    font-family subtitleFont
+    .listing__title
+      text-decoration underline
+[data-size="big"]
+  .listing__item
+    max-width none
+    @media only screen and (min-width: xs)
+      max-width 450px
+      width calc(50% - 10px)
+    @media only screen and (min-width: sm)
+      width calc(50% - 30px)
+[data-type="portfolio"]
+  .listing__item
+    max-width 100%
+    width auto
+    @media only screen and (min-width: sm)
+      max-width none
+    picture
+      img
+        height 300px
+        width auto
+        max-width 100%
+#result-cloth
+  .listing__item
+    max-width none
+    height 265px
+    overflow hidden
+    @media only screen and (min-width: xs)
+      none
+    @media only screen and (min-width: sm)
+      max-width none
+    .listing__foto
+      width auto
+      height auto
+  

@@ -1,1 +1,122 @@
+section.submenu.site__submenu
+  #box-buyer.submenu__box.hidden_type_min-md
+    h2.submenu__title Покупателям
+    ul.submenu__list
+      li
+        a(href='#')
+          | Услуги
+      li
+        a(href='#')
+          | Подбор материала обивки
+      li
+        a(href='#')
+          | Подбор нужного механизма
+      li
+        a(href='#')
+          | Инструкции для самостоятельной сборки
+      li
+        a(href='#')
+          | Рекомендации при выборе мебели
+      li
+        a(href='#')
+          | Рекомендации по уходу и бережной эксплуатации
+      li
+        a(href='#')
+          | Полезно знать
+      li
+        a(href='#')
+          | Гарантия
+      li
+        a(href='#')
+          | Обработка данных
+  #box-cooperation.submenu__box.hidden_type_min-md
+    h2.submenu__title Сотрудничество
+    ul.submenu__list
+      li
+        a(href='#')
+          | Дизайнерам
+      li
+        a(href='#')
+          | Застройщикам
+      li
+        a(href='#')
+          | HoReCa
+      li
+        a(href='#')
+          | Салонам красоты и маникюра
+      li
+        a(href='#')
+          | Поставщикам
+      li
+        a(href='#')
+          | Коллегам-производителям мебели
+      li.submenu__title.hidden_type_min-md
+        a(href="") Наши партнеры
+      li.submenu__title.hidden_type_min-md
+        a(href="") Портфолио
+  #box-contacts.submenu__box.hidden_type_min-md
+    h2.submenu__title Контакты
+    a.submenu__phone(href="tel:+79299758819") +7 (929) 975-88-19
+    .submenu__time
+      | 08:00-22:00 GMT +03:00
+    ul.submenu__list
+      li
+        a(href='#')
+          | Написать в WhatsApp
+      li
+        a(href='#')
+          | Мы в Instagram
+      li
+        a(href='#')
+          | Мы в Facebook
+      li
+        a(href='#')
+          | Шоу-рум
+      li
+        a(href='#')
+          | Производство
 footer.site__footer.footer
+  .footer__item.hidden_type_min-md
+    .footer__call(data-popup="callback")
+      i.fa.fa-phone.fa-lg(aria-hidden='true')
+      span Oбратная связь
+  .footer__item.hidden_type_min-md
+    a.footer__social(href="#")
+      i.fa.fa-instagram.fa-3x(aria-hidden='true')
+      span wheelhousedesign.ru
+  .footer__item.hidden_type_min-md
+    a.footer__social(href="#")
+      i.fa.fa-facebook-official.fa-3x(aria-hidden='true')
+      span wheelhousedesign.ru
+  ul.footer__list.hidden_type_max-md
+      li
+        a(href='#')
+          | Каталог
+      li.navigation__accent
+        a(href='#')
+          | Суперцена
+      li.navigation__call-buyer
+        a(href='#')
+          | Покупателям
+      li.navigation__call-cooperation
+        a(href='#')
+          | Сотрудничество
+      li
+        a(href='#')
+          | Наши партнёры
+      li
+        a(href='#')
+          | Портфолио
+      li.navigation__call-contacts
+        a(href="") 
+          | Контакты
+.popup.hidden#callback
+  .popup__content
+    .popup__exit
+      i.fa.fa-times.fa-lg(aria-hidden='true')
+    form.wpcf7
+      input.form__input(type='text', placeholder='Ваше имя')
+      br
+      input.form__input(type='tel', placeholder='Ваш телефон')
+      br
+      button.form__button(type='submit') Заказать звонок

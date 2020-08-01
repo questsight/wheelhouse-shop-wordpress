@@ -1,0 +1,36 @@
+.product__form
+  display flex
+  flex-direction column
+  max-width 100%
+  select
+    color baseColor
+    font-family baseFont
+    border 1px solid themeColor
+    font-size: 10px;
+    text-transform uppercase
+    outline: none;
+    background lightColor
+    @media only screen and (min-width: xs)
+      font-size: 13px;
+    &:active
+      border 1px solid themeColor
+      outline: none; 
+    &:focus
+      border 1px solid themeColor
+      outline: none; 
+    &:hover
+      border 1px solid themeColor
+      outline: none; 
+  button
+    background themeColor
+    color lightColor
+    border 1px solid themeColor
+    padding 10px 30px
+    border-radius 5px
+    margin 15px 0
+    width: 100%
+    max-width 300px
+    text-transform uppercase
+    outline none
+    &:hover
+      border-radius none

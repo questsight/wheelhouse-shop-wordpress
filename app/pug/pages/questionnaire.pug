@@ -1,0 +1,261 @@
+extends ../layouts/default.pug
+
+block site__content
+  .text
+    p(style="text-align:center;") Здравствуйте!
+    p(style="text-align:center;") Пожалуйста, заполните анкету индивидуального заказа
+    .text__button(data-questionnaire) 
+      span Заполнить анкету
+    .questionnaire
+      .questionnaire__close &times;
+      form
+        .questionnaire__partition(data-item="1")
+          .questionnaire__item
+            .questionnaire__question
+              | Познакомимся!
+              br
+              | Как мы можем к вам обращатся?
+            .questionnaire__answer
+              input.required(type="text" name="name" value="")
+              .questionnaire__error.hidden Заполните поле "Ваше имя"
+            .back.questionnaire__arrow.hidden
+              i.fa.fa-arrow-left.fa-2x(aria-hidden='true')
+            .farther.questionnaire__arrow
+              i.fa.fa-arrow-right.fa-2x(aria-hidden='true')
+          .questionnaire__item
+            .questionnaire__question
+              | Сориентируемся по вашей задаче
+            .questionnaire__answer
+              label(for="task01")
+                input#task01(type="radio" name="task" value="подбираю мебель по дизайн-проекту" )
+                | подбираю мебель по дизайн-проекту
+              label(for="task02")
+                input#task02(type="radio" name="task" value="подбираю мебель без дизайнера")
+                | подбираю мебель без дизайнера
+              label(for="task03")
+                input#task03(type="radio" name="task" value="дизайнер выполнил проект, но я хочу другое")
+                | дизайнер выполнил проект, но я хочу другое
+              label(for="task04")
+                input#task04(type="radio" name="task" value="я дизайнер")
+                | я дизайнер
+              label(for="task05")
+                input#task05(type="radio" name="task" value="у меня сложная задача, помогите мне")
+                | у меня сложная задача, помогите мне
+        .questionnaire__partition.hidden(data-item="2")
+          .questionnaire__item
+            .questionnaire__question
+              | Укажите назначение помещения
+            .questionnaire__answer
+              .questionnaire__detail жилое
+              label(for="room01")
+                input#room01(type="checkbox" name="room[]" value="гостиная")
+                | гостиная              
+              label(for="room0detail2")
+                input#room02(type="checkbox" name="room[]" value="кухня/столовая")
+                | кухня/столовая
+              label(for="room03")
+                input#room03(type="checkbox" name="room[]" value="спальня")
+                | спальня
+              label(for="room04")
+                input#room04(type="checkbox" name="room[]" value="десткая комната")
+                | десткая комната
+              label(for="room05")
+                input#room05(type="checkbox" name="room[]" value="балкон/терраса")
+                | балкон/терраса
+              label(for="room06")
+                input#room06(type="checkbox" name="room[]" value="комплекс (рассматриваем все помещения дома/таунхауса/квартиры)")
+                | комплекс (рассматриваем все помещения дома/таунхауса/квартиры)
+              p коммерческое
+              label(for="room07")
+                input#room07(type="checkbox" name="room[]" value="ресторан/кафе")
+                | ресторан/кафе
+              label(for="room08")
+                input#room08(type="checkbox" name="room[]" value="салон красоты")
+                | салон красоты
+              label(for="room9")
+                input#room09(type="checkbox" name="room[]" value="шоу-рум")
+                | шоу-рум
+              label(for="room10")
+                input#room10(type="checkbox" name="room[]" value="кабинет")
+                | кабинет
+              label(for="room11")
+                input#room11(type="checkbox" name="room[]" value="офис")
+                | офис
+              label(for="room12")
+                input#room12(type="checkbox" name="room[]" value="опен-спейс")
+                | опен-спейс
+              p нечто особенное
+              textarea
+        .questionnaire__partition.hidden(data-item="3")
+          .questionnaire__item
+            .questionnaire__question
+              | Укажите параметры помещения
+            .questionnaire__answer
+              p площадь*
+              input(type="text" name="size-s" value="")
+              p длина
+              input(type="text" name="size-length" value="")
+              p ширина
+              input(type="text" name="size-width" value="")
+              p высота
+              input(type="text" name="size-height" value="")
+        .questionnaire__partition.hidden(data-item="4")
+          .questionnaire__item
+            .questionnaire__question
+              | Поставьте галочки по перечню предметов,
+              br
+              | которые вас интересуют
+            .questionnaire__answer
+              label(for="sort01")
+                input#sort01(type="checkbox" name="sort[]" value="диван")
+                | диван
+              label(for="sort02")
+                input#sort02(type="checkbox" name="sort[]" value="кровать")
+                | кровать
+              label(for="sort03")
+                input#sort03(type="checkbox" name="sort[]" value="детская кровать")
+                | детская кровать
+              label(for="sort04")
+                input#sort04(type="checkbox" name="sort[]" value="кушетка")
+                | кушетка
+              label(for="sort05")
+                input#sort05(type="checkbox" name="sort[]" value="кресла")
+                | кресла
+              label(for="sort06")
+                input#sort06(type="checkbox" name="sort[]" value="шезлонг")
+                | шезлонг
+              label(for="sort07")
+                input#sort07(type="checkbox" name="sort[]" value="банкетки")
+                | банкетки
+              label(for="sort08")
+                input#sort08(type="checkbox" name="sort[]" value="пуфы")
+                | пуфы
+              label(for="sort09")
+                input#sort09(type="checkbox" name="sort[]" value="стулья")
+                | стулья
+              label(for="sort10")
+                input#sort10(type="checkbox" name="sort[]" value="мягкие стеновые панели")
+                | мягкие стеновые панели
+              label(for="sort11")
+                input#sort11(type="checkbox" name="sort[]" value="нечто особенное")
+                | нечто особенное
+              label(for="sort12")
+                input#sort12(type="checkbox" name="sort[]" value="комплексная меблировка мягкой мебелью")
+                | комплексная меблировка мягкой мебелью
+        .questionnaire__partition.hidden(data-item="5")
+          .questionnaire__item
+            .questionnaire__question
+              | Рассматриваете варианты
+              br
+              | расположения дивана
+            .questionnaire__answer
+              label(for="location01")
+                input#location01(type="checkbox" name="location[]" value="у стены")
+                | у стены
+              label(for="location02")
+                input#location02(type="checkbox" name="location[]" value="островное")
+                | островное
+              label(for="location03")
+                input#location03(type="checkbox" name="location[]" value="в нише")
+                | в нише
+              label(for="location04")
+                input#location04(type="checkbox" name="location[]" value="все сложно")
+                | все сложно
+          .questionnaire__item
+            .questionnaire__question
+              | Рассматриваете варианты
+              br
+              | конфигурации дивана
+            .questionnaire__answer
+              label(for="configuration01")
+                input#configuration01(type="checkbox" name="configuration[]" value="линейное")
+                | линейное
+              label(for="configuration02")
+                input#configuration02(type="checkbox" name="configuration[]" value="угловое")
+                | угловое
+              label(for="configuration03")
+                input#configuration03(type="checkbox" name="configuration[]" value="буквой П")
+                | буквой П
+              label(for="configuration04")
+                input#configuration04(type="checkbox" name="configuration[]" value="радиусное")
+                | радиусное
+              label(for="configuration05")
+                input#configuration05(type="checkbox" name="configuration[]" value="все сложно")
+                | все сложно
+        .questionnaire__partition.hidden(data-item="6")
+          .questionnaire__item
+            .questionnaire__question
+              | Давайте обратим внимание на нюансы вашей планировки.
+              br
+              | Отметьте возможные ограничения и привязки к помещению
+            .questionnaire__answer
+              label(for="nuances01")
+                input#nuances01(type="checkbox" name="nuances[]" value="розетки")
+                | розетки
+              label(for="nuances02")
+                input#nuances02(type="checkbox" name="nuances[]" value="настенные светильники/декор")
+                | настенные светильники/декор
+              label(for="nuances03")
+                input#nuances03(type="checkbox" name="nuances[]" value="плинтус")
+                | плинтус
+              label(for="nuances04")
+                input#nuances04(type="checkbox" name="nuances[]" value="ниша")
+                | ниша
+              label(for="nuances05")
+                input#nuances05(type="checkbox" name="nuances[]" value="подоконник")
+                | подоконник
+              label(for="nuances06")
+                input#nuances06(type="checkbox" name="nuances[]" value="открывание дверей")
+                | открывание дверей
+              p что-то еще? напишите
+              textarea
+        .questionnaire__partition.hidden(data-item="7")
+          .questionnaire__item
+            .questionnaire__question
+              | Вникаем в суть. Что особенно важно учесть
+            .questionnaire__answer
+              label(for="important01")
+                input#important01(type="checkbox" name="important[]" value="комфорт важнее дополнительных опций")
+                | комфорт важнее дополнительных опций
+              label(for="important02")
+                input#important02(type="checkbox" name="important[]" value="расширенный функционал")
+                | расширенный функционал
+              label(for="important03")
+                input#important03(type="checkbox" name="important[]" value="гипоаллергенность")
+                | гипоаллергенность
+              label(for="important04")
+                input#important04(type="checkbox" name="important[]" value="подбор материала на объекте")
+                | подбор материала на объекте
+              label(for="important05")
+                input#important05(type="checkbox" name="important[]" value="выкрасы опор в цвет элементов интерьера")
+                | выкрасы опор в цвет элементов интерьера
+              label(for="important06")
+                input#important06(type="checkbox" name="important[]" value="dust-free - клининг роботом (высокие опоры)")
+                | dust-free - клининг роботом (высокие опоры)
+              label(for="important07")
+                input#important07(type="checkbox" name="important[]" value="декоративные элементы из металла")
+                | декоративные элементы из металла
+              label(for="important08")
+                input#important08(type="checkbox" name="important[]" value="система хранения")
+                | система хранения
+              label(for="important09")
+                input#important09(type="checkbox" name="important[]" value="встроенная электрика")
+                | встроенная электрика
+        .questionnaire__partition.hidden(data-item="8")
+          .questionnaire__item
+            .questionnaire__question
+              | Прикрепите файлы проекта, образа или рисунок от руки
+            .questionnaire__answer
+              input#ifile01(type="file" name="file" multiple)
+          .questionnaire__item
+            .questionnaire__question
+              | Дополнительные пожелания от вас
+            .questionnaire__answer
+              textarea
+          .questionnaire__item
+            .questionnaire__question
+              | Укажите любой удобный способ связи с вами
+            .questionnaire__answer
+              textarea
+          .questionnaire__button
+            button Отправить

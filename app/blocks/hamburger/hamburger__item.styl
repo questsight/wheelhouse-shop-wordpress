@@ -1,0 +1,17 @@
+.hamburger__item
+  background themeColor
+  height 3px
+  left 0
+  opacity 1
+  position absolute
+  transform rotate(0deg)
+  transition-duration 0.55s
+  width 25px
+  &:nth-child(1)
+    top 5px
+  &:nth-child(2)
+    top 14px
+  &:nth-child(3)
+    top 22px
+  @media only screen and (min-width: xs)
+    width 35px

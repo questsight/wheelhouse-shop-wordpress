@@ -1,0 +1,31 @@
+.listing__price
+  position absolute
+  top -15px
+  left -15px
+  background lightColor
+  border-radius 15px
+  padding 20px 10px 5px 25px
+  text-align right
+  max-width: 90%;
+  display flex
+  max-width: calc(100% + 15px)
+  font-size 8px
+  del
+    margin-right: 10px;
+  ins 
+    text-decoration: none;
+    font-family titleFont
+  @media only screen and (min-width: xs)
+    padding 20px 15px 5px 30px
+    font-size 11px
+    max-width: 95%;
+  @media only screen and (min-width: sm)
+    padding 25px 20px 10px 35px
+    max-width 90%
+    font-size baseSize 
+.listing[data-related]
+  .listing__item
+    .listing__price
+      @media only screen and (min-width: sm)
+        padding 20px 15px 5px 30px
+        font-size 13px

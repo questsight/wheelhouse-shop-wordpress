@@ -1,7 +1,16 @@
 .header
-  background linear-gradient(180deg, #ADACAC -2.13%, rgba(255, 255, 255, 0) 43.06%)
-  height 100vh
-  max-height 1080px
-  flex-direction column
-  @media only screen and (min-width: xs)
-    flex-direction row
+  color headerColor
+  display flex
+  width 100%
+  padding 0 0 15px
+  justify-content flex-end
+  align-items center
+  flex-wrap wrap
+  position relative
+  font-family subtitleFont
+  font-size 16px
+  @media only screen and (min-width: 390px)
+    padding 0 15px 15px
+  @media only screen and (min-width: navigationBreakPoint)
+    padding 20px 60px
+    background themeColor

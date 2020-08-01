@@ -1,0 +1,23 @@
+.listing__popup
+  display flex
+  flex-direction: column-reverse
+  background popupOverlay
+  padding 0
+  border-radius 15px
+  width calc(100% - 30px)
+  position static
+  align-items: center
+  @media only screen and (min-width: sm)
+    flex-direction row
+    padding 70px 50px
+    position absolute
+  @media only screen and (min-width: md)
+    width 800px
+.listing[data-fixed='fixed']
+  .listing__popup
+    position static
+    bottom 30px
+    z-index 2
+    @media only screen and (min-width: sm)
+      position fixed
+      

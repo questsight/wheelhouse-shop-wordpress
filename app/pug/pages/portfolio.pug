@@ -1,0 +1,38 @@
+extends ../layouts/default.pug
+
+block site__content
+  .listing[data-type="portfolio"]
+    .listing__item(data-item="1")
+      picture
+        source(srcset='assets/images/portfolio/0.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/portfolio/0.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 1
+    .listing__item(data-item="2")
+      picture
+        source(srcset='assets/images/portfolio/1.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/portfolio/1.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 2
+    .listing__item(data-item="3")
+      picture
+        source(srcset='assets/images/portfolio/2.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/portfolio/2.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 3
+    .listing__item(data-item="4")
+      picture
+        source(srcset='assets/images/portfolio/3.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/portfolio/3.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 4
+    .listing__item(data-item="5")
+      picture
+        source(srcset='assets/images/portfolio/4.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/unique05.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 5
+    .listing__popup.hidden
+      .listing__close &times;
+      .listing__arrow-left &laquo;
+      .listing__arrow-right &raquo;
+      .listing__popup-text
+        .listing__popup-title
+        .listing__popup-description
+      .listing__popup-foto
+        img(src='' alt="Студия авторской мебели WheelHouse")

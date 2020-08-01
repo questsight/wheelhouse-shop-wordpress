@@ -1,0 +1,94 @@
+.shop__sidebar
+  width calc(100% - 30px)
+  margin 15px
+  background: themeOverlay
+  color lightColor
+  border-radius: 15px;
+  padding 30px
+  font-family subtitleFont
+  max-width 350px
+  @media only screen and (min-width: md)
+    width 350px
+  ul
+    margin-left -10px
+    margin-bottom: 20px;
+    list-style-type: none;
+    text-transform uppercase
+    li
+      margin 10px 0
+      img
+        vertical-align: middle;
+        margin: -7px 0 0 5px;
+        padding: 0;
+        position: relative;
+        box-shadow: none;
+        width: 20px;
+      p
+        text-transform none
+  a
+    color lightColor
+    &:active
+      color lightColor
+    &:focus
+      color lightColor
+    &:hover
+      color lightColor
+      text-decoration underline
+  section
+    flex-direction column
+    margin: 15px 0;
+  button
+    color accentColor
+    padding 10px
+    border-radius 15px
+    border: 1px solid lightColor
+    font-size subtitleSize
+    width 100%
+    font-family baseFont
+    text-align center
+    background-color lightColor
+  button:hover
+    color accentColor
+    font-family subtitleFont
+  table
+    margin: -15px 0 10px;
+    text-align: left;
+    width: 100%;
+    tfoot
+      font-family titleFont
+    thead
+      font-family titleFont
+    td
+      padding: 15px 0;
+      border-bottom: 1px solid themeColor;
+      font-weight normal
+    th
+      padding: 15px 0;
+      border-bottom: 1px solid themeColor;
+      font-weight normal
+  input
+    color: baseColor;
+    font-family: baseFont
+    margin: 5px 0;
+    width: 100%;
+    padding: 5px 10px;
+    border none
+    font-size 16px
+    outline 0
+    &:active
+      outline 0
+      border none
+    &:focus
+      outline 0
+      border none
+    &:hover
+      outline 0
+      border none
+  input[type='radio']
+    width auto
+    margin: 3px 3px 0px 5px;
+  fieldset
+    margin 30px 0
+    border 2px solid lightColor
+    border-radius 5px
+    padding 10px 20px

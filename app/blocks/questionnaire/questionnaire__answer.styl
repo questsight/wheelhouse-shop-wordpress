@@ -1,0 +1,35 @@
+.questionnaire__answer
+  width 100%
+  max-width 400px
+  display flex
+  flex-direction column
+  padding 0 10px
+  @media only screen and (min-width: sm)
+    width 400px
+    max-width none
+  @media only screen and (min-width: md)
+    width 550px
+  @media only screen and (min-width: lg)
+    width 600px
+  .wpcf7-list-item
+  label
+    cursor pointer
+    margin-bottom 3px
+    display flex
+    align-items center
+  input 
+    margin 0 5px 0 0
+  input[type="text"]
+    border-bottom: 1px solid themeColor;
+    border-top none
+    border-right none
+    border-left none
+    outline none
+    width 100%
+  .questionnaire__detail
+    margin 0 0 3px 0
+    color accentColor
+  textarea
+    border: 1px solid themeColor;
+    outline none
+    width 100%

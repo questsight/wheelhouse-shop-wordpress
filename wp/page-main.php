@@ -1,15 +1,23 @@
-<?php get_header();?>
+<?php
+/*
+Template Name: Main page
+Template Post Type: page
+*/
+get_header();?>
 
         <div class="main">
           <picture>
-            <source srcset="<?php echo get_field('main-webp'); ?>" type="image/webp"><img class="main__background-image" src="<?php echo get_field('main-img'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+            <source srcset="<?php echo CFS()->get( 'background-image_webp' ); ?>" type="image/webp"><img class="main__background-image" src="<?php echo CFS()->get( 'background-image' ); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
           </picture>
           <div class="main__name">
             <picture>
-              <source srcset="<?php echo get_field('name-webp'); ?>" type="image/webp"><img class="main__name-image" src="<?php echo get_field('name-img'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+              <source srcset="<?php echo CFS()->get('name-logo_webp'); ?>" type="image/webp"><img class="main__name-logo" src="<?php echo CFS()->get('name-logo'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             </picture>
-            <h1 class="title"><?php echo get_bloginfo('description'); ?></h1>
+            <picture>
+              <source srcset="<?php echo CFS()->get('name-image_webp'); ?>" type="image/webp"><img class="main__name-image" src="<?php echo CFS()->get('name-image'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+            </picture>
+            <h1 class="main__name-title"><?php echo get_bloginfo('description'); ?></h1>
           </div>
         </div>
 
-<?get_footer();?>
+<?php get_footer();?>

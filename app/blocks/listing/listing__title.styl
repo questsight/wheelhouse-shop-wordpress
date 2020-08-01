@@ -1,0 +1,30 @@
+.listing__title
+  position absolute
+  bottom -15px
+  right -15px
+  background lightColor
+  border-radius 15px
+  padding 5px 25px 20px 10px
+  text-align right
+  max-width: calc(100% + 15px)
+  text-transform uppercase
+  font-size 8px
+  @media only screen and (min-width: xs)
+    padding 5px 30px 20px 15px
+    font-size 11px
+    max-width: 95%;
+  @media only screen and (min-width: sm)
+    padding 10px 35px 25px 20px
+    max-width 90%
+    font-size baseSize
+.listing[data-transform='none']
+  .listing__item
+    .listing__title
+      text-transform none
+.listing[data-related]
+  .listing__item
+    .listing__title
+      @media only screen and (min-width: sm)
+        padding 5px 30px 20px 15px
+        font-size 13px
+      

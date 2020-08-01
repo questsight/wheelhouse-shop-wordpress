@@ -1,15 +1,22 @@
 .navigation
+  position absolute
+  top: 68px;
+  left: 19px;
+  background lightOverlay
+  z-index 1
   display flex
-  justify-content center
-  margin-top 10px
-  margin-left 15px
-  margin-right 15px
-  width 100%
-  @media only screen and (min-width: xs)
-    margin-top 20px
-  @media only screen and (min-width: sm)
-    margin-top 45px
+  flex-direction column
+  border-bottom-right-radius 15px
+  border-top-left-radius 15px
+  @media only screen and (min-width: 390px)
+    left: 65px;
+    border-bottom-left-radius 15px
+    border-top-left-radius 0
+  @media only screen and (min-width: navigationBreakPoint)
+    flex-direction row
+    position static
+    margin 5px auto
+    width calc(100% - 30px)
+    background lightColor
   @media only screen and (min-width: lg)
-    margin-right 150px
-    width calc(100% - 150px)
-  
+    width calc(100% - 80px)

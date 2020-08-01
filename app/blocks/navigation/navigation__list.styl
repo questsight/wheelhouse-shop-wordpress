@@ -1,29 +1,100 @@
 .navigation__list
   list-style-type none
-  display flex
-  width 100%
-  flex-wrap wrap
-  flex-direction column
-  text-shadow 0px 2px 4px rgba(0, 0, 0, 0.25)
-  padding 0
-  @media only screen and (min-width: sm)
-    flex-direction row
-    justify-content center
-    text-shadow none
+  font-size baseSize
+  @media only screen and (min-width: navigationBreakPoint)
+    width 100%
+    justify-content space-between
+    display flex
+  @media only screen and (min-width: lg)
+    font-size subtitleSize
   & > li
-    position relative
+    position static
     cursor pointer
-    margin-bottom 10px
-    @media only screen and (min-width: sm)
-      margin-bottom 15px
-    &:hover
-      text-decoration underline
-      text-decoration-color lightColor
+    margin 10px
+    @media only screen and (min-width: navigationBreakPoint)
+      margin auto 0
+      display inline-block
+      &:hover ul
+        display flex
     & > a
-      color lightColor
       text-transform uppercase
-      padding 0
-      @media only screen and (min-width: xs)
-        padding 0 15px
-      @media only screen and (min-width: md)
-        padding 0 30px
+      &:hover
+        font-family subtitleFont
+        text-decoration underline
+      @media only screen and (min-width: navigationBreakPoint)
+        font-family baseFont
+        color baseColor
+        &:hover
+          font-family subtitleFont
+    & > ul
+      z-index 10
+      color baseColor
+      font-size 14px
+      list-style-type none
+      display none
+      position absolute
+      flex-wrap wrap
+      top 110px
+      left 0
+      right 0
+      height calc(100vh - 135px)
+      max-height 715px
+      overflow hidden
+      padding 50px
+      justify-content center
+      overflow hidden
+      & > li
+        position relative
+        width calc(25% - 30px)
+        height calc((100vh - 310px) / 3)
+        max-height 150px
+        margin 15px
+        overflow hidden
+        border-radius 15px
+        & > a
+          position relative
+          width 100%
+          height calc((100vh - 310px) / 3)
+          max-height 150px
+          display flex
+          text-transform uppercase
+          font-size 12px
+          font-family subtitleFont
+          color baseColor
+          transition-duration 0.35s
+          text-decoration none
+          &:hover
+            span
+              text-decoration underline
+          & > span
+            position absolute
+            bottom -15px
+            right -15px
+            background lightColor
+            border-radius 15px
+            padding 10px 35px 25px 20px
+            text-align right
+            max-width: 80%;
+          & > img
+            object-fit: cover;
+            object-position center center
+            width: 100%;
+            height: 100%;
+            max-width none
+            padding: 0;
+    & > ul:before
+      content ""
+      position absolute
+      top 15px
+      bottom 0
+      right 0
+      left 0
+      background rgba(171, 178, 204, 0.95)
+      border-radius 50px
+  & > li.fifteen
+    & > ul
+      & > li
+        width calc(20% - 30px)
+        & > a
+          & > span
+            max-width none

@@ -1,19 +1,12 @@
 .main__name
   position absolute
-  bottom 10vh
-  left 15px
-  right 15px
-  font-family subtitleFont
+  top 0
+  right 0
+  left 0
+  display flex
+  flex-direction column
+  align-items center
   @media only screen and (min-width: xs)
-    left 50px
-    right 50px
-    max-width calc(100vw - 150px)
-  @media only screen and (min-width: md)
-    left 100px
-    right 150px
-    max-width calc(100vw - 350px)
-  @media only screen and (min-width: lg)
-    left 10vw
-    right auto
-    bottom 5vh
-    max-width 70vw
+    top 20px
+  @media only screen and (min-width: big)
+    top 40px
