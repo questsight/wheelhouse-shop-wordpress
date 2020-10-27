@@ -27,6 +27,7 @@ jQuery( document ).ready( function() {
         var $img = jQuery(this),
             src = $img.attr('data-src');
         jQuery($img).attr('src',src);
+        jQuery($img).removeAttr('data-spai');
       });
     }
   });

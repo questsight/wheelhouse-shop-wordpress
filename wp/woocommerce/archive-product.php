@@ -27,7 +27,7 @@ get_header();
  * php dynamic_sidebar('filter');//???????? ???????
  */
 do_action( 'woocommerce_before_main_content' );
-if(!is_shop() && !is_product_category('superczena')):?>
+if(is_product_category('podushki') || !is_shop() && !is_product_category('superczena') && !check_if_category_has_child(get_queried_object())): ?>
 <div class="content__box">
 <?php wc_get_template_part( 'content', 'filter' ); endif; if ( woocommerce_product_loop() ) {
     
@@ -44,8 +44,12 @@ if(!is_shop() && !is_product_category('superczena')):?>
 	            go_filter_shop();
 	        } else {
 	            $cat = get_queried_object()->slug;
-	            global $query_string;
-                query_posts($query_string.'post_type=product&product_cat='.$cat.'&posts_per_page=-1');
+	            if($cat=='matrasy'){
+                $sort = "&orderby=meta_value_num&meta_key=regular&order=ASC";
+              }else{
+                $sort ='';
+              }
+                query_posts($query_string.'post_type=product&product_cat='.$cat.'&posts_per_page=-1'.$sort);
                 go_filter();   
 	        }
         }

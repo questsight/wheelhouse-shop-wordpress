@@ -26,10 +26,19 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 <div class="cart__item <?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'woocommerce-table__line-item order_item', $item, $order ) ); ?>">
     <div class="catr__product">
     <?php
-        $is_visible        = $product && $product->is_visible();
+    $is_visible        = $product && $product->is_visible();
 		$product_permalink = apply_filters( 'woocommerce_order_item_permalink', $is_visible ? $product->get_permalink( $item ) : '', $item, $order );
 		$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $product->get_image() );
-		if ( ! $product_permalink ) {
+    $item_id = $product->parent_id;
+    $categories = get_the_terms( $item_id, 'product_cat' );
+    $mattress = false;
+    foreach ($categories as $category) {
+      if($category->term_id == 148){
+        $mattress = true;
+        break;
+      }
+    }
+		if ( ! $product_permalink  || $mattress) {
 			echo $thumbnail; // PHPCS: XSS ok.
 		} else {
 			printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $thumbnail ); // PHPCS: XSS ok.
@@ -42,7 +51,13 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 		$is_visible        = $product && $product->is_visible();
 		$product_permalink = apply_filters( 'woocommerce_order_item_permalink', $is_visible ? $product->get_permalink( $item ) : '', $item, $order );
 
-		echo apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', $product_permalink, $item->get_name() ) : $item->get_name(), $item, $is_visible ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		//
+    
+    if ( $mattress) {
+							 echo '<p>'.apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, $is_visible );
+						  } else {
+							 echo '<p>'.apply_filters( 'woocommerce_order_item_name', $product_permalink ? sprintf( '<a href="%s">%s</a>', $product_permalink, $item->get_name() ) : $item->get_name(), $item, $is_visible ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						  }
 
 		$qty          = $item->get_quantity();
 		$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
@@ -53,7 +68,7 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 			$qty_display = esc_html( $qty );
 		}
 
-		echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>', $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', $qty_display ) . '</strong>', $item .'</p>'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		//do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, false );
         echo "<div class='cart__meta'>";

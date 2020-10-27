@@ -19,6 +19,12 @@
 defined( 'ABSPATH' ) || exit;
 
 global $product;
+foreach($product->category_ids as $cat){
+  if(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' )){
+    $basic_cat = $cat;
+    break;
+  }
+}
 /**
  * Hook: woocommerce_before_single_product.
  *
@@ -55,57 +61,6 @@ if ( post_password_required() ) {
 	</div>
     <div class="product__description">
         <h1 class="product__title"><?php echo CFS()->get( 'title' );?></h1>
-        <div class="product__meta hidden">
-            <?php
-            $values = CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-size' );
-            if($values){
-                echo '<div class="product__meta-title">Размер: ';
-                $parameter = array();
-                foreach ( $values as $key => $label ) {
-                    $parameter[]= '<a href="'.get_category_link( $product->category_ids[0] ).'?'.get_term( $product->category_ids[0], 'product_cat' )->slug.'-size%5B%5D='.$key.'">'.$label.'</a>';
-                }
-                $parameter = implode('<span>, </span>',$parameter);
-                echo $parameter;
-                echo '</div>';
-            }
-            $values = CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-function' );
-            if($values){
-                echo '<div class="product__meta-title">Функции: ';
-                $parameter = array();
-                foreach ( $values as $key => $label ) {
-                    $parameter[]= '<a href="'.get_category_link( $product->category_ids[0] ).'?'.get_term( $product->category_ids[0], 'product_cat' )->slug.'-function%5B%5D='.$key.'">'.$label.'</a>';
-                }
-                $parameter = implode('<span>, </span>',$parameter);
-                echo $parameter;
-                echo '</div>';
-            }
-            $values = CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-purpose' );
-            if($values){
-                echo '<div class="product__meta-title">Назначение: ';
-                $parameter = array();
-                foreach ( $values as $key => $label ) {
-                    $parameter[]= '<a href="https://wheelhousedesign.ru/katalog/?purpose%5B%5D='.$key.'">'.$label.'</a>';
-                }
-                $parameter = implode('<span>, </span>',$parameter);
-                echo $parameter;
-                echo '</div>';
-            }
-            if($product->category_ids[0] == 24){
-                echo '<div class="product__meta-title">Назначение: <a href="https://wheelhousedesign.ru/katalog/?purpose%5B%5D=home-children">HOME/для детской</a></div>';
-            }
-            $values = CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-collection' );
-            if($values){
-                echo '<div class="product__meta-title">Коллекция: ';
-                $parameter = array();
-                foreach ( $values as $key => $label ) {
-                    $parameter[]= '<a href="https://wheelhousedesign.ru/katalog/?collection%5B%5D='.$key.'">'.$label.'</a>';
-                }
-                $parameter = implode('<span>, </span>',$parameter);
-                echo $parameter;
-                echo '</div>';
-            }
-            ?>
-        </div>
 	    <div class="summary entry-summary">
 		<?php
 		/**
@@ -126,27 +81,46 @@ if ( post_password_required() ) {
     </div>
     <div class="product__popup cloth hidden">
         <div class="cloth__close">&times;</div>
-        <div class="listing" id="cloth__color">
-            <div class="cloth__title">Выберите цвет ткани</div>
-            <?php $fields = CFS()->find_fields( array( 'field_name' => 'marker' ))['0']['options']['choices'];
-                foreach ($fields as $key => $value) { ?>
-                <div class="listing__item cloth__color" data-color="<?php echo $key; ?>">
-                    <div class="listing__title"><?php echo $value; ?></div>
-                </div>
-            <?php } ?>
             <form id='filter-cloth'>
                 <input type="hidden" data-ids name="ids" value="<?php echo CFS()->get('ids');?>">
                 <input type="hidden" data-item name="item" value="">
-                <input type="hidden" data-marker name="marker[]" value="">
-                <input type="hidden" name="product_cat" value="<? echo get_term( $product->category_ids[0], 'product_cat' )->slug;?>">
-                <?php $values = CFS()->get(get_term( $product->category_ids[0], 'product_cat' )->slug.'-collection');
+                <input type="hidden" name="product_cat" value="<? echo get_term( $basic_cat, 'product_cat' )->slug;?>">
+                <?php if(!CFS()->get( 'fix-choice' )) {$values = CFS()->get(get_term( $basic_cat, 'product_cat' )->slug.'-collection');
                     foreach ( $values as $key => $label ) {
                         echo '<input type="hidden" name="collection[]" value="'.$key.'">';
-                }?>
+                }}?>
             </form>
-        </div>
         <div class="listing hidden" id="result-cloth"></div>
     </div>
+    <?php $categories = get_the_terms( $post->ID, 'product_cat' );
+      $mattress = false;
+      foreach ($categories as $category) {
+        if($category->term_id == 23 || $category->term_id == 24){
+          $mattress = true;
+          break;
+        }
+      }
+  if($mattress):?>
+    <form id='mattress-size'>
+      <input type="hidden" name="mattress-size" value="">
+    </form>
+    <div class="product__popup mattress hidden">
+        <div class="mattress__close">&times;</div>
+        <div class="listing hidden" data-size="big" data-flip='flip' id="result-mattress"></div>
+    </div>
+   <?php endif;?>
+   <?php $fields = CFS()->get( 'mattress' ); if(!empty($fields)):?>
+    <form id='mattress-size'>
+      <input type="hidden" name="mattress-size" value="">
+      <?php foreach($fields as $value):?>
+      <input type="hidden" name="mattress-fix[]" value="<?php echo $value;?>">
+      <?php endforeach;?>
+    </form>
+    <div class="product__popup mattress hidden">
+        <div class="mattress__close">&times;</div>
+        <div class="listing hidden" data-size="big" id="result-mattress" style="width:100%;"></div>
+    </div>
+   <?php endif;?>
 </div>
 	    <?php
 	/**
@@ -161,4 +135,7 @@ if ( post_password_required() ) {
 	
 
 
-<?php do_action( 'woocommerce_after_single_product' ); ?>
+<?php do_action( 'woocommerce_after_single_product' ); 
+if(get_term( $basic_cat, 'product_cat' )->slug == 'detskie-krovati' || get_term( $basic_cat, 'product_cat' )->slug == 'krovati' ){
+  wc_get_template_part( 'single-product/product', 'accessories' ); 
+}?>

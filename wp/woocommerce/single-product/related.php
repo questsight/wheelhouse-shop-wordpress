@@ -19,12 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
-if(get_term( $product->category_ids[0], 'product_cat' )->slug != "superczena"){
-
-$value = array_key_first(CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-collection' ));
+if(get_term( $product->category_ids[0], 'product_cat' )->slug != "superczena" && get_term( $product->category_ids[0], 'product_cat' )->slug != "matrasy"){
+foreach($product->category_ids as $cat){
+  if(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' )){
+    $value = array_key_first(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' ));
+    break;
+  }
+}
 if ( $related_products ) : ?>
 		
-		<?php woocommerce_product_loop_start(); ?>
+		<?php woocommerce_product_loop_start(); echo '<div class="product__subtitle">Похожие товары:</div>';?>
 
 			<?php foreach ( $related_products as $related_product ) : ?>
 
@@ -32,10 +36,14 @@ if ( $related_products ) : ?>
 					$post_object = get_post( $related_product->get_id() );
 
 					setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
-                    if(array_key_exists($value, CFS()->get( get_term( $related_product->category_ids[0], 'product_cat' )->slug . '-collection' ))){
-					wc_get_template_part( 'content', 'product' );
-                        
-                    }
+          if(count(array_intersect( $product->category_ids, $related_product->category_ids)) == count($related_product->category_ids)){
+            foreach($related_product->category_ids as $cat){
+              if(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' ) && array_key_exists($value, CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' ))){
+                wc_get_template_part( 'content', 'product' );
+                break;
+              }
+            }
+          }
 					?>
 
 			<?php endforeach; ?>

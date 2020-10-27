@@ -12,15 +12,11 @@ get_header();?>
             foreach ( $fields as $field ){
           if($field['link']){?>
           <a href="<?php echo $field['link']; ?>" class="partner">
-             <picture>
-              <source srcset="<?php echo $field['image_webp']; ?>" type="image/webp"><img src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo $field['title']; ?>">
-            </picture>
+            <img src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo $field['title']; ?>">
           </a>
           <?php }else{?>
           <div class="partner">
-             <picture>
-              <source srcset="<?php echo $field['image_webp']; ?>" type="image/webp"><img src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo $field['title']; ?>">
-            </picture>
+            <img src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo $field['title']; ?>">
           </div>
           <?php } } endif;?> 
         </div>

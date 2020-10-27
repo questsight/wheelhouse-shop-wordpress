@@ -5,7 +5,7 @@ jQuery( document ).ready( function() {
     jQuery('.product_first').attr('srcset',jQuery(this).attr('data-src'));
     jQuery('.product_first').attr('src',jQuery(this).attr('data-src'));
   });
-var native_width = 0;
+  var native_width = 0;
   var native_height = 0;
   var mouse = {x: 0, y: 0};
   var magnify;

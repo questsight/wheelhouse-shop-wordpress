@@ -19,5 +19,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="listing" <?php if(!is_shop()&&!is_product()){echo 'data-size="big"';} if(!is_shop()&&!is_product()&&!is_product_category('superczena')){echo 'data-box="box" id="result-product"';} if(is_product()){echo 'data-related';}?>>
-    <?php if(is_product()){echo '<div class="product__subtitle">Похожие товары:</div>';}
+<div class="listing" <?php if(!is_shop()&&!is_product()&&!is_product_category('aksessuary')){echo 'data-size="big"';} if(!is_shop()&&!is_product()&&!is_product_category('superczena')&&!check_if_category_has_child(get_queried_object())){echo 'data-box="box" id="result-product"';} if(is_product()){echo 'data-related';}?>>

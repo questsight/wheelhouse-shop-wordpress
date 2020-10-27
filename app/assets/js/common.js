@@ -1,27 +1,22 @@
 jQuery(document).ready(function () {
   jQuery('.product__cloth').on('click', function(){
     jQuery('.cloth').removeClass('hidden');
-  });
-  jQuery('.cloth__color').on('click', function(){
-    jQuery('[data-marker]').attr('value',jQuery(this).attr('data-color'));
     var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-cloth.php',
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth.php',
         data: str,
         method: 'POST',
         success: function(data){
           jQuery("#result-cloth").html(data);
         }
     });
-    jQuery('#cloth__color').addClass('hidden');
     jQuery('#result-cloth').removeClass('hidden');
   });
   jQuery('.cloth__close').on('click', function(){
     price = "";
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-cloth').addClass('hidden');
-    jQuery('#cloth__color').removeClass('hidden');
     jQuery('.cloth').addClass('hidden');
   });
   jQuery(this).keydown(function(eventObject){
@@ -30,13 +25,12 @@ jQuery(document).ready(function () {
     }
   });
   jQuery('.product__cloth-add').on('click', function(){
-    jQuery('#cloth__color').addClass('hidden');
     jQuery('.cloth').removeClass('hidden');
     jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-cloth-add.php',
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth-add.php',
         data: str,
         method: 'POST',
         success: function(data){
@@ -45,6 +39,14 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-cloth').removeClass('hidden');
   });
+  jQuery('.product__cloth-fix').on('click', function(){
+    jQuery('#popup-fix img').attr('src',jQuery(this).attr('data-fix'));
+    jQuery('#popup-fix').removeClass('hidden');
+  });
+  jQuery('#popup-fix .popup__content .listing__close').on('click', function(){
+    jQuery('#popup-fix').addClass('hidden');
+    jQuery('#popup-fix img').attr('src','');
+  })
 })
 jQuery(document).ready(function () {
   jQuery('.filter__title').on('click', function(){
@@ -76,9 +78,9 @@ jQuery(document).ready(function () {
   jQuery("#filter-materialy input").change(function(e) {
     var str = jQuery("#filter-materialy").serialize();
     history.pushState({}, '', '?'+str);
-    jQuery("#result-materialy").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-materialy").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-materialy.php',
+        url: window.location.origin + '/wp-content/themes/questsight/ajax-materialy.php',
         data: str,
         method: 'GET',
         success: function(data){
@@ -99,9 +101,9 @@ jQuery(document).ready(function () {
     }
       var str = jQuery("#filter-product").serialize();
       history.pushState({}, '', '?'+str);
-      jQuery("#result-product").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+      jQuery("#result-product").html('<div class="spinner"></div>');
       jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-product.php',
+        url: window.location.origin + '/wp-content/themes/questsight/ajax-product.php',
         data: str,
         method: 'GET',
         success: function(data){
@@ -128,38 +130,80 @@ jQuery( document ).ready( function() {
 jQuery( document ).ready( function() {
   var calc = jQuery(".listing__item").length;
   var item = 0;
+  if(jQuery('.listing').attr('data-type')=='portfolio'){
+    var portfolio = true;
+  }else{var portfolio = false;}
   jQuery( '.listing__item' ).click( function() {
+    jQuery(".portfolio__img").remove();
+    jQuery('.listing__popup-foto img:first').attr('style', '');
     if( window.matchMedia( '(max-width: 767px)' ).matches) {
       jQuery('.listing__item').addClass('hidden');
       jQuery('.description').addClass('hidden');
       jQuery('.title').addClass('hidden');
     }
+    if(portfolio){
+      var stuff = jQuery(this).children('.listing__foto').attr('data-src').split(',');
+    }
     if( window.matchMedia( '(min-width: 992px)' ).matches & jQuery(".listing").height() > jQuery(window).height() - 160) {
       jQuery(".listing").attr("data-fixed","fixed");
-    } else if(jQuery(".listing").height() > jQuery(window).height() - jQuery(".site__header").height() - 50 ){
+    } else if(jQuery(".listing").height() > jQuery(window).height() - jQuery(".site__header").height() - 50){
       jQuery(".listing").attr("data-fixed","fixed");
     };
-    jQuery('.listing__popup-foto img').attr('src', jQuery(this).children('picture').children('.listing__foto').attr('src'));
+    if(portfolio){
+      jQuery('.listing__popup-foto img').attr('src', stuff[0]);
+      if(stuff.length > 1){
+        jQuery('.listing__popup-foto img:first').css('max-height','calc(100vh - 200px)');
+        jQuery.each(stuff,function(index,value){
+          jQuery('.listing__popup-foto').append('<img class="portfolio__img" src="'+value+'" style="height:80px;margin: 5px;cursor:pointer;">');
+        });
+        jQuery(".portfolio__img").on('click', function(){
+          jQuery('.listing__popup-foto img:first').attr('src',jQuery(this).attr('src'));
+        });
+      }
+    }else{
+      jQuery('.listing__popup-foto img').attr('src', jQuery(this).children('.listing__foto').attr('data-src'));
+    }
     jQuery('.listing__popup-title').html(jQuery(this).children('.listing__title').html());
     jQuery('.listing__popup-description').html(jQuery(this).attr('data-description'));
     item = +jQuery(this).attr('data-item');
     jQuery( '.listing__popup' ).removeClass('hidden');
   });
   jQuery( '.listing__arrow-left' ).click( function () {
+    jQuery(".portfolio__img").remove();
+    jQuery('.listing__popup-foto img:first').attr('style', '');
     if(item == 1){
       item = calc;
     } else {
       item--;
     }
+    console.log(item);
+    console.log(jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src'));
+    
+    var stuff = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src').split(',');
     jQuery('.listing__popup-title').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').children('.listing__title').html());;
     jQuery('.listing__popup-description').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').attr('data-description'));
     jQuery('.listing__arrow-left').addClass('animation-opacity-0');
     jQuery('.listing__arrow-right').addClass('animation-opacity-0');
-    jQuery('.listing__popup-foto img').addClass('animation-opacity-0').attr('src', jQuery('[data-item="'+item+'"]').children('picture').children('.listing__foto').attr('src')).on("load", function() {
+    if(portfolio){
+      var foto0 = stuff[0];
+      if(stuff.length > 1){
+        jQuery('.listing__popup-foto img:first').css('max-height','calc(100vh - 200px)');
+        jQuery.each(stuff,function(index,value){
+          jQuery('.listing__popup-foto').append('<img class="portfolio__img" src="'+value+'" style="height:80px;margin: 5px;cursor:pointer;">');
+        });
+        jQuery(".portfolio__img").on('click', function(){
+          jQuery('.listing__popup-foto img:first').attr('src',jQuery(this).attr('src'));
+        });
+      }
+    }else{
+      var foto0 = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src');
+    }
+    jQuery('.listing__popup-foto img:first').addClass('animation-opacity-0').attr('src', foto0).on("load", function() {
       jQuery('.listing__popup-foto img').removeClass('animation-opacity-0').addClass('animation-opacity');
       jQuery('.listing__popup-title').removeClass('animation-opacity-0').addClass('animation-opacity');
       jQuery('.listing__popup-description').removeClass('animation-opacity-0').addClass('animation-opacity');
       jQuery('.listing__arrow-left').removeClass('animation-opacity-0').addClass('animation-opacity');
+      
       jQuery('.listing__arrow-right').removeClass('animation-opacity-0').addClass('animation-opacity');
       setTimeout(function() {
         jQuery('.listing__popup-foto img').removeClass('animation-opacity');
@@ -172,16 +216,33 @@ jQuery( document ).ready( function() {
     return false;
 	});
   jQuery( '.listing__arrow-right' ).click( function () {
+    jQuery(".portfolio__img").remove();
+    jQuery('.listing__popup-foto img:first').attr('style', '');
     if(item == calc) {
       item = 1;
     } else {
       item++;
     }
+    var stuff = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src').split(',');
     jQuery('.listing__popup-title').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').children('.listing__title').html());;
     jQuery('.listing__popup-description').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').attr('data-description'));
     jQuery('.listing__arrow-left').addClass('animation-opacity-0');
     jQuery('.listing__arrow-right').addClass('animation-opacity-0');
-    jQuery('.listing__popup-foto img').addClass('animation-opacity-0').attr('src', jQuery('[data-item="'+item+'"]').children('picture').children('.listing__foto').attr('src')).on("load", function() {
+    if(portfolio){
+      var foto0 = stuff[0];
+      if(stuff.length > 1){
+        jQuery('.listing__popup-foto img:first').css('max-height','calc(100vh - 200px)');
+        jQuery.each(stuff,function(index,value){
+          jQuery('.listing__popup-foto').append('<img class="portfolio__img" src="'+value+'" style="height:80px;margin: 5px;cursor:pointer;">');
+        });
+        jQuery(".portfolio__img").on('click', function(){
+          jQuery('.listing__popup-foto img:first').attr('src',jQuery(this).attr('src'));
+        });
+      }
+    }else{
+      var foto0 = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src');
+    }
+    jQuery('.listing__popup-foto img:first').addClass('animation-opacity-0').attr('src', foto0).on("load", function() {
       jQuery('.listing__popup-foto img').removeClass('animation-opacity-0').addClass('animation-opacity');
       jQuery('.listing__popup-title').removeClass('animation-opacity-0').addClass('animation-opacity');
       jQuery('.listing__popup-description').removeClass('animation-opacity-0').addClass('animation-opacity');
@@ -203,6 +264,8 @@ jQuery( document ).ready( function() {
     jQuery('.listing__item').removeClass('hidden');
     jQuery('.description').removeClass('hidden');
     jQuery('.title').removeClass('hidden');
+    jQuery(".portfolio__img").remove();
+    jQuery('.listing__popup-foto img:first').attr('style', '');
   });
   jQuery(this).keydown(function(eventObject){
     if (eventObject.which == 27){
@@ -232,6 +295,42 @@ jQuery(document).bind('touchmove', function (e){
 });
 //let vh = window.innerHeight * 0.01;
 //document.documentElement.style.setProperty('--vh', vh + 'px');
+jQuery(document).ready(function () {
+  jQuery('#pa_size-krd').change(function() {
+    jQuery('[name="mattress-size"]').attr('value',jQuery(this).val());
+    if(jQuery('#product__mattress').attr('data-fix')){
+      jQuery('#product__mattress').html('Выбрать матрас');
+    }else{
+      jQuery('#product__mattress').html('Добавить матрас');
+    }
+    jQuery('#add-mattress').removeAttr('name');
+    jQuery('#add-mattress').removeAttr('value');
+    jQuery('.variation_id').removeAttr('data-addprice');
+  });
+  jQuery('.variation_id').change( function(){
+    jQuery('[name="mattress-size"]').attr('value',jQuery('#pa_size-krd').val());
+  });
+  jQuery('#product__mattress').on('click', function(){
+    jQuery('.mattress').removeClass('hidden');
+    jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
+    var str = jQuery("#mattress-size").serialize();
+    jQuery("#result-mattress").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-mattress.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-mattress").html(data);
+        }
+    });
+    jQuery('#result-mattress').removeClass('hidden');
+  });
+  jQuery('.mattress__close').on('click', function(){
+    jQuery('.cloth__popup').addClass('hidden');
+    jQuery('#result-mattress').addClass('hidden');
+    jQuery('.mattress').addClass('hidden');
+  });
+})
 jQuery( document ).ready( function() {
   jQuery('.navigation__call-buyer > a').on('click', function(){
     jQuery('#box-cooperation').addClass('hidden_type_min-md');
@@ -261,6 +360,7 @@ jQuery( document ).ready( function() {
         var $img = jQuery(this),
             src = $img.attr('data-src');
         jQuery($img).attr('src',src);
+        jQuery($img).removeAttr('data-spai');
       });
     }
   });
@@ -296,7 +396,7 @@ jQuery( document ).ready( function() {
     jQuery('.product_first').attr('srcset',jQuery(this).attr('data-src'));
     jQuery('.product_first').attr('src',jQuery(this).attr('data-src'));
   });
-var native_width = 0;
+  var native_width = 0;
   var native_height = 0;
   var mouse = {x: 0, y: 0};
   var magnify;

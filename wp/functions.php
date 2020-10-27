@@ -58,19 +58,18 @@ add_action( 'after_setup_theme', 'questsight_content_width', 0 );
 
 
 function questsight_scripts() {
-	wp_enqueue_style( 'questsight-style', get_stylesheet_uri() );
-  wp_enqueue_style('font-awesome-css', get_template_directory_uri() . '/assets/css/font-awesome.min.css', array(), null, false);
-  wp_enqueue_script( 'jquery' );
+  wp_enqueue_style( 'questsight-style', get_stylesheet_uri() );
   wp_enqueue_style('questsight-common-css', get_template_directory_uri() . '/assets/css/common.min.css', array(), null, false);
   wp_enqueue_script( 'jquery' );
-  wp_enqueue_script('questsight-common-js', get_template_directory_uri() . '/assets/js/common.min.js', array( 'jquery' ), null, true);
+  wp_enqueue_script('questsight-common-js', get_template_directory_uri() . '/assets/js/common.min.js', array('jquery'), null, true);
   if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
       wp_enqueue_script( 'comment-reply' );
-	}
+    }
 }
 add_action( 'wp_enqueue_scripts', 'questsight_scripts' );
 add_filter('style_loader_tag', 'myplugin_remove_type_attr', 10, 2);
 add_filter('script_loader_tag', 'myplugin_remove_type_attr', 10, 2);
+
 
 function myplugin_remove_type_attr($tag, $handle) {
     return preg_replace( "/type=['\"]text\/(javascript|css)['\"]/", '', $tag );
@@ -127,13 +126,14 @@ function go_filter() {
   global $wp_query;
   foreach ($_GET as $key => $value) {
     $type = array('relation' => 'OR');
-    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel'){
+    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved'){
         foreach($value as $val){
             $type[] = array(
 			    'key' => $key, 
+			    'compare_key' => 'LIKE',
 			    'value' => $val,
-          'type' => 'text',
-          'compare' => 'LIKE'
+                'type' => 'text',
+                'compare' => 'IN'
 		    );
         }
     }
@@ -191,7 +191,7 @@ function mayak_update_category_image ( $term, $taxonomy ) {
        <input type="hidden" id="id-cat-images" name="id-cat-images" value="<?php echo $id_images; ?>">
        <div id="cat-image-miniature">
          <?php if (empty($id_images )) { ?>
-		 <img src="https://wheelhousedesign.ru/wp-content/uploads/2020/05/wp.png" alt="Zaglushka" width="84" height="89"/>
+		 <img src="<?php echo get_site_url();?>/wp-content/uploads/2020/05/wp.png" alt="Zaglushka" width="84" height="89"/>
 		 <?php } else {?>
            <?php echo wp_get_attachment_image ( $id_images, 'thumbnail' ); ?>
          <?php } ?>
@@ -264,8 +264,16 @@ add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 //страница подкаталога
 function woocommerce_template_loop_product_link_open() {
     global $product;
+    $categories = get_the_terms( $post->ID, 'product_cat' );
+    $style = '';
+    foreach ($categories as $category) {
+        if($category->term_id == 148 || $category->term_id == 24){
+          $style = ' style="border:1px solid rgba(171, 178, 204, 0.85);"';
+          break;
+        }
+      }
 	$link = apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product );
-	echo '<a href="' . esc_url( $link ) . '" class="listing__item">';
+	echo '<a href="' . esc_url( $link ) . '"'. $style .' class="listing__item">';
 }
 function woocommerce_template_loop_product_link_close() {
 	echo '</a>';
@@ -334,7 +342,7 @@ function woocommerce_get_product_subcategories( $parent_id = 0 ) {
 					'hierarchical' => 1,
 					'taxonomy'     => 'product_cat',
 					'pad_counts'   => 1,
-          'exclude' => 118,
+          'exclude' => '118',
 				)
 			)
 		);
@@ -364,7 +372,7 @@ function woocommerce_breadcrumb( $args = array() ) {
 	);
 	$breadcrumbs = new WC_Breadcrumb();
 	if ( ! empty( $args['home'] ) && !is_shop()) {
-		$breadcrumbs->add_crumb( $args['home'], apply_filters( 'woocommerce_breadcrumb_home_url', 'https://wheelhousedesign.ru/katalog' ) );
+		$breadcrumbs->add_crumb( $args['home'], apply_filters( 'woocommerce_breadcrumb_home_url', get_permalink(57) ) );
 	}
 	$args['breadcrumb'] = $breadcrumbs->generate();
 	/**
@@ -399,6 +407,8 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 			$selected_key     = 'attribute_' . sanitize_title( $args['attribute'] );
 			$args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) : $args['product']->get_variation_default_attribute( $args['attribute'] ); // WPCS: input var ok, CSRF ok, sanitization ok.
 		}
+		$slug                  = $args['slug'];
+		$fixchoice             = $args['fixchoice'];
         $storage               = $args['storage'];
         $other                 = $args['other'];
 		$options               = $args['options'];
@@ -409,7 +419,6 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 		$class                 = $args['class'];
 		$show_option_none      = (bool) $args['show_option_none'];
 		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' ); // We'll do our best to hide the placeholder, but we'll need to show something when resetting options.
-
 		if ( empty( $options ) && ! empty( $product ) && ! empty( $attribute ) ) {
 			$attributes = $product->get_variation_attributes();
 			$options    = $attributes[ $attribute ];
@@ -438,13 +447,36 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
             }
             $html .= '<select class="product__variation-choice hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
         }elseif($name  == "attribute_pa_kategoriya-tkani"){
-            
-            if(count($options) == 1){
-                $html = '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice">' . CFS()->get( 'material_0' ) . '</div></div><div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div><div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>';
+            if(count($options) == 1 && !$fixchoice){
+                $html = '<div id="popup-fix" class="popup hidden" style="background: rgba(255, 255, 255, 0.7);"><div class="popup__content"><div class="listing__close" style="top: -25px;right: -10px;">&times;</div><img src=""></div></div><div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_0' ) .'">' . CFS()->get( 'material_0' ) . '</div></div>';
+                if(CFS()->get( 'material_name_1' )){
+                  $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_1' ) .'" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
+                }
+                if(CFS()->get( 'material_name_2' )){
+                  $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_2' ) .'" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>';
+                }
+
                 $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
 
             }else{
-                $html = '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth">' . CFS()->get( 'material_0' ) . '</div></div><div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div><div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>';
+                if($fixchoice){
+                   $html = '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="0">' . CFS()->get( 'material_0' ) . '</div></div>';
+                 
+                }else {
+                   $html = '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth">' . CFS()->get( 'material_0' ) . '</div></div>';
+                 
+                }
+                if(CFS()->get( 'material_name_1' )){
+                    if($slug == 'pokryvala'){
+                        $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
+                    }else{
+                        $html .= '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
+                    }
+                  
+                }
+                if(CFS()->get( 'material_name_2' )){
+                  $html .= '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>'; 
+                }
                 $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
             }
         }elseif(count($options) == 1){
@@ -456,9 +488,12 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 					)
 				);
             $html = '<div class="product__variation-size"><div class="product__variation-text"></div><div class="product__variation-choice">' . $terms[0]->name. '</div><select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+        }elseif($slug == "matrasy"){
+            $html = '<div class="product__variation-size"><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
         }else{
             $html = '<div class="product__variation"><div class="product__variation-text"></div><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
         }
+		
 		
 		$html .= '<option value="">' . wc_attribute_label( $attribute )  . '</option>';
 
@@ -561,9 +596,28 @@ function replace_variation_single_price(){
             if( '' != $('input.variation_id').val() ){
                 if($('p.availability')){
                     $('p.availability').remove();}
-                $('p.price').html($('div.woocommerce-variation-price > span.price').html()).append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>');
+                if(this.hasAttribute('data-addprice')){
+                  var dp = + jQuery('div.woocommerce-variation-price span.price .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                  var rp = + jQuery('div.woocommerce-variation-price > span.price del .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                  var sp = + jQuery('div.woocommerce-variation-price > span.price ins .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                  jQuery('.summary .price .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(dp) + " ₽");
+                  jQuery('.summary .price del .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(rp) + " ₽");
+                  jQuery('.summary .price ins .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
+                  $('p.price').append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>'); 
+                }else{
+                  $('p.price').html($('div.woocommerce-variation-price > span.price').html()).append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>'); 
+                }
             } else {
-                $('p.price').html($('div.hidden-variable-price').html());
+                 if(this.hasAttribute('data-addprice')){
+                   var dp = + jQuery('div.hidden-variable-price .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                   var rp = + jQuery('div.hidden-variable-price del .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                   var sp = + jQuery('div.hidden-variable-price ins .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+                   jQuery('.summary .price .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(dp) + " ₽");
+                   jQuery('.summary .price del .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(rp) + " ₽");
+                   jQuery('.summary .price ins .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
+                 }else{
+                   $('p.price').html($('div.hidden-variable-price').html());
+                 }
                 if($('p.availability')){
                     $('p.availability').remove();}
             }
@@ -1333,3 +1387,232 @@ function woocommerce_output_related_products() {
 
 		woocommerce_related_products( apply_filters( 'woocommerce_output_related_products_args', $args ) );
 	}
+
+class add_more_to_cart {
+
+private $prevent_redirect = false; //used to prevent WC from redirecting if we have more to process
+
+function __construct() {
+if ( ! isset( $_REQUEST[ 'add-more-to-cart' ] ) ) return; //don't load if we don't have to
+$this->prevent_redirect = 'no'; //prevent WC from redirecting so we can process additional items
+add_action( 'wp_loaded', [ $this, 'add_more_to_cart' ], 21 ); //fire after WC does, so we just process extra ones
+add_action( 'pre_option_woocommerce_cart_redirect_after_add', [ $this, 'intercept_option' ], 9000 ); //intercept the WC option to force no redirect
+}
+
+function intercept_option() {
+return $this->prevent_redirect;
+}
+
+function add_more_to_cart() {
+$product_ids = explode( ',', $_REQUEST['add-more-to-cart'] );
+$count       = count( $product_ids );
+$number      = 0;
+
+foreach ( $product_ids as $product_id ) {
+if ( ++$number === $count ) $this->prevent_redirect = false; //this is the last one, so let WC redirect if it wants to.
+$_REQUEST['add-to-cart'] = $product_id; //set the next product id
+WC_Form_Handler::add_to_cart_action(); //let WC run its own code
+}
+}
+}
+new add_more_to_cart;
+
+add_filter( 'woocommerce_add_cart_item_data', function ( $cartItemData, $productId, $variationId ) {
+    
+    $cartItemData['DataSale'] = date("m.d.y");
+    $cartItemData['TimeSale'] = date("H:i:s");
+
+    return $cartItemData;
+}, 10, 3 );
+
+add_filter( 'woocommerce_get_cart_item_from_session', function ( $cartItemData, $cartItemSessionData, $cartItemKey ) {
+    if ( isset( $cartItemSessionData['DataSale'] ) ) {
+        $cartItemData['DataSale'] = $cartItemSessionData['DataSale'];
+    }
+    if ( isset( $cartItemSessionData['TimeSale'] ) ) {
+        $cartItemData['TimeSale'] = $cartItemSessionData['TimeSale'];
+    }
+
+    return $cartItemData;
+}, 10, 3 );
+
+add_action( 'woocommerce_before_calculate_totals', 'add_remove_menu', 50, 1 );
+function add_remove_menu( $cart ) {
+    foreach( $cart->get_cart() as $cart_item_key => $cart_item ) {
+        $item_id = $cart_item['product_id'];
+        $categories = get_the_terms( $item_id, 'product_cat' );
+        $mattress = false;
+        foreach ($categories as $category) {
+          if($category->term_id == 148){
+            $mattress = true;
+            break;
+          }
+        }
+        if($mattress){
+            $cart_mattress = 0;
+            $time_sale = $cart_item['TimeSale'];
+            $data_sale = $cart_item['DataSale'];
+            foreach( $cart->get_cart() as $cart_item_key => $cart_elem ) {
+                if($cart_elem['TimeSale'] == $time_sale && $cart_elem['DataSale'] == $data_sale && $cart_elem['product_id'] !=$item_id){
+                    $cart_mattress = 1;
+                     break;
+                }
+            }
+            if(!$cart_mattress){
+                $cart->remove_cart_item($cart_item['key']);
+            }
+        }
+    }
+}
+function add_preloader_head () {
+	?>
+    <style>
+        #preloader_preload {
+            display: block;
+            position: fixed;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: #fff;
+            background-image: url(/wp-content/themes/questsight/assets/images/126.gif);
+            background-size: 80px;
+        }
+    </style>
+    <div id="preloader">
+        <div id="preloader_preload"></div>
+    </div>
+    <script type="text/javascript">
+		var preloader = document.getElementById("preloader_preload");
+
+		function fadeOutnojquery(el) {
+			el.style.opacity = 1;
+			var interpreloader = setInterval(function () {
+				el.style.opacity = el.style.opacity - 0.05;
+				if (el.style.opacity <= 0.05) {
+					clearInterval(interpreloader);
+					preloader.style.display = "none";
+				}
+			}, 16);
+		}
+
+		window.onload = function () {
+			setTimeout(function () {
+				fadeOutnojquery(preloader);
+			}, 1000);
+		};
+    </script> 
+	<?php
+}
+add_action('wp_head', 'add_preloader_head', 999);
+
+function check_if_category_has_child ($term) {
+    $children = get_terms( $term->taxonomy, array(
+    'parent'    => $term->term_id,
+    'hide_empty' => false
+    ) );
+    return $children;
+}
+
+function mihdan_woocommerce_permalinks( $flash = false ) {
+  $terms = get_terms(
+    array(
+      'taxonomy'   => 'product_cat',
+      'post_type'  => 'product',
+      'hide_empty' => false,
+    )
+  );
+  if ( $terms && ! is_wp_error( $terms ) ) {
+    $siteurl = esc_url( home_url( '/' ) );
+    foreach ( $terms as $term ) {
+      $term_slug = $term->slug;
+      $baseterm  = str_replace( $siteurl, '', get_term_link( $term->term_id, 'product_cat' ) );
+      add_rewrite_rule( $baseterm . '?$', 'index.php?product_cat=' . $term_slug, 'top' );
+      add_rewrite_rule( $baseterm . 'page/([0-9]{1,})/?$', 'index.php?product_cat=' . $term_slug . '&paged=$matches[1]', 'top' );
+      add_rewrite_rule( $baseterm . '(?:feed/)?(feed|rdf|rss|rss2|atom)/?$', 'index.php?product_cat=' . $term_slug . '&feed=$matches[1]', 'top' );
+    }
+  }
+  if ( true === $flash ) {
+    flush_rewrite_rules( false );
+  }
+}
+add_filter( 'init', 'mihdan_woocommerce_permalinks' );
+/**
+ * Перегенирить пермалинки и сбросить их кэш при создании новой категории.
+ *
+ * @param int $term_id     идентификатор категории.
+ * @param string $taxonomy слаг таксономии.
+ */
+function mihdan_woocommerce_permalinks_flush( $term_id, $taxonomy ) {
+  if ( 'product_cat' === $taxonomy ) {
+    mihdan_woocommerce_permalinks( true );
+  }
+}
+add_action( 'create_term', 'mihdan_woocommerce_permalinks_flush', 10, 2 );
+/**
+ * Подменить /product-category/ на /shop/ в ссылке категории.
+ *
+ * @param string $url      URL по дефолту.
+ * @param object $term     объект термина.
+ * @param string $taxonomy слаг таксономии.
+ *
+ * @return mixed
+ */
+function mihdan_woocommerce_fixed_category_permalink( $url, $term, $taxonomy ) {
+  if ( 'product_cat' === $taxonomy ) {
+    return str_replace( 'product-category/', 'shop/', $url );
+  }
+  return $url;
+}
+add_filter( 'term_link', 'mihdan_woocommerce_fixed_category_permalink', 10, 3 );
+
+add_action( 'woocommerce_before_calculate_totals', 'add_custom_price', 20, 1);
+function add_custom_price( $cart ) {
+// This is necessary for WC 3.0+
+if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+return;
+
+// Avoiding hook repetition (when using price calculations for example)
+if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
+return;
+
+foreach( $cart->get_cart() as $cart_item_key => $cart_item ) {
+  $item_id = $cart_item['product_id'];
+  $categories = get_the_terms( $item_id, 'product_cat' );
+  $mattress = false;
+  foreach ($categories as $category) {
+    if($category->term_id == 148){
+      $mattress = true;
+      break;
+    }
+  }
+  if($mattress){
+    $cart_mattress = 0;
+    $time_sale = $cart_item['TimeSale'];
+    $data_sale = $cart_item['DataSale'];
+    foreach( $cart->get_cart() as $cart_item_key => $cart_elem ) {
+      if($cart_elem['TimeSale'] == $time_sale && $cart_elem['DataSale'] == $data_sale && $cart_elem['product_id'] !=$item_id){
+        $item_id = $cart_elem['product_id'];
+        $cats = get_the_terms( $item_id, 'product_cat' );
+        foreach ($cats as $cat) {
+          if($cat->term_id == 118){
+            $cart_mattress = 1;
+            break;
+          }
+        }
+      }
+    }
+    if($cart_mattress){
+      $cart_item['data']->set_price( 0 );
+    }
+  }
+}
+}
+
+function wplife_filter_woocommerce_short_description( $post_post_excerpt ) {
+  return ""; 
+};
+add_filter( 'woocommerce_short_description', 'wplife_filter_woocommerce_short_description', 10, 1 );

@@ -12,9 +12,16 @@ get_header();?>
             $item=1;
             foreach ( $fields as $field ){?>
           <div class="listing__item" data-item="<?php echo $item; ?>" data-description='<?php echo $field['description']; ?>'>
-            <picture>
-              <source srcset="<?php echo $field['image_webp']; ?>" type="image/webp"><img class="listing__foto" src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-            </picture>
+           <?php if(is_page('portfolio')):
+            $arr=array();
+            foreach ( $field['image'] as $one ){
+              $arr[] = $one['image_jpg'];
+            }
+            ?>
+           <img class="listing__foto" src="<?php echo $field['image'][0]['image_jpg']; ?>" data-src="<?php echo implode(", ", $arr); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+           <?php else:?>
+            <img class="listing__foto" src="<?php echo $field['image_jpg']; ?>" data-src="<?php echo $field['image_jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+            <?php endif;?>
             <?php if($field['title_all']):?>
             <div class="listing__title hidden"><?php echo $field['title_all']; ?>
             </div>

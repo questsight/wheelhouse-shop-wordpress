@@ -28,9 +28,9 @@ jQuery(document).ready(function () {
   jQuery("#filter-materialy input").change(function(e) {
     var str = jQuery("#filter-materialy").serialize();
     history.pushState({}, '', '?'+str);
-    jQuery("#result-materialy").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-materialy").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-materialy.php',
+        url: window.location.origin + '/wp-content/themes/questsight/ajax-materialy.php',
         data: str,
         method: 'GET',
         success: function(data){
@@ -51,9 +51,9 @@ jQuery(document).ready(function () {
     }
       var str = jQuery("#filter-product").serialize();
       history.pushState({}, '', '?'+str);
-      jQuery("#result-product").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+      jQuery("#result-product").html('<div class="spinner"></div>');
       jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-product.php',
+        url: window.location.origin + '/wp-content/themes/questsight/ajax-product.php',
         data: str,
         method: 'GET',
         success: function(data){

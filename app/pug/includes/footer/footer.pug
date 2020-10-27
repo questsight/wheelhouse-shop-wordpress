@@ -78,15 +78,15 @@ section.submenu.site__submenu
 footer.site__footer.footer
   .footer__item.hidden_type_min-md
     .footer__call(data-popup="callback")
-      i.fa.fa-phone.fa-lg(aria-hidden='true')
+      span.icon-phone
       span Oбратная связь
   .footer__item.hidden_type_min-md
     a.footer__social(href="#")
-      i.fa.fa-instagram.fa-3x(aria-hidden='true')
+      span.icon-instagram
       span wheelhousedesign.ru
   .footer__item.hidden_type_min-md
     a.footer__social(href="#")
-      i.fa.fa-facebook-official.fa-3x(aria-hidden='true')
+      span.icon-facebook-official
       span wheelhousedesign.ru
   ul.footer__list.hidden_type_max-md
       li
@@ -112,8 +112,7 @@ footer.site__footer.footer
           | Контакты
 .popup.hidden#callback
   .popup__content
-    .popup__exit
-      i.fa.fa-times.fa-lg(aria-hidden='true')
+    .popup__exit &times;
     form.wpcf7
       input.form__input(type='text', placeholder='Ваше имя')
       br

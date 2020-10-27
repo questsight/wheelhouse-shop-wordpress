@@ -1,27 +1,22 @@
 jQuery(document).ready(function () {
   jQuery('.product__cloth').on('click', function(){
     jQuery('.cloth').removeClass('hidden');
-  });
-  jQuery('.cloth__color').on('click', function(){
-    jQuery('[data-marker]').attr('value',jQuery(this).attr('data-color'));
     var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-cloth.php',
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth.php',
         data: str,
         method: 'POST',
         success: function(data){
           jQuery("#result-cloth").html(data);
         }
     });
-    jQuery('#cloth__color').addClass('hidden');
     jQuery('#result-cloth').removeClass('hidden');
   });
   jQuery('.cloth__close').on('click', function(){
     price = "";
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-cloth').addClass('hidden');
-    jQuery('#cloth__color').removeClass('hidden');
     jQuery('.cloth').addClass('hidden');
   });
   jQuery(this).keydown(function(eventObject){
@@ -30,13 +25,12 @@ jQuery(document).ready(function () {
     }
   });
   jQuery('.product__cloth-add').on('click', function(){
-    jQuery('#cloth__color').addClass('hidden');
     jQuery('.cloth').removeClass('hidden');
     jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div style="text-align:center; padding:30px;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>');
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
     jQuery.ajax({
-        url: 'https://wheelhousedesign.ru/wp-content/themes/questsight/ajax-cloth-add.php',
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth-add.php',
         data: str,
         method: 'POST',
         success: function(data){
@@ -45,4 +39,12 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-cloth').removeClass('hidden');
   });
+  jQuery('.product__cloth-fix').on('click', function(){
+    jQuery('#popup-fix img').attr('src',jQuery(this).attr('data-fix'));
+    jQuery('#popup-fix').removeClass('hidden');
+  });
+  jQuery('#popup-fix .popup__content .listing__close').on('click', function(){
+    jQuery('#popup-fix').addClass('hidden');
+    jQuery('#popup-fix img').attr('src','');
+  })
 })

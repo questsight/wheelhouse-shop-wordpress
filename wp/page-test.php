@@ -9,9 +9,7 @@ if ( have_posts() ) : ?>
             foreach ( $fields as $field ){
             if(array_key_exists("white", $field['marker'])):?>
             <div class="listing__item">
-                <picture>
-                <source srcset="<?php echo $field['icon-webp']; ?>" type="image/webp"><img class="listing__foto" src="<?php echo $field['icon-jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-            </picture>
+                <img class="listing__foto" src="<?php echo $field['icon-jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             <div class="listing__title">
                 <p><?php echo $field['name-color']; ?></p>
                 <ul>

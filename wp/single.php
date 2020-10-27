@@ -8,9 +8,7 @@
             $item=1;
             foreach ( $fields as $field ){?>
           <div class="listing__item" data-item="<?php echo $item; ?>" data-description="<?php echo $field['description']; ?>">
-            <picture>
-              <source srcset="<?php echo $field['icon-webp']; ?>" type="image/webp"><img class="listing__foto" src="<?php echo $field['icon-jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-            </picture>
+            <img class="listing__foto" src="<?php echo $field['icon-jpg']; ?>" data-src="<?php echo $field['icon-jpg']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             <div class="listing__title"><?php echo $field['name-color']; ?></div>
           </div>
           <?php $item++;} endif;?> 

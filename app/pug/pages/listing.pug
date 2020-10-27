@@ -111,12 +111,14 @@ block site__content
       .filter__show.hidden_type_max-md Показать
     .filter__call.hidden_type_max-md Открыть фильтр
         i.fa.fa-filter(aria-hidden="true")
-    .listing(data-box='box' data-size="big")
-      a.listing__item(href="#" data-item="1" data-description="<p>Повседневная практика показывает, что дальнейшее развитие различных форм деятельности позволяет выполнять важные задания по разработке систем массового участия. Идейные соображения высшего порядка, а также постоянное информационно-пропагандистское обеспечение нашей деятельности требуют от нас анализа модели развития.</p")
-        picture
-          source(srcset='assets/images/komanda-wh-ushakova.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-ushakova.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 1
+    .listing(data-box='box' data-size="big" data-flip='flip')
+      a.listing__item.flip(href="#" data-item="1" data-description="test")
+        .flip__front
+          picture
+            source(srcset='assets/images/komanda-wh-ushakova.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
+            img.listing__foto(src='assets/images/komanda-wh-ushakova.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+          .listing__title имя 1
+        .flip__back test
       .listing__item(data-item="2" data-description="<p>test2</p")
         picture
           source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")

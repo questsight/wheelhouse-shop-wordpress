@@ -29,7 +29,20 @@ defined( 'ABSPATH' ) || exit;
 			foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 				$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 				$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
-
+        $item_id = $cart_item['product_id'];
+        $categories = get_the_terms( $item_id, 'product_cat' );
+        $mattress = false;
+        $bed = false;
+        foreach ($categories as $category) {
+          if($category->term_id == 148){
+            $mattress = true;
+            break;
+          }
+          if($category->term_id == 23 || $category->term_id == 24 || $category->term_id == 151 || $category->term_id == 152 || $category->term_id == 153 || $category->term_id == 154){
+            $bed = true;
+            break;
+          }
+        }
 				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 					$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 					?>
@@ -38,7 +51,7 @@ defined( 'ABSPATH' ) || exit;
 						<?php
 						$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
-						if ( ! $product_permalink ) {
+						if ( ! $product_permalink || $mattress) {
 							echo $thumbnail; // PHPCS: XSS ok.
 						} else {
 							printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $thumbnail ); // PHPCS: XSS ok.
@@ -48,8 +61,8 @@ defined( 'ABSPATH' ) || exit;
             <div class="cart__description">
               <div class="cart__title product-name" data-title="<?php esc_attr_e( 'Product', 'woocommerce' ); ?>">
 						  <?php
-						  if ( ! $product_permalink ) {
-							 echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . '&nbsp;' );
+						  if ( ! $product_permalink || $mattress) {
+							 echo '<p>'.wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . '&nbsp;' ).'</p>';
 						  } else {
 							 echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $_product->get_name() ), $cart_item, $cart_item_key ) );
 						  }
@@ -61,10 +74,12 @@ defined( 'ABSPATH' ) || exit;
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'woocommerce' ) . '</p>', $product_id ) );
 						  }
 						  ?>
-						  </div>
-             
-             
-             
+						  </div>             
+              <?php if($bed):?>
+              <div><a class="cart__link" href="<?php echo get_category_link( 158 );?>">Добавить подушки</a></div>
+              <div><a class="cart__link" href="<?php echo get_category_link( 159 );?>">Добавить покрывала</a></div>
+              <br>
+              <?php endif?>
             <div class="cart__count product-quantity" data-title="<?php esc_attr_e( 'Quantity', 'woocommerce' ); ?>">
 						<?php
 						if ( $_product->is_sold_individually() ) {

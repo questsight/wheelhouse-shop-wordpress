@@ -35,10 +35,10 @@
       </section>
       <footer class="site__footer footer">
         <div class="footer__item hidden_type_min-md">
-          <div class="footer__call" data-popup="callback"><i class="fa fa-phone fa-lg" aria-hidden="true"></i><span>Oбратная связь</span></div>
+          <div class="footer__call" data-popup="callback"><span class="icon-phone"></span><span>Oбратная связь</span></div>
         </div>
-        <div class="footer__item hidden_type_min-md"><a class="footer__social" href="https://www.instagram.com/wheelhousedesign.ru" target="_blank"><i class="fa fa-instagram fa-3x" aria-hidden="true"></i><span>wheelhousedesign.ru</span></a></div>
-        <div class="footer__item hidden_type_min-md"><a class="footer__social" href="https://www.facebook.com/katerina.v.ushakova/" target="_blank"><i class="fa fa-facebook-official fa-3x" aria-hidden="true"></i><span>wheelhousedesign.ru</span></a></div>
+        <div class="footer__item hidden_type_min-md"><a class="footer__social" href="https://www.instagram.com/wheelhousedesign.ru" target="_blank"><span class="icon-instagram"></span><span>wheelhousedesign.ru</span></a></div>
+        <div class="footer__item hidden_type_min-md"><a class="footer__social" href="https://www.facebook.com/katerina.v.ushakova/" target="_blank"><span class="icon-facebook-official"></span><span>wheelhousedesign.ru</span></a></div>
         <?php
             wp_nav_menu( array(
               'theme_location' => 'footer-mobile',
@@ -49,7 +49,7 @@
       </footer>
       <div class="popup hidden" id="callback">
         <div class="popup__content">
-          <div class="popup__exit"><i class="fa fa-times fa-lg" aria-hidden="true"></i></div>
+          <div class="popup__exit">&times;</div>
           <?php echo do_shortcode('[contact-form-7 id="211" title="Обратный звонок"]'); ?>
         </div>
       </div>

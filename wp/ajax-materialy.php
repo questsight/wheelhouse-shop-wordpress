@@ -9,9 +9,7 @@ if ($_REQUEST && !empty($_REQUEST)) {
 }
 if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
           <a href="<?php the_permalink()?>" class="listing__item">
-            <picture>
-              <source srcset="<?php echo CFS()->get('image-webp'); ?>" type="image/webp"><img class="listing__foto" src="<?php echo CFS()->get('image-jpg'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-            </picture>
+            <img class="listing__foto" src="<?php the_post_thumbnail_url();?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             <div class="listing__title"><?php the_title(); ?></div>
           </a>
           <?php endwhile; endif; ?>
