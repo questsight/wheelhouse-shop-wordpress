@@ -28,9 +28,9 @@ foreach($product->category_ids as $cat){
 }
 if ( $related_products ) : ?>
 		
-		<?php woocommerce_product_loop_start(); echo '<div class="product__subtitle">Похожие товары:</div>';?>
+		<?php woocommerce_product_loop_start(); ?>
 
-			<?php foreach ( $related_products as $related_product ) : ?>
+			<?php $rel=array(); foreach ( $related_products as $related_product ) : ?>
 
 					<?php
 					$post_object = get_post( $related_product->get_id() );
@@ -39,7 +39,7 @@ if ( $related_products ) : ?>
           if(count(array_intersect( $product->category_ids, $related_product->category_ids)) == count($related_product->category_ids)){
             foreach($related_product->category_ids as $cat){
               if(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' ) && array_key_exists($value, CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' ))){
-                wc_get_template_part( 'content', 'product' );
+                $rel[]= $related_product;
                 break;
               }
             }
@@ -47,6 +47,19 @@ if ( $related_products ) : ?>
 					?>
 
 			<?php endforeach; ?>
+			<?php if($rel){
+          echo '<div class="product__subtitle">Похожие товары:</div>';
+          $item = 0;
+          foreach ( $rel as $rel_product ){
+            $post_object = get_post( $rel_product->get_id() );
+            setup_postdata( $GLOBALS['post'] =& $post_object );
+            wc_get_template_part( 'content', 'product' );
+            $item++;
+            if($item == 4){
+              break;
+            }
+          }
+      };?>
 
 		<?php woocommerce_product_loop_end(); ?>
 

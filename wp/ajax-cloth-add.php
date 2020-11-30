@@ -45,12 +45,9 @@ foreach ( $fields as $field ){?>
     material = "";
     jQuery('.cloth__popup').addClass('hidden');
   });
-</script>
-<?php if($item==0):?>
-<script>
     jQuery('#choice').on('click', function(){
-    jQuery('[name="_material_0"]').attr('value',material);
-    jQuery('[data-item="0"]').html(jQuery('.cloth__popup-title').html());
+    jQuery('[data-key="<?php echo $item;?>"]').attr('value',material);
+    jQuery('[data-item="<?php echo $item;?>"]').html(jQuery('.cloth__popup-title').html());
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-cloth').addClass('hidden');
     jQuery('#cloth__color').removeClass('hidden');
@@ -58,29 +55,3 @@ foreach ( $fields as $field ){?>
     jQuery('.cloth').addClass('hidden');
   });
 </script>
-<?php endif;?>
-<?php if($item==1):?>
-<script>
-    jQuery('#choice').on('click', function(){
-    jQuery('[name="_material_1"]').attr('value',material);
-    jQuery('[data-item="1"]').html(jQuery('.cloth__popup-title').html());
-    jQuery('.cloth__popup').addClass('hidden');
-    jQuery('#result-cloth').addClass('hidden');
-    jQuery('#cloth__color').removeClass('hidden');
-    jQuery('.cloth__color').removeClass('hidden');
-    jQuery('.cloth').addClass('hidden');
-  });
-</script>
-<?php endif;?>
-<?php if($item==2):?>
-<script>
-    jQuery('#choice').on('click', function(){
-    jQuery('[name="_material_2"]').attr('value',material);
-    jQuery('[data-item="2"]').html(jQuery('.cloth__popup-title').html());
-    jQuery('.cloth__popup').addClass('hidden');
-    jQuery('#result-cloth').addClass('hidden');
-    jQuery('#cloth__color').removeClass('hidden');
-    jQuery('.cloth').addClass('hidden');
-  });
-</script>
-<?php endif;?>

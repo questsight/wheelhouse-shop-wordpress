@@ -29,8 +29,11 @@ jQuery( document ).ready( function() {
         jQuery($img).attr('src',src);
         jQuery($img).removeAttr('data-spai');
       });
+      jQuery('.product__variation').addClass('product__variation-block');
     }
-  });
+  },function(){
+    jQuery('.product__variation').removeClass('product__variation-block');
+  });;
   jQuery('#navigation .navigation__list .menu-item-has-children > a', this).on('click', function(){
     if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
       return false;

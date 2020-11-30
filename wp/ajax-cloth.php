@@ -3,9 +3,12 @@ global $query_string;
 query_posts($query_string.'&cat=34&posts_per_page=-1');
 if ( have_posts() ) : 
 $result = array();
-$collection = $_REQUEST['collection'][0];
+$collection = $_REQUEST['collection'];
+$console = array();
+foreach($collection as $val):
 while ( have_posts() ) : the_post();
-    if(array_key_exists($collection, CFS()->get('collection'))){
+    if(array_key_exists($val, CFS()->get('collection'))){
+        $console[]=get_the_title();
         $ids = get_the_ID();
         $fields = CFS()->get( 'palette' );
         if( ! empty($fields) ){
@@ -31,7 +34,7 @@ while ( have_posts() ) : the_post();
             }
         }
     }
-endwhile; endif;
+endwhile; endforeach; endif;
 if(! empty($result)){
 ksort($result['price']);
 ?>
@@ -55,6 +58,7 @@ ksort($result['price']);
 <script>
   var price;
   var material;
+  console.log(<?php echo json_encode($console) ?>)
   jQuery('#result-cloth .cloth__item').on('click', function(){
      price = jQuery(this).attr('data-price');
      material = jQuery(this).children('.listing__title').html();
@@ -71,11 +75,10 @@ ksort($result['price']);
   jQuery('#choice').on('click', function(){
     jQuery('[value="kategoriya-'+price+'"]').attr('selected','selected');
     jQuery('#pa_kategoriya-tkani').change();
-    jQuery('[name="_material_0"]').attr('value',material);
-    if(jQuery('[name="_material_1"]').attr('value') != "Стёганое полотно из микрофибры"){
-      jQuery('[name="_material_1"]').attr('value',"");  
+    if(jQuery('[name="_material[]"]').attr('value') != "Стёганое полотно из микрофибры"){
+      jQuery('[name="_material[]"]').attr('value',"");  
     }
-    jQuery('[name="_material_2"]').attr('value',"");
+    jQuery('[data-key="0"]').attr('value',material);
     jQuery('.product__cloth').html(jQuery('.cloth__popup-title').html());
     jQuery('.product__cloth-add').html("Выбрать материал и цвет");
     jQuery('[data-ids]').attr('value',ids);

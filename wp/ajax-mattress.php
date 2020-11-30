@@ -10,7 +10,6 @@ if($_REQUEST['mattress-fix']){
 if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
   if ( have_posts() ) : $mattress = array(); while ( have_posts() ) : the_post();
   if ($product->is_type( 'variable' )){
-    //print_r($product);
     $available_variations = $product->get_available_variations();
     foreach ($available_variations as $key => $value){
       if($_REQUEST['mattress-size'] == '1400-2000' || $_REQUEST['mattress-size'] == '1600-2000' || $_REQUEST['mattress-size'] == '1800-2000' || $_REQUEST['mattress-size'] == '2000-2000'){
@@ -42,7 +41,7 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
   });
   foreach ( $mattress as $key => $value ){
     if($fix){$price=0;}else{$price=$value['display_price'];}
-    echo '<div style="border:1px solid rgba(171, 178, 204, 0.85);" class="listing__item mattress__item flip" data-ids="'.$value['variation_id'].'" data-price="'.$price.'"><div class="flip__front"><img src="'.$value['img'].'"><div class="listing__title" style="text-transform:none;"><span id="title-name">'.$value['name'].'</span><br>Высота: '.$value['height'].'см<br>'.$value['hardness'].'</div><span class="listing__price">'.number_format($price, 0, ',', ' ').' ₽</span></div><div class="flip__back">'.$value['description'].'</div></a></div>';
+    echo '<div style="border:1px solid rgba(171, 178, 204, 0.85);" class="listing__item mattress__item flip"><div class="flip__front"><img src="'.$value['img'].'"><div class="listing__title" style="text-transform:none;"><span id="title-name">'.$value['name'].'</span><br>Высота: '.$value['height'].'см<br>'.$value['hardness'].'</div><span class="listing__price">'.number_format($price, 0, ',', ' ').' ₽</span></div><div class="flip__back" data-price="'.$price.'" data-ids="'.$value['variation_id'].'">'.$value['description'].'</div></a></div>';
   }
   else: do_action( 'woocommerce_no_products_found' );
   endif; 
@@ -76,12 +75,17 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-mattress').addClass('hidden');
     jQuery('.mattress').addClass('hidden');
-    var dp = jQuery('.summary .price .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '');
-    var rp = jQuery('.summary .price del .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '');
-    var sp = jQuery('.summary .price ins .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+    if(jQuery('.variation_id').attr('data-addprice')){
+      var addprice = parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+    }else{
+      var addprice = 0;
+    }
+    var dp = + jQuery('.summary .price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') - addprice;
+    var rp = + jQuery('.summary .price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') - addprice;
+    var sp = + jQuery('.summary .price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') - addprice;
     jQuery('.variation_id').attr('data-addprice',price);
-    jQuery('.summary .price .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(+dp+price) + " ₽");
-    jQuery('.summary .price del .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(+rp+price) + " ₽");
-    jQuery('.summary .price ins .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(+sp+price) + " ₽");
+    jQuery('.summary .price .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+dp+price) + " ₽");
+    jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp+price) + " ₽");
+    jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp+price) + " ₽");
   });
 </script>

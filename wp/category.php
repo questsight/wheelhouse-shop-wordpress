@@ -48,13 +48,13 @@ if ($_REQUEST && !empty($_REQUEST)) {
           <div class="filter__title" data-type="collection">Подходит для коллекции</div>
           <div class="filter__item hidden_type_min-md" data-type="collection">
             <?php $fields = CFS()->find_fields( array( 'field_name' => 'collection' ))['0']['options']['choices'];
-            foreach ($fields as $key => $value) {
+            foreach ($fields as $key => $value) { if($key != "empty"){
             ?>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="collection[]" value="<?php echo $key; ?>" id="collection<?php echo $key; ?>"  <?php checkbox('collection',$key);?>>
               <label class="filter__label" for="collection<?php echo $key; ?>"><?php echo $value; ?></label>
             </div>
-            <?php } ?>
+            <?php }} ?>
           </div>
           <div class="filter__title" data-type="marker">Цвет</div>
           <div class="filter__item hidden_type_min-md" data-type="marker">

@@ -10,3 +10,40 @@ to {
   animation: opacity 1000ms;
 .animation-opacity-0
   opacity 0;
+  
+@keyframes animation-opacity-hidden {
+from {
+  opacity: 1; 
+}
+to {
+  opacity: 0;
+}
+}
+.animation-opacity
+  animation: opacity 1000ms;
+.animation-opacity-0
+  opacity 0;
+.animation-opacity-hidden
+  animation: animation-opacity-hidden 1500ms forwards;
+
+@keyframes translate-r-l {
+from {
+  transform (translate(0,0)); 
+}
+to {
+  transform (translate(-100%,0));
+}
+}
+.animation-translate
+  animation: translate-r-l 1500ms forwards;
+  
+@keyframes animation-opacity-display {
+from {
+  opacity: 0; 
+}
+to {
+  opacity: 1;
+}
+}
+.animation-opacity-display
+  animation: animation-opacity-display 1500ms forwards;

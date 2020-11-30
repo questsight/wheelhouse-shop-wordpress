@@ -24,70 +24,62 @@ $variations_json = wp_json_encode( $available_variations );
 $variations_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $variations_json ) : _wp_specialchars( $variations_json, ENT_QUOTES, 'UTF-8', true );
 
 do_action( 'woocommerce_before_add_to_cart_form' );
-if(CFS()->get( 'color-name' )):?>
+if(CFS()->get( 'colors' )[0]['color-name']):?>
 <div class="product__color">
-    <div class="product__color-name"><?php echo CFS()->get( 'color-name' );?><span> - </span></div>
-	<div class="product__color-description"><?php echo CFS()->get( 'color-description' );?></div>
+    <div class="product__color-name"><?php echo CFS()->get( 'colors' )[0]['color-name'];?><span> - </span></div>
+	<div class="product__color-description"><?php echo CFS()->get( 'colors' )[0]['color-description'];?></div>
 </div>
 <?php endif;?>
-<form class="product__form variations_form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. ?>">
+<form class="product__form variations_form cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. ?>">
 	<?php do_action( 'woocommerce_before_variations_form' ); ?>
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
 		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce' ) ) ); ?></p>
 	<?php else : ?>
 		<div class="variations">
-			<?php $storage=0; $other=0; foreach ( $attributes as $attribute_name => $options ) : ?>
+			<?php foreach ( $attributes as $attribute_name => $options ) : ?>
 
 							<?php
-							    if(in_array('false',$options)){
-							        $input++;
-							        if(strpos($attribute_name, "storage") != false){
-							            $storage++;
-							        }else{
-							            $other++;
-							        }
-							    }
 							    $categories = get_the_terms( $post->ID, 'product_cat' );
 							    $slug = false;
-							    
-                                foreach ($categories as $category) {
-                                    if($category->slug == 'pokryvala'){
-                                        $slug = $category->slug;
-                                        break;
-                                    }
-                                    if($category->slug == 'matrasy'){
-                                        $slug = $category->slug;
-                                        break;
-                                    }
-                                }
+							    $aksessuary = false;
+                  foreach ($categories as $category) {
+                    if(CFS()->get( $category->slug . '-collection' )){
+                      $slug = $category->slug;
+                    }
+                    if($category->slug == 'matrasy'){
+                      $slug = $category->slug;
+                      $aksessuary = true;
+                      break;
+                    }
+                    if(get_ancestors($category->term_id,'product_cat')[0] == 33){
+                      $aksessuary = true;
+                      break;
+                    }
+                  }
 								wc_dropdown_variation_attribute_options(
 									array(
 										'options'   => $options,
 										'attribute' => $attribute_name,
 										'product'   => $product,
 										'input' => $input,
-										'storage' => $storage,
-										'other' => $other,
 										'slug' => $slug,
-										'fixchoice' => CFS()->get( 'fix-choice' ),
+                    'aksessuary' =>$aksessuary,
 									)
 								);
 								
 							?>
 
-				<?php endforeach;
-				if($storage > 0 || $other > 0){echo "</div></div></div>";}?>
+				<?php endforeach;?>
 		</div>
         <?php $heading = apply_filters( 'woocommerce_product_additional_information_heading', __( 'Additional information', 'woocommerce' ) );
             do_action( 'woocommerce_product_additional_information', $product ); ?>
-        <div class="description"><?php echo $product->post->post_content;?></div>
+        
 		<div class="single_variation_wrap">
 			<?php
 				/**
 				 * Hook: woocommerce_before_single_variation.
 				 */
 				do_action( 'woocommerce_before_single_variation' );
-
 				/**
 				 * Hook: woocommerce_single_variation. Used to output the cart button and placeholder for variation data.
 				 *
@@ -96,7 +88,6 @@ if(CFS()->get( 'color-name' )):?>
 				 * @hooked woocommerce_single_variation_add_to_cart_button - 20 Qty and cart button.
 				 */
 				do_action( 'woocommerce_single_variation' );
-
 				/**
 				 * Hook: woocommerce_after_single_variation.
 				 */

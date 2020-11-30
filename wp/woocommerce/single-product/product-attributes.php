@@ -28,31 +28,15 @@ if ( ! $product_attributes ) {
       $mattress = false;
       $size = false;
       foreach ($categories as $category) {
-        if($category->term_id == 23 || $category->term_id == 24){
-          $mattress = true;
-          break;
-        }elseif($category->term_id == 148){
+        if($category->term_id == 148){
             $size = true;
             break;
         }
       }
-  if($mattress):?>
-  <div class="product__variation">
-    <div class="product__variation-text"></div>
-    <div class="product__variation-choice" id="product__mattress">Добавить матрас</div>
-  </div> 
-  <?php endif;?>
-  <?php $fields = CFS()->get( 'mattress' ); if(!empty($fields)):?>
-  <div class="product__variation">
-    <div class="product__variation-text"></div>
-    <div class="product__variation-choice" data-fix=1 id="product__mattress">Выбрать матрас</div>
-  </div>
-  <?php endif;?>
-	<?php if(!$size): foreach ( $product_attributes as $product_attribute_key => $product_attribute ) : ?>
+	if(!$size): foreach ( $product_attributes as $product_attribute_key => $product_attribute ) : ?>
 	    <div class="product__variation-size woocommerce-product-attributes-item woocommerce-product-attributes-item--<?php echo esc_attr( $product_attribute_key ); ?>">
 			<div class="product__variation-text woocommerce-product-attributes-item__label"><?php echo wp_kses_post( $product_attribute['label'] ); ?></div>
-			<div class="product__variation-choice woocommerce-product-attributes-item__value">Чтобы узнать общие габаритные размеры изделия, выберите опции товара</div>
+			<div class="product__variation-choice woocommerce-product-attributes-item__value">Чтобы узнать общие габаритные размеры изделия, выберите размер спального места</div>
 		</div>
 	<?php endforeach; endif;?>
-	<br>
 </div>

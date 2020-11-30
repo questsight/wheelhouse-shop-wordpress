@@ -38,26 +38,31 @@ if ( post_password_required() ) {
 }
 ?>
 <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
-    <div class="product__gallery images">
-        <?php
-		if ( $product->get_image_id() ) {
-			$html = get_gallery_image_html( $product->get_image_id(), true );
-		}
-
-		echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $product->get_image_id() ); // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
-
-		//do_action( 'woocommerce_product_thumbnails' );
-            $fields = CFS()->get( 'gallery' );
-            if( ! empty($fields) ):
-            foreach ( $fields as $field ){?>
-          <img class="product__img" data-src="<?php echo $field['img-jpg']; ?>" src="<?php echo $field['img-min']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-         <?php } endif;
-            $fields = CFS()->get( 'schemes' );
-            if( ! empty($fields) ):
-            foreach ( $fields as $field ){?>
-            
-          <img class="product__img <?php if(!$field['selected']){echo "hidden ";}?>" data-scheme="<?php echo $field['scheme-size']; ?>" data-src="<?php echo $field['scheme-img']; ?>" src="<?php echo $field['scheme-mini']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
-         <?php } endif;?>
+  <div class="product__gallery">
+    <?php
+    $fields = CFS()->get( 'colors' )[0]['gallery'];
+    if( ! empty($fields) ):
+    $itk = 0;
+    foreach ( $fields as $key => $field ): if($itk==0): $itk++;?>
+      <div class='product__first'>
+        <img src="<?php echo $field['img-jpg']; ?>" class="magniflier">
+        <img src="<?php echo $field['img-jpg']; ?>" class="product__change">
+      </div>
+      <div class='product__foto'>
+      <?php endif;?>
+      <img class="product__img" data-src="<?php echo $field['img-jpg']; ?>" src="<?php echo $field['img-min']; ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>" data-gallery="gallery">
+    <?php endforeach;
+      $schemes = CFS()->get( 'schemes' );
+      if( ! empty($schemes) ):
+      foreach ( $schemes as $scheme ):?>    
+      <img class="product__img <?php if(!$scheme['selected']){echo "hidden";}?>" data-scheme="<?php echo $scheme['scheme-size']; ?>" data-src="<?php echo $scheme['scheme-img']; ?>" src="<?php echo $scheme['scheme-mini']; ?>">
+        <?php endforeach; endif;?>
+      </div>
+      <?php else:?>
+    <div class='product__first'>
+        <img src="<?php the_post_thumbnail_url(); ?>" class="magniflier">
+      </div>
+    <?php endif;?>
 	</div>
     <div class="product__description">
         <h1 class="product__title"><?php echo CFS()->get( 'title' );?></h1>
@@ -85,18 +90,23 @@ if ( post_password_required() ) {
                 <input type="hidden" data-ids name="ids" value="<?php echo CFS()->get('ids');?>">
                 <input type="hidden" data-item name="item" value="">
                 <input type="hidden" name="product_cat" value="<? echo get_term( $basic_cat, 'product_cat' )->slug;?>">
-                <?php if(!CFS()->get( 'fix-choice' )) {$values = CFS()->get(get_term( $basic_cat, 'product_cat' )->slug.'-collection');
+                <?php $values = CFS()->get(get_term( $basic_cat, 'product_cat' )->slug.'-collection');
                     foreach ( $values as $key => $label ) {
                         echo '<input type="hidden" name="collection[]" value="'.$key.'">';
-                }}?>
+                }?>
             </form>
         <div class="listing hidden" id="result-cloth"></div>
     </div>
     <?php $categories = get_the_terms( $post->ID, 'product_cat' );
       $mattress = false;
+      $aksessuary = false;
       foreach ($categories as $category) {
         if($category->term_id == 23 || $category->term_id == 24){
           $mattress = true;
+          break;
+        }
+        if(get_ancestors($category->term_id,'product_cat')[0] == 33){
+          $aksessuary = true;
           break;
         }
       }
@@ -121,6 +131,30 @@ if ( post_password_required() ) {
         <div class="listing hidden" data-size="big" id="result-mattress" style="width:100%;"></div>
     </div>
    <?php endif;?>
+   <form id='product-colors'>
+      <input type="hidden" name="product-ids" value="<?php the_ID(); ?>">
+     <?php if($mattress):?>
+      <input type="hidden" name="mattress-size" value="">
+     <?php endif;?>
+    </form>
+    <div class="product__popup colors hidden">
+        <div class="colors__close">&times;</div>
+        <div class="listing hidden" data-size="big" id="result-colors" style="width:100%;"></div>
+    </div>
+    <?php if(!$aksessuary):?>
+    <form id='product-pillar'>
+      <?php
+        $values = CFS()->get(get_term( $basic_cat, 'product_cat' )->slug.'-collection');
+        foreach ( $values as $key => $label ) {
+          echo '<input type="hidden" name="collection[]" value="'.$key.'">';
+        }
+      ?>
+    </form>
+    <div class="product__popup pillar hidden">
+        <div class="pillar__close">&times;</div>
+        <div class="listing hidden" data-size="big" id="result-pillar" style="width:100%;"></div>
+    </div>
+    <?php endif;?>
 </div>
 	    <?php
 	/**

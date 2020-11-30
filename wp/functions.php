@@ -126,31 +126,10 @@ function go_filter() {
   global $wp_query;
   foreach ($_GET as $key => $value) {
     $type = array('relation' => 'OR');
-    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved'){
+    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'category' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved' && $key != 'orderby'){
         foreach($value as $val){
-            $type[] = array(
+          $type[] = array(
 			    'key' => $key, 
-			    'compare_key' => 'LIKE',
-			    'value' => $val,
-                'type' => 'text',
-                'compare' => 'IN'
-		    );
-        }
-    }
-    $args['meta_query'][] = $type;
-  }
-  query_posts(array_merge($args,$wp_query->query));
-}
-function go_filter_shop() { 
-  $args = array();
-  $args['meta_query'] = array('relation' => 'OR');
-  global $wp_query;
-  foreach ($_GET as $key => $value) {
-    $type = array('relation' => 'OR');
-    if($key != 'cat' && $key != 'v' && $key != 'product_cat'){
-        foreach($value as $val){
-            $type[] = array(
-			    'key' => $key,
 			    'compare_key' => 'LIKE',
 			    'value' => $val,
           'type' => 'text',
@@ -162,6 +141,50 @@ function go_filter_shop() {
   }
   query_posts(array_merge($args,$wp_query->query));
 }
+
+function go_filter_shop() { 
+  $args = array();
+  $args['meta_query'] = array('relation' => 'AND');
+  global $wp_query;
+  foreach ($_GET as $key => $value) {
+    $type = array('relation' => 'OR');
+    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'category' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved' && $key != 'orderby' && $key != 'post_type'){
+        foreach($value as $val){
+          $type[] = array(
+			    'key' => $key, 
+			    'compare_key' => 'LIKE',
+			    'value' => $val,
+          'type' => 'text',
+          'compare' => 'IN'
+		    );
+        }
+    $args['meta_query'][] = $type;
+    }
+  }
+  $query = new WP_Query(array_merge($wp_query->query,$args));
+  $products = $query->posts;
+  if($_GET['orderby'] == 'price'){ 
+    usort($products, function($a,$b){
+      $idsA = $a->ID;
+      $productA = new WC_Product($idsA);
+      $idsB = $b->ID;
+      $productB = new WC_Product($idsB);
+      return ($productA->get_price()-$productB->get_price());
+    });
+  }
+  if($_GET['orderby'] == 'priced'){ 
+    usort($products, function($a,$b){
+      $idsA = $a->ID;
+      $productA = new WC_Product($idsA);
+      $idsB = $b->ID;
+      $productB = new WC_Product($idsB);
+      return ($productB->get_price()-$productA->get_price());
+    });
+  }
+  return $products;
+}
+
+
 
 function checkbox($name,$value) {
   if($_REQUEST[$name] && in_array($value,$_REQUEST[$name])){
@@ -286,7 +309,31 @@ function woocommerce_template_loop_product_title() {
 function woocommerce_get_product_thumbnail( $size = 'woocommerce_thumbnail', $deprecated1 = 0, $deprecated2 = 0, $attr = array('class' => 'listing__foto')) {
 	global $product;
 	$image_size = apply_filters( 'single_product_archive_thumbnail_size', $size );
-	return $product ? $product->get_image( $image_size, $attr ) : '';
+  if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )->slug != 'aksessuary' ){
+    $slug = get_term( get_queried_object()->parent )->slug;
+  }else{
+    $slug = get_queried_object()->slug;
+  }
+  if($_REQUEST[$slug.'-marker']){
+    $marker = $_REQUEST[$slug.'-marker'][0];
+    $colors = CFS()->get( 'colors');
+    $color = false;
+    foreach ( $colors as $key => $value ){
+      if(array_key_first($value['marker']) == 'basic'){
+        $basic = $value['gallery'][0]['img-jpg'];
+      }
+      if(array_key_first($value['marker']) == $marker){
+        $color = true;
+        echo '<img width="450" height="300" src="'.$value['gallery'][0]['img-jpg'].'" class="listing__foto">';
+        break;
+      }
+    }
+    if(!$color){
+      echo '<img width="450" height="300" src="'.$basic.'" class="listing__foto">';
+    }
+  }else{
+    return $product ? $product->get_image( $image_size, $attr ) : '';
+  }
 }
 //страница общего каталога
 function woocommerce_template_loop_category_link_open( $category ) {
@@ -353,7 +400,7 @@ function woocommerce_get_product_subcategories( $parent_id = 0 ) {
 	return $product_categories;
 }
 function woocommerce_breadcrumb( $args = array() ) {
-	$args = wp_parse_args(
+	/*$args = wp_parse_args(
 		$args,
 		apply_filters(
 			'woocommerce_breadcrumb_defaults',
@@ -362,11 +409,8 @@ function woocommerce_breadcrumb( $args = array() ) {
 				'wrap_before' => '<nav class="breadcrumb">',
 				'wrap_after'  => '</nav>',
 				'before'      => '',
-				'a
-				
-				
-				fter'       => '',
-				'home'        => _x( 'Каталог', 'breadcrumb', 'woocommerce' ),
+				'after'       => '',
+				'home'        => _x( 'Home', 'breadcrumb', 'woocommerce' ),
 			)
 		)
 	);
@@ -380,8 +424,8 @@ function woocommerce_breadcrumb( $args = array() ) {
 	 *
 	 * @hooked WC_Structured_Data::generate_breadcrumblist_data() - 10
 	 */
-	do_action( 'woocommerce_breadcrumb', $breadcrumbs, $args );
-		wc_get_template( 'global/breadcrumb.php', $args );
+	//do_action( 'woocommerce_breadcrumb', $breadcrumbs, $args );
+	//wc_get_template( 'global/breadcrumb.php', $args );
 }
 
 //Товар
@@ -408,9 +452,7 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 			$args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) : $args['product']->get_variation_default_attribute( $args['attribute'] ); // WPCS: input var ok, CSRF ok, sanitization ok.
 		}
 		$slug                  = $args['slug'];
-		$fixchoice             = $args['fixchoice'];
-        $storage               = $args['storage'];
-        $other                 = $args['other'];
+    $aksessuary            = $args['aksessuary'];
 		$options               = $args['options'];
 		$product               = $args['product'];
 		$attribute             = $args['attribute'];
@@ -423,78 +465,53 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 			$attributes = $product->get_variation_attributes();
 			$options    = $attributes[ $attribute ];
 		}
-        
-	    if(strpos($name, "storage") != false){
-	        
-	    }
-	    if(in_array('false',$options)){
-            $checked='';
-            if($args['selected']=='true'){$checked='checked ';}
-            if($other == 1){
-                $html = "";
-                if($storage > 0){
-                    $html .= '</div></div></div>';    
-                }
-                $html .= '<div class="product__variation"><div class="product__variation-text"></div><div class="product__variation-choice"><span>Выбрать опции</span><div class="product__variation-select hidden"><div class="product__variation-input"><input data-ids="' . esc_attr( $id ) . ' " id="input_' . esc_attr( $id ) . '"'. $checked .'type="checkbox" name="attribute_pa_dust-free" data-attribute_name="attribute_pa_dust-free" data-show_option_none="yes"><label for="input_' . esc_attr( $id ) . '">' . wc_attribute_label( $attribute )  . '</label></div>';
-            }elseif($storage == 1){
-                $html = "";
-                if($other > 0){
-                    $html .= '</div></div></div>';
-                }
-                $html .= '<div class="product__variation"><div class="product__variation-text"></div><div class="product__variation-choice"><span>Система хранения</span><div class="product__variation-select hidden"><div class="product__variation-input"><input data-ids="' . esc_attr( $id ) . ' " id="input_' . esc_attr( $id ) . '"'. $checked .'type="checkbox" name="attribute_pa_dust-free" data-attribute_name="attribute_pa_dust-free" data-show_option_none="yes"><label for="input_' . esc_attr( $id ) . '">' . wc_attribute_label( $attribute )  . '</label></div>';
-            }else{
-                $html = '<div class="product__variation-input"><input data-ids="' . esc_attr( $id ) . ' " id="input_' . esc_attr( $id ) . '"'. $checked .' type="checkbox" name="attribute_pa_dust-free" data-attribute_name="attribute_pa_dust-free" data-show_option_none="yes"><label for="input_' . esc_attr( $id ) . '">' . wc_attribute_label( $attribute )  . '</label></div>';
-            }
-            $html .= '<select class="product__variation-choice hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-        }elseif($name  == "attribute_pa_kategoriya-tkani"){
-            if(count($options) == 1 && !$fixchoice){
-                $html = '<div id="popup-fix" class="popup hidden" style="background: rgba(255, 255, 255, 0.7);"><div class="popup__content"><div class="listing__close" style="top: -25px;right: -10px;">&times;</div><img src=""></div></div><div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_0' ) .'">' . CFS()->get( 'material_0' ) . '</div></div>';
-                if(CFS()->get( 'material_name_1' )){
-                  $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_1' ) .'" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
-                }
-                if(CFS()->get( 'material_name_2' )){
-                  $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. CFS()->get( 'material_img_2' ) .'" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>';
-                }
-
-                $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-
-            }else{
-                if($fixchoice){
-                   $html = '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="0">' . CFS()->get( 'material_0' ) . '</div></div>';
-                 
-                }else {
-                   $html = '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_0' ) . '</div><div class="product__variation-choice product__cloth">' . CFS()->get( 'material_0' ) . '</div></div>';
-                 
-                }
-                if(CFS()->get( 'material_name_1' )){
-                    if($slug == 'pokryvala'){
-                        $html .= '<div class="product__variation-size"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
-                    }else{
-                        $html .= '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_1' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="1">' . CFS()->get( 'material_1' ) . '</div></div>';
-                    }
-                  
-                }
-                if(CFS()->get( 'material_name_2' )){
-                  $html .= '<div class="product__variation"><div class="product__variation-text">' . CFS()->get( 'material_name_2' ) . '</div><div class="product__variation-choice product__cloth-add" data-item="2">' . CFS()->get( 'material_2' ) . '</div></div>'; 
-                }
-                $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-            }
-        }elseif(count($options) == 1){
-            $terms = wc_get_product_terms(
-					$product->get_id(),
-					$attribute,
-					array(
-						'fields' => 'all',
-					)
-				);
-            $html = '<div class="product__variation-size"><div class="product__variation-text"></div><div class="product__variation-choice">' . $terms[0]->name. '</div><select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-        }elseif($slug == "matrasy"){
-            $html = '<div class="product__variation-size"><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-        }else{
-            $html = '<div class="product__variation"><div class="product__variation-text"></div><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+    if($name  == "attribute_pa_kategoriya-tkani"){
+      $html;
+      $colors = CFS()->get( 'colors' );
+      $fields = $colors[0]['materials'];
+      $materials = CFS()->get( 'materials' );
+      $hidden;
+      if(count($colors) > 1){
+        $hidden = 'hidden ';
+        $html .= '<div class="product__variation"><div class="product__variation-text"></div><div class="product__variation-choice" id="product__colors">Выбрать цвет</div></div>';
+      }
+      if(count($colors) > 1 || !$colors[0]['basic']){
+        $html .= '<div id="popup-fix" class="popup hidden" style="background: rgba(255, 255, 255, 0.7);"><div class="popup__content"><div class="listing__close" style="top: -25px;right: -10px;">&times;</div><img src=""></div></div>';
+      }
+      $key = 0;
+      foreach ( $fields as $k => $val ){
+        if(count($colors) > 1 || $colors[0]['basic']){
+          if($key == 0){
+            $html .= '<div class="'.$hidden.'product__variation choice__basic"><div class="product__variation-text">' . $materials[$key]['material_name'] . '</div><div class="product__variation-choice product__cloth">' . $val['material'] . '</div></div>';
+          }elseif($key == 1 && $slug == 'pokryvala'){
+            $html .= '<div class="'.$hidden.'product__variation-size choice__basic"><div class="product__variation-text">' . $materials[$key]['material_name'] . '</div><div class="product__variation-choice" data-item="'.$key.'">' . $val['material'] . '</div></div>';
+          }else{
+            $html .= '<div class="'.$hidden.'product__variation choice__basic"><div class="product__variation-text">' . $materials[$key]['material_name'] . '</div><div class="product__variation-choice product__cloth-add" data-item="'.$key.'">' . $val['material'] . '</div></div>';
+          }
         }
-		
-		
+        if(count($colors) > 1 || !$colors[0]['basic']){
+          $html .= '<div class="'.$hidden.'product__variation-size choice__color"><div class="product__variation-text">' . $materials[$key]['material_name'] . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. $val['material_img'] .'" data-item="'.$key.'">' . $val['material'] . '</div></div>';
+        }
+        $key++;
+      }
+      if(!$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==3 || !$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==12){
+        $html .= '<div class="'.$hidden.'product__variation choice__pillar"><div class="product__variation-text">Опоры</div><div class="product__variation-choice product__pillar">Выбрать форму и цвет опор</div></div>';
+      }
+      $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">';
+    }elseif(count($options) == 1){
+      $terms = wc_get_product_terms(
+			 $product->get_id(),
+			 $attribute,
+			 array(
+			   'fields' => 'all',
+			 )
+			);
+      $html = '<div class="product__variation-size"><div class="product__variation-text"></div><div class="product__variation-choice">' . $terms[0]->name. '</div><select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+    }elseif($slug == "matrasy"){
+      $html = '<div class="product__variation-size"><select style="width:auto" class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+    }else{
+      $html = '<div class="product__variation"><div class="product__variation-text"></div><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+    }
 		$html .= '<option value="">' . wc_attribute_label( $attribute )  . '</option>';
 
 		if ( ! empty( $options ) ) {
@@ -533,7 +550,7 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 		echo apply_filters( 'woocommerce_dropdown_variation_attribute_options_html', $html, $args ); // WPCS: XSS ok.
 	}
 
-/*add_filter('woocommerce_variable_price_html', 'my_woocommerce_variable_price_html', 10, 2); 
+add_filter('woocommerce_variable_price_html', 'my_woocommerce_variable_price_html', 10, 2); 
 function my_woocommerce_variable_price_html( $price, $product ) {
     $prices = array( $product->get_variation_price( 'min', true ), $product->get_variation_price( 'max', true ) );
     $price = $prices[0] !== $prices[1] ? sprintf( __( '%1$s', 'woocommerce' ), wc_price( $prices[0] ) ) : wc_price( $prices[0] );
@@ -547,7 +564,7 @@ function my_woocommerce_variable_price_html( $price, $product ) {
         $price = '<del>' . $saleprice . $product->get_price_suffix() . '</del> <ins>' . $price . $product->get_price_suffix() . '</ins>';
     }
      return $price; 
-}*/
+}
 add_action( 'woocommerce_before_single_product', 'move_variations_single_price', 1 );
 function move_variations_single_price(){
     global $product, $post;
@@ -590,37 +607,83 @@ function replace_variation_single_price(){
             font-size: 0% !important;
         }
     </style>
-    <script>
+<script>
     jQuery(document).ready(function($) {
-        $('.variation_id').change( function(){
-            if( '' != $('input.variation_id').val() ){
-                if($('p.availability')){
-                    $('p.availability').remove();}
-                if(this.hasAttribute('data-addprice')){
-                  var dp = + jQuery('div.woocommerce-variation-price span.price .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                  var rp = + jQuery('div.woocommerce-variation-price > span.price del .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                  var sp = + jQuery('div.woocommerce-variation-price > span.price ins .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                  jQuery('.summary .price .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(dp) + " ₽");
-                  jQuery('.summary .price del .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(rp) + " ₽");
-                  jQuery('.summary .price ins .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
-                  $('p.price').append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>'); 
+        jQuery('.variation_id').change( function(){
+          if(jQuery('.variation_id').attr('data-option')){
+            var option = parseInt(jQuery('.variation_id').attr('data-option'), 10);
+          }else{
+            var option = 0;
+          }
+          if(jQuery('.variation_id').attr('data-addprice')){
+            var addprice = parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
+          }else{
+            var addprice = 0;
+          }
+          if( '' != $('input.variation_id').val() && jQuery('div.woocommerce-variation-price').text()){
+            var dp = + jQuery('div.woocommerce-variation-price span.price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+            var rp = + jQuery('div.woocommerce-variation-price span.price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+            var sp = + jQuery('div.woocommerce-variation-price span.price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+          }else{
+            var dp = + jQuery('div.hidden-variable-price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+            var rp = + jQuery('div.hidden-variable-price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+            var sp = + jQuery('div.hidden-variable-price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '') + addprice + option;
+          }
+          jQuery('.summary .price .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(dp) + " ₽");
+          jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(rp) + " ₽");
+          jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
+        });
+        let previous;
+        $('.wc-pao-addon-field').on('focus', e => previous = e.target.value).change(function(e){
+            if(jQuery(this).attr('data-change') && jQuery(this).attr('data-price')){
+              if(jQuery(this).is(':checked')){
+                price = parseInt(jQuery(this).attr('data-price'), 10);
+                var dp = +jQuery('.summary .price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                var rp = +jQuery('.summary .price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                var sp = +jQuery('.summary .price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                if(jQuery('.variation_id').attr('data-option')){
+                  jQuery('.variation_id').attr('data-option',+ parseInt(jQuery('.variation_id').attr('data-option'), 10)+price);
                 }else{
-                  $('p.price').html($('div.woocommerce-variation-price > span.price').html()).append('<p class="availability">'+$('div.woocommerce-variation-availability').html()+'</p>'); 
+                  jQuery('.variation_id').attr('data-option',price);
                 }
-            } else {
-                 if(this.hasAttribute('data-addprice')){
-                   var dp = + jQuery('div.hidden-variable-price .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                   var rp = + jQuery('div.hidden-variable-price del .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                   var sp = + jQuery('div.hidden-variable-price ins .woocommerce-Price-amount').text().replace(/\₽.*/, '').replace(/\s+/g, '') + parseInt(jQuery('.variation_id').attr('data-addprice'), 10);
-                   jQuery('.summary .price .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(dp) + " ₽");
-                   jQuery('.summary .price del .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(rp) + " ₽");
-                   jQuery('.summary .price ins .woocommerce-Price-amount').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
-                 }else{
-                   $('p.price').html($('div.hidden-variable-price').html());
-                 }
-                if($('p.availability')){
-                    $('p.availability').remove();}
+                jQuery('.summary .price .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+dp+price) + " ₽");
+                jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp+price) + " ₽");
+                jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp+price) + " ₽");
+              }else{
+                price = parseInt(jQuery(this).attr('data-price'), 10);
+                var dp = +jQuery('.summary .price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                var rp = +jQuery('.summary .price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                var sp = +jQuery('.summary .price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+                jQuery('.variation_id').attr('data-option',parseInt(jQuery('.variation_id').attr('data-option'), 10)-price);
+                jQuery('.summary .price .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+dp-price) + " ₽");
+                jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp-price) + " ₽");
+                jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp-price) + " ₽");
+              }
+            }else if(jQuery(this).attr('data-change')){
+              if(jQuery('[value="'+previous+'"]').attr('data-price')){
+                oldprice = parseInt(jQuery('[value="'+previous+'"]').attr('data-price'), 10);
+              }else{
+                oldprice = 0;
+              }
+              if($(this).children('option:selected').attr('data-price')){
+                price = parseInt($(this).children('option:selected').attr('data-price'), 10);
+              }else{
+                price = 0;
+              }
+              previous = e.target.value;
+              var dp = +jQuery('.summary .price .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+              var rp = +jQuery('.summary .price del .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+              var sp = +jQuery('.summary .price ins .woocommerce-Price-amount bdi').text().replace(/\₽.*/, '').replace(/\s+/g, '');
+              if(jQuery('.variation_id').attr('data-option')){
+                jQuery('.variation_id').attr('data-option',+ parseInt(jQuery('.variation_id').attr('data-option'), 10)-oldprice+price);
+              }else{
+                jQuery('.variation_id').attr('data-option',price);
+              }
+              jQuery('.summary .price .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+dp-oldprice+price) + " ₽");
+              jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp-oldprice+price) + " ₽");
+              jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp-oldprice+price) + " ₽");
             }
+            jQuery(this).attr("data-change",'change');
         });
     });
     </script>
@@ -633,14 +696,14 @@ function replace_variation_single_price(){
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
 
 
-add_filter( 'woocommerce_get_price_html', 'custom_price_format', 10, 2 );
+/*add_filter( 'woocommerce_get_price_html', 'custom_price_format', 10, 2 );
 add_filter( 'woocommerce_variable_price_html', 'custom_price_format', 10, 2 );
 function custom_price_format( $price, $product ) {
 
 // 1. Variable products
 if( $product->is_type('variable') ){
     // Searching for the default variation
-   /* $default_attributes = $product->get_default_attributes();
+   $default_attributes = $product->get_default_attributes();
     // Loop through available variations
     foreach($product->get_available_variations() as $variation){
         $found = true; // Initializing
@@ -665,9 +728,9 @@ if( $product->is_type('variable') ){
     // Get the default variation prices or if not set the variable product min prices
     
     $regular_price = $default_variaton['display_regular_price'];
-    $sale_price = $default_variaton['display_price'];*/
-    $regular_price = CFS()->get( 'regular' );
-    $sale_price = CFS()->get( 'sale' );
+    $sale_price = $default_variaton['display_price'];
+    //$regular_price = CFS()->get( 'regular' );
+    //$sale_price = CFS()->get( 'sale' );
 }
 // 2. Other products types
 else {
@@ -683,7 +746,7 @@ if ( $regular_price !== $sale_price && $product->is_on_sale()) {
     $price = '<del>' . wc_price($regular_price) . '</del> <ins>' . wc_price($sale_price) . '</ins>';
 } else {$price = '<span>' . wc_price($regular_price) . '</span>';}
 return $price;
-}
+}*/
 //корзина
 add_action( 'wp_footer', 'cart_update_qty_script' );
 function cart_update_qty_script() {
@@ -702,12 +765,49 @@ function cart_update_qty_script() {
  * @return html
  */
 function ctrlv_material(){
-    $value = isset( $_POST['_material_0'] ) ? sanitize_text_field( $_POST['_material_0'] ) : '';
-    printf( '<label>%s</label><input type="hidden" name="_material_0" value="' . CFS()->get( 'material_0' ) . '" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
-    $value = isset( $_POST['_material_1'] ) ? sanitize_text_field( $_POST['_material_1'] ) : '';
-    printf( '<label>%s</label><input type="hidden" name="_material_1" value="' . CFS()->get( 'material_1' ) . '" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
-    $value = isset( $_POST['_material_2'] ) ? sanitize_text_field( $_POST['_material_2'] ) : '';
-    printf( '<label>%s</label><input type="hidden" name="_material_2" value="' . CFS()->get( 'material_2' ) . '" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+    global $post;
+    $categories = get_the_terms( $post->ID, 'product_cat' );
+    foreach($categories as $cat){
+      if(CFS()->get( get_term( $cat, 'product_cat' )->slug . '-collection' )){
+        $slug = get_term( $cat, 'product_cat' )->slug;
+        break;
+      }
+    }
+    $pokryvala = false;
+    $aksessuary = false;
+		foreach ($categories as $category) {
+      if($category->slug == 'pokryvala'){
+        $pokryvala = true;
+        $aksessuary = true;
+        break;
+      }
+      if(get_ancestors($category->term_id,'product_cat')[0] == 33){
+          $aksessuary = true;
+          break;
+        }
+    }
+    $fields = CFS()->get( 'materials' );
+    $colors = CFS()->get( 'colors' );
+    if( ! empty($fields) ){
+      $k = 0;
+      foreach ( $fields as $key => $val ){
+        $value = isset( $_POST['_material[]'] ) ? sanitize_text_field( $_POST['_material[]'] ) : '';
+        if(count($colors)==1 && !$colors[0]['basic']){
+          $name = $colors[0]['materials'][$k]['material'];
+        }elseif($pokryvala){
+          $name = 'Стёганое полотно из микрофибры';
+        }else{
+          $name = '';
+        }
+        printf( '<input type="hidden" data-key="'.$key.'" name="_material[]" value="'.$name.'" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+        printf( '<input type="hidden" name="_material-name[]" value="' . $val['material_name'] . '" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+        $k++;
+      }
+      if(!$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==3 || !$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==12){
+        printf( '<input type="hidden" data-key="pillar" name="_material[]" value="" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+        printf( '<input type="hidden" name="_material-name[]" value="Опоры" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) ); 
+      }
+    }
 }
 add_action( 'woocommerce_before_add_to_cart_button', 'ctrlv_material', 10 );
 /*
@@ -718,23 +818,15 @@ add_action( 'woocommerce_before_add_to_cart_button', 'ctrlv_material', 10 );
  * @return bool
  */
 function ctrlv_add_to_cart_validation($passed, $product_id, $qty){
- 
-    if( isset( $_POST['_material_0'] ) && sanitize_text_field( $_POST['_material_0'] ) == '' ){
-        $product = wc_get_product( $product_id );
-        wc_add_notice( sprintf( __( '%s не может быт добавлен в корзину, пока Вы не выберите материал обивки.', 'ctrlv-plugin-textdomain' ), $product->get_title() ), 'error' );
-        return false;
+    if( !empty( $_POST['_material'] )){
+      foreach($_POST['_material'] as $val){
+        if(!$val){
+          $product = wc_get_product( $product_id );
+          wc_add_notice( sprintf( __( '%s не может быт добавлен в корзину, пока Вы не выберите материал обивки.', 'ctrlv-plugin-textdomain' ), $product->get_title() ), 'error' );
+          return false;
+        }
+      }
     }
-    if( isset( $_POST['_material_1'] ) && sanitize_text_field( $_POST['_material_1'] ) == '' ){
-        $product = wc_get_product( $product_id );
-        wc_add_notice( sprintf( __( '%s не может быт добавлен в корзину, пока Вы не выберите материал обивки.', 'ctrlv-plugin-textdomain' ), $product->get_title() ), 'error' );
-        return false;
-    }
-    if( isset( $_POST['_material_2'] ) && sanitize_text_field( $_POST['_material_2'] ) == '' ){
-        $product = wc_get_product( $product_id );
-        wc_add_notice( sprintf( __( '%s не может быт добавлен в корзину, , пока Вы не выберите материал обивки.', 'ctrlv-plugin-textdomain' ), $product->get_title() ), 'error' );
-        return false;
-    }
- 
     return $passed;
  
 }
@@ -746,24 +838,14 @@ add_filter( 'woocommerce_add_to_cart_validation', 'ctrlv_add_to_cart_validation'
  * @return array
  */
 function ctrlv_add_cart_item_data( $cart_item, $product_id ){
- 
-    if( isset( $_POST['_material_0'] ) ) {
-        $cart_item['material_0'] = sanitize_text_field( $_POST['_material_0'] );
-    } else {
-        $cart_item['material_0'] = "";
-    }
-    if( isset( $_POST['_material_1'] ) ) {
-        $cart_item['material_1'] = sanitize_text_field( $_POST['_material_1'] );
-    } else {
-        $cart_item['material_1'] = "";
-    }
-    if( isset( $_POST['_material_2'] ) ) {
-        $cart_item['material_2'] = sanitize_text_field( $_POST['_material_2'] );
-    } else {
-        $cart_item['material_2'] = "";
-    }
- 
-    return $cart_item;
+  if( !empty( $_POST['_material'] ) ){
+      $cart_item['material'] = $_POST['_material'];
+  }
+  if( !empty( $_POST['_material-name'] ) ){
+      $cart_item['material-name'] = $_POST['_material-name'];
+  }
+  $cart_item['product_id'] = $product_id;
+  return $cart_item;
  
 }
 add_filter( 'woocommerce_add_cart_item_data', 'ctrlv_add_cart_item_data', 10, 2 );
@@ -774,17 +856,16 @@ add_filter( 'woocommerce_add_cart_item_data', 'ctrlv_add_cart_item_data', 10, 2 
  * @return array
  */
 function ctrlv_get_cart_item_from_session( $cart_item, $values ) {
-
-    if ( isset( $values['material_0'] ) ){
-        $cart_item['material_0'] = $values['material_0'];
+  
+  if( !empty( $values['material'] ) ){
+        $cart_item['material'] = $values['material'];
     }
-    if ( isset( $values['material_1'] ) ){
-        $cart_item['material_1'] = $values['material_1'];
+  if( !empty( $values['material-name'] ) ){
+        $cart_item['material-name'] = $values['material-name'];
     }
-    if ( isset( $values['material_2'] ) ){
-        $cart_item['material_2'] = $values['material_2'];
+  if( !empty( $values['product_id'] ) ){
+        $cart_item['product_id'] = $values['product_id'];
     }
-
     return $cart_item;
 
 }
@@ -796,16 +877,23 @@ add_filter( 'woocommerce_get_cart_item_from_session', 'ctrlv_get_cart_item_from_
  * @return void
  */
 function ctrlv_add_order_item_meta( $item_id, $values ) {
-
-    if ( ! empty( $values['material_0'] ) ) {
-        woocommerce_add_order_item_meta( $item_id, 'material_0', $values['material_0'] );           
+  $categories = get_the_terms( $values['product_id'], 'product_cat' );
+  $mattress = false;
+  foreach ($categories as $category) {
+    if($category->term_id == 148){
+      $mattress = true;
+      break;
     }
-    if ( ! empty( $values['material_1'] ) ) {
-        woocommerce_add_order_item_meta( $item_id, 'material_1', $values['material_1'] );           
-    }
-    if ( ! empty( $values['material_2'] ) ) {
-        woocommerce_add_order_item_meta( $item_id, 'material_2', $values['material_2'] );           
-    }
+  }
+  if(!$mattress){
+    $test=$values['material-name'];
+    if ( !empty( $values['material'] ) ){
+      foreach ( $values['material'] as $key => $val ){
+        $name = $test[$key];
+        woocommerce_add_order_item_meta( $item_id, $name, $val );   
+      }
+    }  
+  }
 }
 add_action( 'woocommerce_add_order_item_meta', 'ctrlv_add_order_item_meta', 10, 2 );
 /*
@@ -815,30 +903,15 @@ add_action( 'woocommerce_add_order_item_meta', 'ctrlv_add_order_item_meta', 10, 
  * @return array
  */
 function ctrlv_get_item_data( $other_data, $cart_item ) {
- 
-    if ( isset( $cart_item['material_0'] ) ){
- 
+    $test=$cart_item['material-name'];
+    if ( !empty( $cart_item['material'] ) ){
+      foreach ( $cart_item['material'] as $key => $val ){
+        $name = $test[$key];
         $other_data[] = array(
-            'name' => __( 'Базовый материал', 'ctrlv-plugin-textdomain' ),
-            'value' => sanitize_text_field( $cart_item['material_0'] )
+            'name' => $name,
+            'value' => sanitize_text_field( $val )
         );
- 
-    }
-    if ( isset( $cart_item['material_1'] ) ){
- 
-        $other_data[] = array(
-            'name' => __( 'Дополнительная материал №1', 'ctrlv-plugin-textdomain' ),
-            'value' => sanitize_text_field( $cart_item['material_1'] )
-        );
- 
-    }
-    if ( isset( $cart_item['material_2'] ) ){
- 
-        $other_data[] = array(
-            'name' => __( 'Дополнительный материал №2', 'ctrlv-plugin-textdomain' ),
-            'value' => sanitize_text_field( $cart_item['material_2'] )
-        );
- 
+      }
     }
  
     return $other_data;
@@ -1290,9 +1363,6 @@ function misha_remove_my_account_links( $menu_links ){
 			$html = str_replace("</p>", '', $html);
 			$html = str_replace("Выбрать", '', $html);
 			$html = str_replace("выбрать", '', $html);
-			$html = str_replace("material_0", 'Базовый материал', $html);
-			$html = str_replace("material_1", 'Дополнительная материал №1', $html);
-			$html = str_replace("material_2", 'Дополнительный материал №2', $html);
 		}
 
 		$html = apply_filters( 'woocommerce_display_item_meta', $html, $item, $args );
@@ -1343,43 +1413,10 @@ function get_gallery_image_html( $attachment_id, $main_image = false ) {
 
 	return '<div data-thumb="' . esc_url( $thumbnail_src[0] ) . '" data-thumb-alt="' . esc_attr( $alt_text ) . '" class="woocommerce-product-gallery__image"><a href="' . esc_url( $full_src[0] ) . '">' . $image . '</a></div>';
 }
-/*add_filter( 'woocommerce_output_related_products_args', 'jk_related_products_args' );
- function jk_related_products_args( $args ) {
- 
-$args['posts_per_page'] = 40; // количество "Похожих товаров"
- return $args;
-}
-function woocommerce_related_products( $args = array() ) {
-		global $product;
-
-		if ( ! $product ) {
-			return;
-		}
-		//$value = array_key_first(CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-collection' ));
-		//if(array_key_exists($value, CFS()->get( get_term( $product->category_ids[0], 'product_cat' )->slug . '-collection' ))){
-		$defaults = array(
-			'posts_per_page' => 10,
-			'columns'        => 2,
-			'orderby'        => 'rand', // @codingStandardsIgnoreLine.
-			'order'          => 'desc',
-		);
-
-		// Get visible related products then sort them at random.
-		$args['related_products'] = array_filter( array_map( 'wc_get_product', wc_get_related_products( $product->get_id(), $args['posts_per_page'], $product->get_upsell_ids() ) ), 'wc_products_array_filter_visible' );
-
-		// Handle orderby.
-		$args['related_products'] = wc_products_array_orderby( $args['related_products'], $args['orderby'], $args['order'] );
-
-		// Set global loop values.
-		wc_set_loop_prop( 'name', 'related' );
-		wc_set_loop_prop( 'columns', apply_filters( 'woocommerce_related_products_columns', $args['columns'] ) );
-		
-		wc_get_template( 'single-product/related.php', $args );
-	}*/
 function woocommerce_output_related_products() {
 
 		$args = array(
-			'posts_per_page' => 40,
+			'posts_per_page' => -1,
 			'columns'        => 4,
 			'orderby'        => 'rand', // @codingStandardsIgnoreLine.
 			//'meta_query' => 
@@ -1616,3 +1653,56 @@ function wplife_filter_woocommerce_short_description( $post_post_excerpt ) {
   return ""; 
 };
 add_filter( 'woocommerce_short_description', 'wplife_filter_woocommerce_short_description', 10, 1 );
+//Экран каталога (товары или категории)
+	function woocommerce_get_loop_display_mode() {
+		// Only return products when filtering things.
+		if ( wc_get_loop_prop( 'is_search' ) || wc_get_loop_prop( 'is_filtered' ) || $_REQUEST['collection'] || $_REQUEST['purpose']) {
+			return 'products';
+		}
+
+		$parent_id    = 0;
+		$display_type = '';
+
+		if ( is_shop() ) {
+			$display_type = get_option( 'woocommerce_shop_page_display', '' );
+		} elseif ( is_product_category() ) {
+			$parent_id    = get_queried_object_id();
+			$display_type = get_term_meta( $parent_id, 'display_type', true );
+			$display_type = '' === $display_type ? get_option( 'woocommerce_category_archive_display', '' ) : $display_type;
+		}
+
+		if ( ( ! is_shop() || 'subcategories' !== $display_type ) && 1 < wc_get_loop_prop( 'current_page' ) ) {
+			return 'products';
+		}
+
+		// Ensure valid value.
+		if ( '' === $display_type || ! in_array( $display_type, array( 'products', 'subcategories', 'both' ), true ) ) {
+			$display_type = 'products';
+		}
+
+		// If we're showing categories, ensure we actually have something to show.
+		if ( in_array( $display_type, array( 'subcategories', 'both' ), true ) ) {
+			$subcategories = woocommerce_get_product_subcategories( $parent_id );
+
+			if ( empty( $subcategories ) ) {
+				$display_type = 'products';
+			}
+		}
+
+		return $display_type;
+	}
+//Сортировка
+add_filter('woocommerce_default_catalog_orderby', 'custom_default_catalog_orderby');
+function custom_default_catalog_orderby()
+{
+  if (is_product_category('matrasy')) {
+    return 'price';
+  }else{
+    return 'date';
+  }
+}
+//Количество товаров на одной странице
+add_filter('loop_shop_per_page', 'wg_view_all_products');
+function wg_view_all_products(){
+  return '9999';
+}

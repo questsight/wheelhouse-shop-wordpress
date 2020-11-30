@@ -1,0 +1,23 @@
+.colors__basic:before
+  position: absolute;
+  content: "Cоздать собственное сочетание цветов";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index 1
+  color #fff
+  font-size 8px
+  text-transform uppercase
+  @media only screen and (min-width: xs)
+    font-size 11px
+  @media only screen and (min-width: sm)
+    font-size baseSize
+.colors__basic:after
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6)  

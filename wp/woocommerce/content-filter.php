@@ -7,8 +7,38 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
 ?>
          <form class="filter hidden_type_min-md" id="filter-product">
           <div class="filter__close hidden_type_max-md">&times;</div>
+           <?php if($slug == 'matrasy'): ?>
+           <input type="hidden" name="orderby" value="price">
+           <?php else: ?>
+             <div class="filter__title" data-type="marker">Сортировать:</div>
+          <div class="filter__item hidden_type_min-md" data-type="marker">
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="orderby" value="price" id="orderprice">
+              <label class="filter__label" for="orderprice">По цене (сначала дешевые)</label>
+            </div>
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="orderby" value="priced" id="orderpriced">
+              <label class="filter__label" for="orderpriced">По цене (сначала дорогие)</label>
+            </div>
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="orderby" value="none" id="ordernone">
+              <label class="filter__label" for="ordernone">По умолчанию</label>
+            </div>
+          </div>
+          <?php endif; ?>
+        <input type="hidden" name="category" value="<?php echo get_queried_object()->slug; ?>">
+          <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-marker' ))['0']['options']['choices']; if($fields):?>
+          <div class="filter__title" data-type="marker">Цвет</div>
+          <div class="filter__item hidden_type_min-md" data-type="marker">
+            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="<?php echo $slug; ?>-marker[]" value="<?php echo $key; ?>" id="marker<?php echo $key; ?>"  <?php checkbox($slug.'-marker',$key);?>>
+              <label class="filter__label" for="marker<?php echo $key; ?>"><?php echo $value; ?></label>
+            </div>
+            <?php }} ?>
+          </div>
+          <?php endif; ?>
           
-          <input type="hidden" name="product_cat" value="<?php echo get_queried_object()->slug; ?>">
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-purpose' ))['0']['options']['choices']; if($fields):?>
           <div class="filter__title" data-type="purpose">Назначение</div>
           <div class="filter__item hidden_type_min-md" data-type="purpose">

@@ -1,9 +1,27 @@
 jQuery( document ).ready( function() {
-  jQuery('.product_first').attr('srcset',jQuery('.product__img').attr('data-src'));
-  jQuery('.product_first').attr('src',jQuery('.product__img').attr('data-src'));
+  var scheme = false;
   jQuery(".product__img").on('click', function(){
-    jQuery('.product_first').attr('srcset',jQuery(this).attr('data-src'));
-    jQuery('.product_first').attr('src',jQuery(this).attr('data-src'));
+    jQuery('.product__first img').attr('src',jQuery(this).attr('data-src'));
+    if(jQuery(this).attr('data-scheme')){
+      scheme = true;
+    }
+  });
+  var choiseOne = false;
+  jQuery( ".product__variation-choice" ).change(function(e) {
+    if(jQuery( this ).attr("id") && choiseOne){
+      var a = jQuery( this ).attr("id");
+      if(a.indexOf('size') > -1) {
+        jQuery('[data-scheme]').addClass('hidden');
+        if(jQuery(this).val() && jQuery('img').is('[data-scheme='+jQuery(this).val()+']')){
+          jQuery('[data-scheme='+jQuery(this).val()+']').removeClass('hidden');
+          jQuery('[data-scheme='+jQuery(this).val()+']').click();
+        }else if(scheme){
+          jQuery('.product__first img').attr('src',jQuery(".product__img").attr('data-src'));
+          scheme = false;
+        }
+      } 
+    }
+    choiseOne = true;
   });
   var native_width = 0;
   var native_height = 0;
@@ -92,16 +110,5 @@ jQuery( document ).ready( function() {
       jQuery('#'+ids+' option[value="false"]').prop('selected',true);
       jQuery('#'+ids).change();
     }
-  });
-  jQuery( ".product__variation-choice" ).change(function(e) {
-    if(jQuery( this ).attr("id")){
-      var a = jQuery( this ).attr("id");
-      if(a.indexOf('size') > -1) {
-        jQuery('[data-scheme]').addClass('hidden');
-        if(jQuery(this).val()){
-          jQuery('[data-scheme='+jQuery(this).val()+']').removeClass('hidden');
-        }
-      } 
-    } 
   });
 });
