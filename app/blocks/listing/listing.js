@@ -15,7 +15,7 @@ jQuery( document ).ready( function() {
     if(portfolio){
       var stuff = jQuery(this).children('.listing__foto').attr('data-src').split(',');
     }
-    if( window.matchMedia( '(min-width: 992px)' ).matches & jQuery(".listing").height() > jQuery(window).height() - 160) {
+    if( window.matchMedia( '(min-width: 992px)' ).matches & jQuery(".listing").height() > jQuery(window).height() - 160 || window.matchMedia( '(min-width: 992px)' ).matches & jQuery(window).height()<700) {
       jQuery(".listing").attr("data-fixed","fixed");
     } else if(jQuery(".listing").height() > jQuery(window).height() - jQuery(".site__header").height() - 50){
       jQuery(".listing").attr("data-fixed","fixed");
@@ -47,9 +47,6 @@ jQuery( document ).ready( function() {
     } else {
       item--;
     }
-    console.log(item);
-    console.log(jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src'));
-    
     var stuff = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src').split(',');
     jQuery('.listing__popup-title').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').children('.listing__title').html());;
     jQuery('.listing__popup-description').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').attr('data-description'));

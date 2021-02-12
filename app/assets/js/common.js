@@ -164,7 +164,7 @@ jQuery( document ).ready( function() {
     if(portfolio){
       var stuff = jQuery(this).children('.listing__foto').attr('data-src').split(',');
     }
-    if( window.matchMedia( '(min-width: 992px)' ).matches & jQuery(".listing").height() > jQuery(window).height() - 160) {
+    if( window.matchMedia( '(min-width: 992px)' ).matches & jQuery(".listing").height() > jQuery(window).height() - 160 || window.matchMedia( '(min-width: 992px)' ).matches & jQuery(window).height()<700) {
       jQuery(".listing").attr("data-fixed","fixed");
     } else if(jQuery(".listing").height() > jQuery(window).height() - jQuery(".site__header").height() - 50){
       jQuery(".listing").attr("data-fixed","fixed");
@@ -196,9 +196,6 @@ jQuery( document ).ready( function() {
     } else {
       item--;
     }
-    console.log(item);
-    console.log(jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src'));
-    
     var stuff = jQuery('[data-item="'+item+'"]').children('.listing__foto').attr('data-src').split(',');
     jQuery('.listing__popup-title').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').children('.listing__title').html());;
     jQuery('.listing__popup-description').addClass('animation-opacity-0').html(jQuery('[data-item="'+item+'"]').attr('data-description'));
@@ -323,20 +320,39 @@ jQuery(document).ready(function () {
     }else{
       jQuery('#product__mattress').html('Добавить матрас');
     }
+    jQuery('#product__mattress-above').html('Добавить наматрасник');
     jQuery('#add-mattress').removeAttr('name');
+    jQuery('#add-mattress-above').removeAttr('name');
     jQuery('#add-mattress').removeAttr('value');
+    jQuery('#add-mattress-above').removeAttr('value');
     jQuery('.variation_id').removeAttr('data-addprice');
+    jQuery('.variation_id').removeAttr('data-addpricetwo');
   });
   jQuery('.variation_id').change( function(){
     jQuery('[name="mattress-size"]').attr('value',jQuery('#pa_size-krd').val());
   });
   jQuery('#product__mattress').on('click', function(){
     jQuery('.mattress').removeClass('hidden');
-    jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
+    //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
     jQuery("#result-mattress").html('<div class="spinner"></div>');
     jQuery.ajax({
         url: window.location.origin+'/wp-content/themes/questsight/ajax-mattress.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-mattress").html(data);
+        }
+    });
+    jQuery('#result-mattress').removeClass('hidden');
+  });
+  jQuery('#product__mattress-above').on('click', function(){
+    jQuery('.mattress').removeClass('hidden');
+    //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
+    var str = jQuery("#mattress-size").serialize();
+    jQuery("#result-mattress").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-mattress-above.php',
         data: str,
         method: 'POST',
         success: function(data){
@@ -509,6 +525,7 @@ jQuery( document ).ready( function() {
     return;
   };
   jQuery(ui.magniflier).on('mousemove', function() {
+    if(window.matchMedia( '(min-width: 992px)' ).matches){
 	ui.glass.fadeIn(100);
     cur_img = jQuery(this);
     var src = cur_img.attr('src');
@@ -536,9 +553,9 @@ jQuery( document ).ready( function() {
       }
     mouseMove.apply(this, arguments);
     ui.glass.on('mousemove', mouseMove);
-  });
-  jQuery('.product__variation-choice').on('click', function(){
-    jQuery('>.product__variation-select',this).removeClass('hidden');
+  }});
+  jQuery('.product__variation-choice span').on('click', function(){
+    jQuery('>.product__variation-select',jQuery(this).parent('.product__variation-choice')).toggleClass('hidden');
   });
   jQuery( ".product__variation-input input" ).change(function() {
     var ids = jQuery(this).attr("data-ids");
@@ -588,7 +605,6 @@ jQuery( document ).ready( function() {
     }
     if(item == calc) {
       jQuery('.farther').addClass("hidden");
-      jQuery('.back').addClass("hidden");
     }
     if(item == 2) {
       jQuery('.back').removeClass("hidden"); 
@@ -603,6 +619,9 @@ jQuery( document ).ready( function() {
     item--;
     if(item == 1) {
       jQuery('.back').addClass("hidden");
+    }
+    if(item == 8){
+      jQuery('.farther').removeClass("hidden");
     }
     jQuery('[data-item="'+ item +'"]').removeClass("hidden");
   });

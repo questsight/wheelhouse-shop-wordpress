@@ -37,6 +37,7 @@ if(is_product_category('podushki') || !is_shop() && !is_product_category('superc
     woocommerce_product_loop_start();
 	if ( wc_get_loop_prop( 'total' )) {
     if ($_GET && !empty($_GET)) {
+      echo "test";
       $products = go_filter_shop();
       if ( $products ) :
 		    foreach( $products as $post ): setup_postdata($post);
@@ -44,6 +45,7 @@ if(is_product_category('podushki') || !is_shop() && !is_product_category('superc
         wc_get_template_part( 'content', 'product' );
         endforeach; endif;
     }else{
+      echo "test";
       while ( have_posts() ) {
 			the_post();
 			/**
@@ -52,7 +54,7 @@ if(is_product_category('podushki') || !is_shop() && !is_product_category('superc
 			do_action( 'woocommerce_shop_loop' );
 
 			wc_get_template_part( 'content', 'product' );
-		} 
+		}
     }
 	}
     if(!empty($_REQUEST['collection']) || !empty($_REQUEST['purpose'])){

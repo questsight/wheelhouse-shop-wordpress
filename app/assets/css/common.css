@@ -383,6 +383,7 @@ video {
 }
 .cart__description {
   margin: 0 15px;
+  width: 100%;
 }
 .cart__item {
   display: -webkit-box;
@@ -1536,6 +1537,9 @@ video {
 .listing__popup-foto img {
   border-radius: 15px;
 }
+.listing__popup-foto img:nth-child(1) {
+  display: block;
+}
 @media only screen and (min-width: 768px) {
   .listing__popup-foto {
     width: 60%;
@@ -1895,7 +1899,6 @@ ul li ul li.current_page_item a,
 ul li ul li.current-menu-item a,
 ul li ul li.current-post-ancestor a,
 ul li ul li.current-category-ancestor a {
-  color: #627597 !important;
   text-decoration: underline !important;
   font-family: 'Geometria Bold', sans-serif !important;
 }
@@ -2394,6 +2397,22 @@ ul li ul li.current-category-ancestor img {
 .product__form button:hover {
   border-radius: none;
 }
+.a-button {
+  background: #abb2cc;
+  color: #fff;
+  border: 1px solid #abb2cc;
+  padding: 10px 30px;
+  border-radius: 5px;
+  margin: 15px 0;
+  width: 100%;
+  max-width: 300px;
+  text-transform: uppercase;
+  outline: none;
+  text-align: center;
+}
+.a-button:hover {
+  border-radius: none;
+}
 .product__foto {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -2577,7 +2596,7 @@ ul li ul li.current-category-ancestor img {
   position: absolute;
   right: 1px;
   top: 6px;
-  bottom: 6px;
+  height: 6px;
   width: 20px;
   width: 20px;
   background: #fff;
@@ -2610,6 +2629,11 @@ ul li ul li.current-category-ancestor img {
     width: calc(100% - 150px);
     font-size: 13px;
   }
+}
+.product__variation-choice span:first-child {
+  display: inherit;
+  margin: -5px;
+  padding: 5px;
 }
 .product__variation-select {
   border-top: 1px solid #abb2cc;
@@ -2755,9 +2779,10 @@ ul li ul li.current-category-ancestor img {
 }
 .questionnaire__arrow {
   position: absolute;
-  bottom: -25px;
+  bottom: -50px;
   color: #abb2cc;
   cursor: pointer;
+  font-size: 50px;
 }
 .farther {
   right: calc(50% - 50px);
@@ -2772,6 +2797,9 @@ ul li ul li.current-category-ancestor img {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  position: absolute;
+  bottom: -120px;
+  left: calc(50% - 62px);
 }
 .questionnaire__button button {
   background: #abb2cc;
@@ -2827,6 +2855,11 @@ ul li ul li.current-category-ancestor img {
     margin-bottom: 10px;
     padding: 15px;
   }
+}
+.questionnaire__part {
+  text-align: center;
+  color: #627597;
+  margin-bottom: 20px;
 }
 .questionnaire__partition {
   position: relative;
@@ -3149,6 +3182,9 @@ ul li ul li.current-category-ancestor img {
 .shop__sidebar input[type='radio'] {
   width: auto;
   margin: 3px 3px 0px 5px;
+}
+.shop__sidebar input[type='checkbox'] {
+  width: auto;
 }
 .shop__sidebar fieldset {
   margin: 30px 0;

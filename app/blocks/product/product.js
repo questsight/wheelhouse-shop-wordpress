@@ -70,6 +70,7 @@ jQuery( document ).ready( function() {
     return;
   };
   jQuery(ui.magniflier).on('mousemove', function() {
+    if(window.matchMedia( '(min-width: 992px)' ).matches){
 	ui.glass.fadeIn(100);
     cur_img = jQuery(this);
     var src = cur_img.attr('src');
@@ -97,9 +98,9 @@ jQuery( document ).ready( function() {
       }
     mouseMove.apply(this, arguments);
     ui.glass.on('mousemove', mouseMove);
-  });
-  jQuery('.product__variation-choice').on('click', function(){
-    jQuery('>.product__variation-select',this).removeClass('hidden');
+  }});
+  jQuery('.product__variation-choice span').on('click', function(){
+    jQuery('>.product__variation-select',jQuery(this).parent('.product__variation-choice')).toggleClass('hidden');
   });
   jQuery( ".product__variation-input input" ).change(function() {
     var ids = jQuery(this).attr("data-ids");

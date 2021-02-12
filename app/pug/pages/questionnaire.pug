@@ -10,6 +10,7 @@ block site__content
       .questionnaire__close &times;
       form
         .questionnaire__partition(data-item="1")
+          .questionnaire__part Осталось заполнить 9/9 
           .questionnaire__item
             .questionnaire__question
               | Познакомимся!
@@ -18,10 +19,8 @@ block site__content
             .questionnaire__answer
               input.required(type="text" name="name" value="")
               .questionnaire__error.hidden Заполните поле "Ваше имя"
-            .back.questionnaire__arrow.hidden
-              i.fa.fa-arrow-left.fa-2x(aria-hidden='true')
-            .farther.questionnaire__arrow
-              i.fa.fa-arrow-right.fa-2x(aria-hidden='true')
+            .back.questionnaire__arrow.hidden &#8592;
+            .farther.questionnaire__arrow &#8594;
           .questionnaire__item
             .questionnaire__question
               | Сориентируемся по вашей задаче

@@ -35,7 +35,6 @@ jQuery( document ).ready( function() {
     }
     if(item == calc) {
       jQuery('.farther').addClass("hidden");
-      jQuery('.back').addClass("hidden");
     }
     if(item == 2) {
       jQuery('.back').removeClass("hidden"); 
@@ -50,6 +49,9 @@ jQuery( document ).ready( function() {
     item--;
     if(item == 1) {
       jQuery('.back').addClass("hidden");
+    }
+    if(item == 8){
+      jQuery('.farther').removeClass("hidden");
     }
     jQuery('[data-item="'+ item +'"]').removeClass("hidden");
   });
