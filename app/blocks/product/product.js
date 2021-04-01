@@ -112,4 +112,54 @@ jQuery( document ).ready( function() {
       jQuery('#'+ids).change();
     }
   });
+jQuery('.ajax_add_to_cart').on('click', function(){
+  var validation = true;
+  jQuery('select.product__variation-choice').each(function() {
+    if(!jQuery(this).val()){
+      jQuery(this).addClass("accent");
+      validation = false;
+      jQuery(this).change(function() {
+        jQuery(this).removeClass("accent");
+      });
+    }
+  });
+  jQuery('[name="_material[]"]').each(function() {
+    if(!jQuery(this).val()){
+      if(jQuery(".choice__basic").hasClass('hidden')&&jQuery(".choice__color").hasClass('hidden')){
+        jQuery('#product__colors').addClass("accent").on('click', function(){
+          jQuery(this).removeClass("accent");
+        });
+      }else if(!jQuery(".choice__basic").hasClass('hidden')){
+        if(jQuery(this).attr('data-key')=="pillar"){
+          jQuery('.choice__pillar').children('.product__pillar').addClass("accent").on('click', function(){
+          jQuery(this).removeClass("accent");
+        });
+        }else if(jQuery(this).attr('data-key')=="0"){
+          jQuery('.choice__basic').eq(jQuery(this).attr('data-key')).children('.product__cloth').addClass("accent").on('click', function(){
+          jQuery(this).removeClass("accent");
+        });
+        }else{
+          jQuery('.choice__basic').eq(jQuery(this).attr('data-key')).children('.product__cloth-add').addClass("accent").on('click', function(){
+          jQuery(this).removeClass("accent");
+        });
+        }
+      }else{
+        jQuery('.choice__pillar').children('.product__pillar').addClass("accent").on('click', function(){
+          jQuery(this).removeClass("accent");
+        });
+      }
+      validation = false;
+      jQuery(this).change(function() {
+        jQuery(this).removeClass("accent");
+      });
+    }
+  });
+  if(!validation){
+    
+    jQuery('html, body').animate({
+        scrollTop: jQuery(".accent").offset().top - 20
+    }, 0);
+    return false;
+  }
+});
 });

@@ -15,7 +15,7 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
       if($_REQUEST['mattress-size'] == '1400-2000' || $_REQUEST['mattress-size'] == '1600-2000' || $_REQUEST['mattress-size'] == '1800-2000' || $_REQUEST['mattress-size'] == '2000-2000'){
           $kr = true;
       }else{$kr = false;}
-      if($value['attributes']['attribute_pa_size-krd']==$_REQUEST['mattress-size']&&$value['dimensions']['height']<=20&&$value['dimensions']['height']>15 || $value['attributes']['attribute_pa_size-krd']==$_REQUEST['mattress-size']&&$kr&&$value['dimensions']['height']>15){
+      if($value['attributes']['attribute_pa_size-krd']==$_REQUEST['mattress-size']&&$value['dimensions']['height']<=25&&$value['dimensions']['height']>=12&&!$kr || $value['attributes']['attribute_pa_size-krd']==$_REQUEST['mattress-size']&&$kr&&$value['dimensions']['height']>15){
         $fields = CFS()->get( 'matrasy-hardness' );
         if( ! empty($fields) ){
           foreach ( $fields as $key => $val ){
