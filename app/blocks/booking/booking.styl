@@ -1,0 +1,40 @@
+#wc-bookings-booking-form
+    flex-direction: column;
+    align-items: center;
+.wc-bookings-booking-form
+    fieldset
+        border:none;
+.wc-bookings-date-picker
+    width 100%
+ #wc-bookings-form-start-time
+    color baseColor
+    font-family baseFont
+    border 1px solid headerColor
+    font-size: 10px;
+    outline: none;
+    background lightColor
+    border-radius 0
+    @media only screen and (min-width: xs)
+      font-size: 13px;
+    &:active
+      border 1px solid themeColor
+      outline: none; 
+    &:focus
+      border 1px solid themeColor
+      outline: none; 
+    &:hover
+      border 1px solid themeColor
+      outline: none;
+.wc-bookings-booking-form
+    label
+        display none
+#wc-bookings-form-end-time
+    display none
+.wc-bookings-date-picker .ui-datepicker td.bookable a
+    background-color: rgb(0, 94, 131) !important;
+.wc-bookings-date-picker .ui-datepicker td.partial_booked a
+    background-color: rgb(0, 94, 131) !important;
+.wc-bookings-date-picker .ui-datepicker td.ui-datepicker-current-day a
+    background-color: rgb(1, 59, 82) !important;
+.wc-bookings-date-picker .ui-datepicker td.bookable-range .ui-state-default
+    background-color: rgb(1, 59, 82) !important;

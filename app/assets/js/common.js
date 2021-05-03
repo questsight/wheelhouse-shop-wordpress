@@ -310,8 +310,73 @@ jQuery(document).bind('touchmove', function (e){
   }
   lastX = currentX;
 });
-//let vh = window.innerHeight * 0.01;
-//document.documentElement.style.setProperty('--vh', vh + 'px');
+jQuery( document ).ready( function() {
+  jQuery('.navigation__call-buyer > a').on('click', function(){
+    jQuery('#box-cooperation').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').addClass('hidden_type_min-md');
+    jQuery('#box-buyer').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('.navigation__call-cooperation > a').on('click', function(){
+    jQuery('#box-buyer').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').addClass('hidden_type_min-md');
+    jQuery('#box-cooperation').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('.navigation__call-contacts > a').on('click', function(){
+    jQuery('#box-buyer').addClass('hidden_type_min-md');
+    jQuery('#box-cooperation').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('#navigation .navigation__list .menu-item-has-children').hover(function(){
+    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
+      var $images = jQuery('img',this);
+      $images.each(function(){
+        var $img = jQuery(this),
+            src = $img.attr('data-src');
+        jQuery($img).attr('src',src);
+        jQuery($img).removeAttr('data-spai');
+      });
+      jQuery('.product__variation').addClass('product__variation-block');
+    }
+  },function(){
+    jQuery('.product__variation').removeClass('product__variation-block');
+  });;
+  jQuery('#navigation .navigation__list .menu-item-has-children > a', this).on('click', function(){
+    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
+      return false;
+    }
+  });
+});
+jQuery(document).ready(function () {
+  jQuery('.product__pillar').on('click', function(){
+    jQuery('.pillar').removeClass('hidden');
+    var str = jQuery("#product-pillar").serialize();
+    jQuery("#result-pillar").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-pillar.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-pillar").html(data);
+        }
+    });
+    jQuery('#result-pillar').removeClass('hidden');
+  });
+  jQuery('.pillar__close').on('click', function(){
+    jQuery('#result-pillar').addClass('hidden');
+    jQuery('.pillar').addClass('hidden');
+  });
+  jQuery(this).keydown(function(eventObject){
+    if (eventObject.which == 27){
+      jQuery('.pillar__close').click();
+    }
+  });
+})
 jQuery(document).ready(function () {
   jQuery('#pa_size-krd').change(function() {
     jQuery('[name="mattress-size"]').attr('value',jQuery(this).val());
@@ -488,73 +553,8 @@ jQuery(document).ready(function () {
     jQuery('#product__'+cat).parent('.product__variation').children('.product__delete').addClass('hidden');
   });
 })
-jQuery( document ).ready( function() {
-  jQuery('.navigation__call-buyer > a').on('click', function(){
-    jQuery('#box-cooperation').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').addClass('hidden_type_min-md');
-    jQuery('#box-buyer').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('.navigation__call-cooperation > a').on('click', function(){
-    jQuery('#box-buyer').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').addClass('hidden_type_min-md');
-    jQuery('#box-cooperation').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('.navigation__call-contacts > a').on('click', function(){
-    jQuery('#box-buyer').addClass('hidden_type_min-md');
-    jQuery('#box-cooperation').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('#navigation .navigation__list .menu-item-has-children').hover(function(){
-    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
-      var $images = jQuery('img',this);
-      $images.each(function(){
-        var $img = jQuery(this),
-            src = $img.attr('data-src');
-        jQuery($img).attr('src',src);
-        jQuery($img).removeAttr('data-spai');
-      });
-      jQuery('.product__variation').addClass('product__variation-block');
-    }
-  },function(){
-    jQuery('.product__variation').removeClass('product__variation-block');
-  });;
-  jQuery('#navigation .navigation__list .menu-item-has-children > a', this).on('click', function(){
-    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
-      return false;
-    }
-  });
-});
-jQuery(document).ready(function () {
-  jQuery('.product__pillar').on('click', function(){
-    jQuery('.pillar').removeClass('hidden');
-    var str = jQuery("#product-pillar").serialize();
-    jQuery("#result-pillar").html('<div class="spinner"></div>');
-    jQuery.ajax({
-        url: window.location.origin+'/wp-content/themes/questsight/ajax-pillar.php',
-        data: str,
-        method: 'POST',
-        success: function(data){
-          jQuery("#result-pillar").html(data);
-        }
-    });
-    jQuery('#result-pillar').removeClass('hidden');
-  });
-  jQuery('.pillar__close').on('click', function(){
-    jQuery('#result-pillar').addClass('hidden');
-    jQuery('.pillar').addClass('hidden');
-  });
-  jQuery(this).keydown(function(eventObject){
-    if (eventObject.which == 27){
-      jQuery('.pillar__close').click();
-    }
-  });
-})
+//let vh = window.innerHeight * 0.01;
+//document.documentElement.style.setProperty('--vh', vh + 'px');
 jQuery( document ).ready( function() {
   jQuery( '.popup__exit' ).click( function() {
     jQuery('.popup').addClass('hidden');
