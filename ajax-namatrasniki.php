@@ -55,7 +55,8 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
     jQuery('.cloth__popup').addClass('hidden');
   });
   jQuery('#choice-mattress').on('click', function(){
-    jQuery('#product__namatrasniki').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-namatrasniki .product__add-item').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-namatrasniki').removeClass('hidden');
     jQuery('#add-namatrasniki').attr('name','add-more-to-cart[]');
     jQuery('#add-namatrasniki').attr('value',ids);
     jQuery('#add-namatrasniki-deposit').attr('name',mid+'-deposit-radio');

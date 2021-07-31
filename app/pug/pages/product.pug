@@ -139,7 +139,32 @@ block site__content
           .cloth__popup-title Микровелюр - Ggjsgd2
           .cloth__button#choice Выбрать
           .cloth__button#exit Посмотреть еще
-  .listing
+  .text
+    .product__sidebar-selection
+      .product__sidebar-option.active(data-call="description") Описание
+      .product__sidebar-option(data-call="specifications") Технические характеристики
+      .product__sidebar-option(data-call="photogallery") Фотогалерея
+    .product__sidebar(data-type="description")
+      | Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse
+      | Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse
+      | Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse Студия авторской мебели WheelHouse
+    .product__sidebar(data-type="specifications").hidden Тех характеристики
+    .product__sidebar.listing.hidden(data-type='photogallery')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/07/krd-level-03-01_portfolio-1-e1613042232893.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/07/krd-level-03-01_portfolio-1-e1613042232893.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/08/krd-level-03-01_portfolio-2-e1613043150240.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/08/krd-level-03-01_portfolio-2-e1613043150240.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/10/krd-level-03-01_portfolio-5.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/10/krd-level-03-01_portfolio-5.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-8.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-8.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-12.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-12.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-16-scaled.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2020/12/krd-level-03-01_portfolio-16-scaled.jpg')
+      .listing__item
+        img.listing__foto(src='http://localhost:8888/wp-content/uploads/2021/01/krd-level-03-01_portfolio-22-e1613041974727.jpg' loading='lazy' alt='Детская кровать LEVEL - 01 Stellar Sky' data-src='http://localhost:8888/wp-content/uploads/2021/01/krd-level-03-01_portfolio-22-e1613041974727.jpg' )
+  .listing.hidden
     .product__subtitle Похожие товары:
     .listing__item(data-item="1")
       picture

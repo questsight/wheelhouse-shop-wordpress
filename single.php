@@ -1,6 +1,8 @@
 <?php get_header();?>
+<div class="container">
         <h1 class="title"><?php the_title();?></h1>
         <div class="description"><?php while (have_posts()) : the_post(); the_content(); endwhile; ?></div>
+</div>
         <div class="listing">
           <?php
             $fields = CFS()->get( 'palette' );

@@ -3,6 +3,11 @@
   display flex
   flex-wrap wrap
   justify-content center
+  font-size 10px
+  @media only screen and (min-width: xs)
+      font-size 12px
+  @media only screen and (min-width: sm)
+      font-size baseSize
   & > li
     margin 3px
     @media only screen and (min-width: 360px)

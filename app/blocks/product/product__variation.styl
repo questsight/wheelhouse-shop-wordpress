@@ -1,42 +1,59 @@
 .product__variation
-  display: flex;
-  align-items center
+    display: inline-block;
+    outline: 1px solid #ddd;
+    padding: 2px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    cursor pointer
+    position relative
+.product__variation:hover
+  outline-color: accentColor
+.product__variation.active
+  outline-color: accentColor
+.product__variation.active:after
+  content "\2713"
+  position absolute
+  color accentColor
+  top 0
+  right 0
+  font-size 20px
+.product__variation.active .product__variation-text
+  opacity 0.5
+.product__variation.active img
+  opacity 0.5
+.product__variation.selected.add
+  outline: 1px solid #ddd;
+.product__variation.selected.add .product__variation-text
+  opacity 1
+.product__variation.selected.add img
+  opacity 1
+.product__variation.selected.add:after
   position relative
-  font-size 12px
-  @media only screen and (min-width: xs)
-    font-size baseSize
-.product__variation:before
-  content: "";
-  position: absolute;
-  right: 4px;
-  top: 12px;
-  border: 6px solid transparent;
-  border-top: 7px solid #abb2cc;
-  z-index: 2;
-  @media only screen and (min-width: xs)
-    top 14px
-.product__variation.choice:before
-  border none
+  content ""
+.product__variation.selected.add.choice
+  outline-color: accentColor
+.product__variation.selected.add.choice:after
+  content "\2713"!important
+  position absolute!important
+  color accentColor
+  top 0
+  right 0
+  font-size 20px
+.product__variation.selected.add.choice img
+  opacity 0.5!important
+.product__variation.selected.add.choice .product__variation-text
+  opacity 0.5!important
 .product__variation-text
-  width: 110px;
-  @media only screen and (min-width: xs)
-    width 150px
-.product__variation:after
-  content: "";
-  position: absolute;
-  right: 1px;
-  top: 6px;
-  height: 6px;
-  width: 20px;
-  width 20px
-  background #fff
-  z-index: 1;
-.product__variation.product__variation-block:after
-  background transparent
-.product__variation-text
-  width: 110px;
-  @media only screen and (min-width: xs)
-    width 150px
+  min-width: 70px;
+  padding: 0 10px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: titleFont;
+  font-size: 9px;
+  background: headerColor;
+  color: lightColor;
 .product__variation-choice
   width: calc(100% - 110px);
   cursor pointer

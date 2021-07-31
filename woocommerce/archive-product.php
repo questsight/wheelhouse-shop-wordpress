@@ -27,13 +27,13 @@ get_header();
  * php dynamic_sidebar('filter');//???????? ???????
  */
 do_action( 'woocommerce_before_main_content' );
-if(!is_shop() && !is_product_category('v-nalichii') && !is_product_category('services') &&!is_product_category('aksessuary')): ?>
-<div class="content__box">
+if(!is_shop() && !is_product_category('v-nalichii') && !is_product_category('services') &&!is_product_category('aksessuary')&&!is_product_category('detskie-krovati')&&!is_product_category('divany')&&!is_product_category('krovati')&&!is_product_category('podushki')&&!is_product_category('pokryvala')&&!is_product_category('chehly-na-matras')&&strpos(get_queried_object()->slug,'konfigurator')=== false && (!$_GET || $_GET && !array_key_exists("combination",$_GET) && !$_GET['combination'])): ?>
+
 <?php wc_get_template_part( 'content', 'filter' ); endif; 
 if ( woocommerce_product_loop() ) {
 
-  if(!empty($_REQUEST['collection']) || !empty($_REQUEST['purpose'])){
-    echo '<div class="listing" data-size="big">';
+  if(!empty($_REQUEST['collection']) || !empty($_REQUEST['purpose']) || !empty($_REQUEST['color'])){
+    echo '<div class="listing">';
   }
   woocommerce_product_loop_start();
   if ( wc_get_loop_prop( 'total' )) {
@@ -48,6 +48,8 @@ if ( woocommerce_product_loop() ) {
           }
         }elseif(!$_GET['orderby'] || $_GET['orderby']=='none'){
           foreach( $products as $post ){
+              print_r(WC_Product_Addons_Helper::get_product_addons( $post_id, $prefix )[0]);
+              //$product_addons = WC_Product_Addons_Helper::get_product_addons( $post_id, $prefix );
             setup_postdata($post);
             $colors = CFS()->get( 'colors',$post->ID);
             foreach(get_the_terms( $post->ID, 'product_cat' ) as $cat){
@@ -57,9 +59,10 @@ if ( woocommerce_product_loop() ) {
               }
             }
             if(!empty($colors)){
-              foreach ( $colors as $key => $value ): ?>
-                <a href="<?php echo str_replace($del,'/',get_permalink()); echo"?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0]));?>" class="listing__item"><img src="<?php echo $value['gallery'][0]['img-jpg'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php the_title(); echo " ".$value['color-name']?></div><span class="listing__price"><?php echo priceColor(CFS()->get( 'price', $value['material-price'][0]),get_the_ID()); ?></span></a>
-              <?php endforeach;
+              foreach ( $colors as $key => $value ):
+                if((!$_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'] || $_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'][0]=='false' || array_key_exists($_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'][0], $value['marker'])) && (!$_GET['combination'] || $_GET['combination'][0]==$value['color-name'])){?>
+                <a href="<?php echo str_replace($del,'/',get_permalink($post->ID)); echo"?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0]));if($_GET['detskie-krovati-size']){echo "&attribute_pa_size-krd=".$_GET['detskie-krovati-size'][0];}if($_GET['krovati-size']){echo "&attribute_pa_size-krd=".$_GET['krovati-size'][0];}?>" class="listing__item"><img src="<?php echo $value['gallery'][0]['img-jpg'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php echo get_the_title($post->ID); if(!$value['no-name']){echo " ".$value['color-name'];}?></div><span class="listing__price"><?php echo number_format(priceColor(CFS()->get( 'price', $value['material-price'][0]),$post->ID), 0, ',', ' ').' ₽'; ?></span></a>
+              <?php } endforeach;
             }
           }
         }else{
@@ -75,13 +78,27 @@ if ( woocommerce_product_loop() ) {
             }
             if(!empty($colors)){
             foreach ( $colors as $key => $value ){
+              if(!$_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'] || $_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'][0]=='false' || array_key_exists($_GET[get_term( get_term_by( 'slug', $_GET['category'], 'product_cat')->parent )->slug.'-marker'][0], $value['marker'])){ 
+            if($_GET['detskie-krovati-size']){
+                $sizePar = "&attribute_pa_size-krd=".$_GET['detskie-krovati-size'][0];
+              }else if($_GET['krovati-size']){
+                $sizePar = "&attribute_pa_size-krd=".$_GET['krovati-size'][0];
+              }else{
+                $sizePar = "";  
+              }
+              if(!$value['no-name']){
+                $nameC = get_the_title($post->ID) ." " . $value['color-name'];
+              }else{
+                $nameC = get_the_title($post->ID);
+              }
               $item = array(
-			         'link' => str_replace($del,'/',get_permalink($post->ID))."?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0])), 
+			         'link' => str_replace($del,'/',get_permalink($post->ID))."?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0])).$sizePar, 
 			         'price' => priceColor(CFS()->get( 'price', $value['material-price'][0]),$post->ID),
                 'img' => $value['gallery'][0]['img-jpg'],
-                'name' => get_the_title($post->ID) ." " . $value['color-name'],
+                'name' => $nameC,
 		            );
          $filterProducts[] = $item;
+            }
         }
       } 
     }
@@ -95,7 +112,7 @@ if ( woocommerce_product_loop() ) {
       }); 
     }
     foreach ( $filterProducts as $key => $filterProduct ): ?>
-      <a href="<?php echo $filterProduct['link'];?>" class="listing__item"><img src="<?php echo $filterProduct['img'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php echo $filterProduct['name'];?></div><span class="listing__price"><?php echo $filterProduct['price'];?></span></a>
+      <a href="<?php echo $filterProduct['link'];?>" class="listing__item"><img src="<?php echo $filterProduct['img'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php echo $filterProduct['name'];?></div><span class="listing__price"><?php echo number_format($filterProduct['price'], 0, ',', ' ').' ₽';?></span></a>
     <?php endforeach; 
         }
       }
@@ -115,20 +132,20 @@ if ( woocommerce_product_loop() ) {
           }
           if(!empty($colors)){
             foreach ( $colors as $key => $value ): ?>
-              <a href="<?php echo str_replace($del,'/',get_permalink()); echo"?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0]));?>" class="listing__item"><img src="<?php echo $value['gallery'][0]['img-jpg'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php the_title(); echo " ".$value['color-name']?></div><span class="listing__price"><?php echo priceColor(CFS()->get( 'price', $value['material-price'][0]),get_the_ID()); ?></span></a>
+              <a href="<?php echo str_replace($del,'/',get_permalink()); echo"?color=".$value['color-name']."&attribute_pa_kategoriya-tkani=kategoriya-".array_key_first(CFS()->get( 'price', $value['material-price'][0]));?>" class="listing__item"><img src="<?php echo $value['gallery'][0]['img-jpg'];?>" class="listing__foto"><div class="listing__title woocommerce-loop-product__title"><?php the_title(); if(!$value['no-name']){echo " ".$value['color-name'];}?></div><span class="listing__price"><?php echo number_format(priceColor(CFS()->get( 'price', $value['material-price'][0]),get_the_ID()), 0, ',', ' ').' ₽'; ?></span></a>
             <?php endforeach;
-          } 
+          }
         }
 		  } 
     }
   }
-  if(!empty($_REQUEST['collection']) || !empty($_REQUEST['purpose'])){
+  if(!empty($_REQUEST['collection']) || !empty($_REQUEST['purpose']) ){
     woocommerce_product_loop_end();
   } else {
     woocommerce_product_loop_end($echo = false);
   }
   if(!is_shop()):?>
-  </div>
+  
 <?php endif;
 	
 } else {

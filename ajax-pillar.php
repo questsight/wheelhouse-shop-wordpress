@@ -39,9 +39,19 @@ endwhile; endforeach; endif;
   });
   jQuery('#choice-pillar').on('click', function(){
     jQuery('[data-key="pillar"]').attr('value',pillar);
-    jQuery('.product__pillar').html(jQuery('.pillar__popup-title').html());
+    //jQuery('.product__pillar').html(jQuery('.pillar__popup-title').html());
+    jQuery('.product__pillar').parent().addClass('choice');
     jQuery('.pillar__popup').addClass('hidden');
     jQuery('#result-pillar').addClass('hidden');
     jQuery('.pillar').addClass('hidden');
+    var acc = 1;
+    jQuery('[name="_material[]"]').each(function() {
+      if(!jQuery(this).val()){
+        acc = 0;
+      }
+    })
+    if(acc==1){
+      jQuery('#_material-title').removeClass("accent");
+    }
   });
 </script>

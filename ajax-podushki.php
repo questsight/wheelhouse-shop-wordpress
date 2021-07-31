@@ -83,25 +83,32 @@ if(typeof podushki !== 'undefined'){
     jQuery('[data-deposit="podushki"]').remove();
     jQuery('[data-type="add-podushki"]').remove();
     if(podushki.length == 0){
-      var nameTotal = "<span>Добавить подушки</span>";
+      var nameTotal = "";
       jQuery('#product__podushki').parent('.product__variation').removeClass('choice');
     jQuery('#product__podushki').parent('.product__variation').children('.product__delete').addClass('hidden');
     }else{
-      var nameTotal = "<span>Подушки:<br></span>";
+      var nameTotal = "";
       jQuery('#product__podushki').parent('.product__variation').addClass('choice');
     jQuery('#product__podushki').parent('.product__variation').children('.product__delete').removeClass('hidden');
     }
+    var n = 0;
     podushki.forEach(function(item) {
       for (var i = 0; i < item.сalc; i++) {
         var newElems = jQuery('<input data-type="add-podushki" type="hidden" name="add-more-to-cart[]" value="'+item.ids+'">');
         jQuery('#description').append(newElems);
       }
       priceTotal = priceTotal + item.сalc*item.price;
-      nameTotal = nameTotal + '<span>' + item.mattress + " - " + item.сalc + "шт.<br></span>"
+      if(n==0){
+        nameTotal = nameTotal + '<span>' + item.mattress + " - " + item.сalc + "шт.</span>"
+      }else{
+        nameTotal = nameTotal + '<span>, ' + item.mattress + " - " + item.сalc + "шт.</span>"
+      }
+      n++;
       var newDeposit = jQuery('<input data-type="add-deposit" data-deposit="podushki" type="hidden" class="input-radio" value="full" name="'+item.mid+'-deposit-radio">');
       jQuery('.basic-switch-woocommerce-deposits').append(newDeposit);
     });
-    jQuery('#product__podushki').html(nameTotal);
+    jQuery('#additional-podushki .product__add-item').html(nameTotal);
+    jQuery('#additional-podushki').removeClass('hidden');
     if(jQuery('.variation_id').attr('data-podushki')){
       var podushkiOld = parseInt(jQuery('.variation_id').attr('data-podushki'), 10);
     }else{

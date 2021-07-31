@@ -65,11 +65,11 @@
         </ul>
       </nav>
       <div class="site__content content">
-        <div class="content__box">
-          <form class="filter hidden_type_min-md" id="filter-materialy">
-            <div class="filter__close hidden_type_max-md">&times;</div>
+        <form class="filter hidden_type_min-md" id="filter-materialy">
+          <div class="filter__close hidden_type_max-md">&times;</div>
+          <div class="filter__box">
             <div class="filter__title" data-type="producer">Поставщик</div>
-            <div class="filter__item hidden_type_min-md" data-type="producer">
+            <div class="filter__item hidden" data-type="producer">
               <div class="filter__one">
                 <input class="filter__input" type="checkbox" name="producer[]" value="CKMF" id="CKMF">
                 <label class="filter__label" for="CKMF">CKMF</label>
@@ -107,8 +107,10 @@
                 <label class="filter__label" for="Souz-m">Souz-m</label>
               </div>
             </div>
+          </div>
+          <div class="filter__box">
             <div class="filter__title" data-type="price">Ценовая категория</div>
-            <div class="filter__item hidden_type_min-md" data-type="price">
+            <div class="filter__item hidden" data-type="price">
               <div class="filter__one">
                 <input class="filter__input" type="checkbox" name="price[]" value="1" id="price-1">
                 <label class="filter__label" for="price-1">Категория 1</label>
@@ -130,8 +132,10 @@
                 <label class="filter__label" for="price-5">Категория 5</label>
               </div>
             </div>
+          </div>
+          <div class="filter__box">
             <div class="filter__title" data-type="collection">Подходит для коллекции</div>
-            <div class="filter__item hidden_type_min-md" data-type="collection">
+            <div class="filter__item hidden" data-type="collection">
               <div class="filter__one">
                 <input class="filter__input" type="checkbox" name="collection[]" value="FRAME" id="FRAME">
                 <label class="filter__label" for="FRAME">FRAME</label>
@@ -169,8 +173,10 @@
                 <label class="filter__label" for="TRIANGLE">TRIANGLE</label>
               </div>
             </div>
+          </div>
+          <div class="filter__box">
             <div class="filter__title" data-type="marker">Цвет</div>
-            <div class="filter__item hidden_type_min-md" data-type="marker">
+            <div class="filter__item hidden" data-type="marker">
               <div class="filter__one">
                 <input class="filter__input" type="checkbox" name="marker[]" value="neutral" id="neutral">
                 <label class="filter__label" for="neutral">Нейтральный</label>
@@ -208,83 +214,37 @@
                 <label class="filter__label" for="yellow">Жёлтый, горчичный</label>
               </div>
             </div>
-            <div class="filter__show hidden_type_max-md">Показать</div>
-          </form>
-          <div class="filter__call hidden_type_max-md">Открыть фильтр<i class="fa fa-filter" aria-hidden="true"></i></div>
-          <div class="listing" data-box="box" data-size="big" data-flip="flip"><a class="listing__item flip" href="#" data-item="1" data-description="test">
-              <div class="flip__front">
-                <picture>
-                  <source srcset="assets/images/komanda-wh-ushakova.webp" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-ushakova.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-                </picture>
-                <div class="listing__title">имя 1</div>
-              </div>
-              <div class="flip__back">test</div></a>
-            <div class="listing__item" data-item="2" data-description="&lt;p&gt;test2&lt;/p">
+          </div>
+          <div class="filter__show hidden_type_max-md">Показать</div>
+        </form>
+        <div class="filter__call hidden_type_max-md">Открыть фильтр<i class="fa fa-filter" aria-hidden="true"></i></div>
+        <div class="listing" data-box="box" data-size="big" data-flip="flip"><a class="listing__item flip" href="#" data-item="1" data-description="test">
+            <div class="flip__front">
               <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
+                <source srcset="assets/images/komanda-wh-ushakova.webp" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-ushakova.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
               </picture>
-              <div class="listing__title">имя 2</div>
-            </div><a class="listing__item" href="#" data-item="3">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 3</div></a>
-            <div class="listing__item" data-item="4">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 4</div>
-            </div><a class="listing__item" href="#" data-item="5">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 5</div></a>
-            <div class="listing__item" data-item="6">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 6</div>
-            </div><a class="listing__item" href="#" data-item="7">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 7</div></a>
-            <div class="listing__item" data-item="8">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 8</div>
-            </div><a class="listing__item" href="#" data-item="9">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 9</div></a>
-            <div class="listing__item" data-item="10">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 10</div>
-            </div><a class="listing__item" href="#" data-item="11">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 11</div></a>
-            <div class="listing__item" data-item="12">
-              <picture>
-                <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
-              </picture>
-              <div class="listing__title">имя 12</div>
+              <div class="listing__title">имя 1</div>
             </div>
-            <div class="listing__popup hidden">
-              <div class="listing__close">&times;</div>
-              <div class="listing__arrow-left">&laquo;</div>
-              <div class="listing__arrow-right">&raquo;</div>
-              <div class="listing__popup-text">
-                <div class="listing__popup-title"></div>
-                <div class="listing__popup-description"></div>
-              </div>
-              <div class="listing__popup-foto"><img src="" alt="Студия авторской мебели WheelHouse"></div>
+            <div class="flip__back">test</div></a>
+          <div class="listing__item" data-item="2" data-description="&lt;p&gt;test2&lt;/p">
+            <picture>
+              <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
+            </picture>
+            <div class="listing__title">имя 2</div>
+          </div><a class="listing__item" href="#" data-item="3">
+            <picture>
+              <source srcset="assets/images/komanda-wh-icon.jpg" type="image/webp" alt="Студия авторской мебели WheelHouse"><img class="listing__foto" src="assets/images/komanda-wh-icon.jpg" loading="lazy" alt="Студия авторской мебели WheelHouse">
+            </picture>
+            <div class="listing__title">имя 3</div></a>
+          <div class="listing__popup hidden">
+            <div class="listing__close">&times;</div>
+            <div class="listing__arrow-left">&laquo;</div>
+            <div class="listing__arrow-right">&raquo;</div>
+            <div class="listing__popup-text">
+              <div class="listing__popup-title"></div>
+              <div class="listing__popup-description"></div>
             </div>
+            <div class="listing__popup-foto"><img src="" alt="Студия авторской мебели WheelHouse"></div>
           </div>
         </div>
       </div>

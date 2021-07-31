@@ -1,5 +1,26 @@
-.wc-pao-addon
-  margin-top: 0!important;
-.wc-pao-addon
-  .form-row
-    margin-bottom: 0!important;
+.wc-pao-addon-name
+    font-family subtitleFont
+.wc-pao-addon-description
+    font-family baseItalicFont
+    font-size 12px
+.wc-pao-addon-image-swatch
+  margin-bottom 5px;
+.wc-pao-addon-image-swatch.selected
+    outline-color: accentColor;
+    outline-width: 1px;
+    position relative
+.wc-pao-addon-image-swatch.selected:after
+  content "\2713"
+  position absolute
+  color accentColor
+  top 0
+  right 0
+  font-size 20px
+.wc-pao-addon-image-swatch.selected img
+  opacity 0.5
+.product__variation.wc-pao-addon-image-swatch
+  margin-bottom 5px
+.wc-pao-addon-name.accent  
+  text-transform: uppercase;
+  color: accentColor;
+  font-family subtitleFont

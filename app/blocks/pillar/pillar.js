@@ -1,5 +1,5 @@
 jQuery(document).ready(function () {
-  jQuery('.product__pillar').on('click', function(){
+  jQuery('.product__pillar').on('click touchend', function(){
     jQuery('.pillar').removeClass('hidden');
     var str = jQuery("#product-pillar").serialize();
     jQuery("#result-pillar").html('<div class="spinner"></div>');

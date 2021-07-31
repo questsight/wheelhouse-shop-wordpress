@@ -26,9 +26,9 @@ if ( ! $product_attributes ) {
 <div class="woocommerce-product-attributes shop_attributes">
 <?php 
 	if(!has_term( 'matrasy', 'product_cat' ) && !has_term( 'namatrasniki', 'product_cat' )): foreach ( $product_attributes as $product_attribute_key => $product_attribute ) : ?>
-	    <div class="product__variation-size woocommerce-product-attributes-item woocommerce-product-attributes-item--<?php echo esc_attr( $product_attribute_key ); ?>">
-			<div class="product__variation-text woocommerce-product-attributes-item__label"><?php echo wp_kses_post( $product_attribute['label'] ); ?></div>
-			<div class="product__variation-choice woocommerce-product-attributes-item__value">Чтобы узнать общие габаритные размеры изделия, выберите размер спального места</div>
+	    <div class=" wc-pao-addon-description woocommerce-product-attributes-item woocommerce-product-attributes-item--<?php echo esc_attr( $product_attribute_key ); ?>"><br>
+			<span class="woocommerce-product-attributes-item__label">Общие размеры: </span>
+          <span class="woocommerce-product-attributes-item__value">выберите размер спального места ⤴️</span>
 		</div>
 	<?php endforeach; endif;?>
 </div>

@@ -1,5 +1,7 @@
 <?php 
-if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )->slug != 'aksessuary' ){
+if(strpos(get_queried_object()->slug,'konfigurator')!==false ){
+  $slug = get_term( get_term_by( 'id', get_queried_object()->parent, 'product_cat')->parent )->slug;
+}else if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )->slug != 'aksessuary'){
   $slug = get_term( get_queried_object()->parent )->slug;
 }else{
   $slug = get_queried_object()->slug;
@@ -10,8 +12,9 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
            <?php if($slug == 'matrasy'): ?>
            <input type="hidden" name="orderby" value="price">
            <?php else: ?>
-             <div class="filter__title" data-type="marker">Сортировать:</div>
-          <div class="filter__item hidden_type_min-md" data-type="marker">
+             <div class="filter__box">
+            <div class="filter__title" data-type="price">Сортировать</div>
+          <div class="filter__item hidden" data-type="price">
             <div class="filter__one">
               <input class="filter__input" type="radio" name="orderby" value="price" id="orderprice">
               <label class="filter__label" for="orderprice">По цене (сначала дешевые)</label>
@@ -25,24 +28,66 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
               <label class="filter__label" for="ordernone">По умолчанию</label>
             </div>
           </div>
+             </div> 
           <?php endif; ?>
         <input type="hidden" name="category" value="<?php echo get_queried_object()->slug; ?>">
         
-          <!--?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-marker' ))['0']['options']['choices']; if($fields):?>
-          <div class="filter__title" data-type="marker">Цвет</div>
-          <div class="filter__item hidden_type_min-md" data-type="marker">
-            <!--?php foreach ($fields as $key => $value) { if($key != "empty"){?>
+        <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-collection' ))['0']['options']['choices']; if($fields&&strpos(get_queried_object()->slug,'all-')!== false): ?>
+             <div class="filter__box">
+          <div class="filter__title" data-type="collection">Коллекция</div>
+          <div class="filter__item hidden" data-type="collection">
+            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
-              <input class="filter__input" type="radio" name="<!--?php echo $slug; ?>-marker[]" value="<!--?php echo $key; ?>" id="marker<!--?php echo $key; ?>"  <!--?php checkbox($slug.'-marker',$key);?>>
-              <label class="filter__label" for="marker<!--?php echo $key; ?>"><!--?php echo $value; ?></label>
+              <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-collection[]" value="<?php echo $key; ?>" id="collection<?php echo $key; ?>"  <?php checkbox($slug.'-collection',$key);?>>
+              <label class="filter__label" for="collection<?php echo $key; ?>"><?php echo $value; ?></label>
             </div>
-            <!--?php }} ?>
+            <?php }} ?>
           </div>
-          <!--?php endif; ?-->
+             </div>
+          <?php endif; ?>
+             
+        <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-size' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
+          <div class="filter__title" data-type="size"><?php echo $slug=="divany" ? 'Тип' : 'Размер';?></div>
+          <div class="filter__item hidden" data-type="size">
+            <?php if($slug!="divany"): ?>
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="<?php echo $slug; ?>-size[]" id="sizenone" value="false">
+              <label class="filter__label" for="sizenone">все размеры</label>
+            </div>
+            <?php endif;?>
+            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
+            <div class="filter__one">
+              <input class="filter__input" type="<?php echo $slug=="divany" ? 'checkbox' : 'radio';?>" name="<?php echo $slug; ?>-size[]" value="<?php echo $key; ?>" id="size<?php echo $key; ?>"  <?php checkbox($slug.'-size',$key);?>>
+              <label class="filter__label" for="size<?php echo $key; ?>"><?php echo $value; ?></label>
+            </div>
+            <?php }} ?>
+          </div>
+             </div>
+          <?php endif; ?>
+             
+          <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-marker' ))['0']['options']['choices']; if($fields&&strpos(get_queried_object()->slug,'konfigurator-')=== false):?>
+             <div class="filter__box">
+          <div class="filter__title" data-type="marker">Цвет</div>
+          <div class="filter__item hidden" data-type="marker">
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="<?php echo $slug; ?>-marker[]" id="markernone" value="false">
+              <label class="filter__label" for="markernone">все цвета</label>
+            </div>
+            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
+            <div class="filter__one">
+              <input class="filter__input" type="radio" name="<?php echo $slug; ?>-marker[]" value="<?php echo $key; ?>" id="marker<?php echo $key; ?>"  <?php checkbox($slug.'-marker',$key);?>>
+              <label class="filter__label" for="marker<?php echo $key; ?>"><?php echo $value; ?></label>
+            </div>
+            <?php }} ?>
+          </div>
+                 </div>
+          <?php endif; ?>
           
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-purpose' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
           <div class="filter__title" data-type="purpose">Назначение</div>
-          <div class="filter__item hidden_type_min-md" data-type="purpose">
+          <div class="filter__item hidden" data-type="purpose">
             <div class="filter__subtitle" data-type="purpose">HOME - для дома</div>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-purpose[]" value="all" id="purpose-all-home" data-call="data-home">
@@ -80,48 +125,28 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
             </div>
             <?php }} ?>    
           </div>
+             </div>
           <?php endif; ?>
           
           
-          <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-function' ))['0']['options']['choices']; if($fields):?>
+          <!--?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-function' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
           <div class="filter__title" data-type="function">Функция</div>
-          <div class="filter__item hidden_type_min-md" data-type="function">
-            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
+          <div class="filter__item hidden" data-type="function">
+            <!--?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
-              <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-function[]" value="<?php echo $key; ?>" id="function<?php echo $key; ?>"  <?php checkbox($slug.'-function',$key);?>>
-              <label class="filter__label" for="function<?php echo $key; ?>"><?php echo $value; ?></label>
+              <input class="filter__input" type="checkbox" name="<!--?php echo $slug; ?>-function[]" value="<!--?php echo $key; ?>" id="function<!--?php echo $key; ?>"  <!--?php checkbox($slug.'-function',$key);?>>
+              <label class="filter__label" for="function<!--?php echo $key; ?>"><!--?php echo $value; ?></label>
             </div>
-            <?php }} ?>
+            <!--?php }} ?>
           </div>
-          <?php endif; ?>
-          
-          <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-size' ))['0']['options']['choices']; if($fields):?>
-          <div class="filter__title" data-type="size">Размер</div>
-          <div class="filter__item hidden_type_min-md" data-type="size">
-            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
-            <div class="filter__one">
-              <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-size[]" value="<?php echo $key; ?>" id="size<?php echo $key; ?>"  <?php checkbox($slug.'-size',$key);?>>
-              <label class="filter__label" for="size<?php echo $key; ?>"><?php echo $value; ?></label>
-            </div>
-            <?php }} ?>
-          </div>
-          <?php endif; ?>
-          
-          <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-collection' ))['0']['options']['choices']; if($fields): ?>
-          <div class="filter__title" data-type="collection">Коллекция</div>
-          <div class="filter__item hidden_type_min-md" data-type="collection">
-            <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
-            <div class="filter__one">
-              <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-collection[]" value="<?php echo $key; ?>" id="collection<?php echo $key; ?>"  <?php checkbox($slug.'-collection',$key);?>>
-              <label class="filter__label" for="collection<?php echo $key; ?>"><?php echo $value; ?></label>
-            </div>
-            <?php }} ?>
-          </div>
-          <?php endif; ?>
+             </div>
+          <!--?php endif; ?-->
           
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-height' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
           <div class="filter__title" data-type="height">Высота</div>
-          <div class="filter__item hidden_type_min-md" data-type="height">
+          <div class="filter__item hidden" data-type="height">
             <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-height[]" value="<?php echo $key; ?>" id="height<?php echo $key; ?>"  <?php checkbox($slug.'-height',$key);?>>
@@ -129,11 +154,13 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
             </div>
             <?php }} ?>
           </div>
+             </div>
           <?php endif; ?>
           
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-hardness' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
           <div class="filter__title" data-type="hardness">Жёсткость</div>
-          <div class="filter__item hidden_type_min-md" data-type="hardness">
+          <div class="filter__item hidden" data-type="hardness">
             <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-hardness[]" value="<?php echo $key; ?>" id="hardness<?php echo $key; ?>"  <?php checkbox($slug.'-hardness',$key);?>>
@@ -141,11 +168,13 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
             </div>
             <?php }} ?>
           </div>
+             </div>
           <?php endif; ?>
           
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-type' ))['0']['options']['choices']; if($fields):?>
-          <div class="filter__title" data-type="hardness">Тип</div>
-          <div class="filter__item hidden_type_min-md" data-type="type">
+             <div class="filter__box">
+          <div class="filter__title" data-type="type">Тип</div>
+          <div class="filter__item hidden" data-type="type">
             <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-type[]" value="<?php echo $key; ?>" id="type<?php echo $key; ?>"  <?php checkbox($slug.'-type',$key);?>>
@@ -153,11 +182,13 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
             </div>
             <?php }} ?>
           </div>
+             </div>
           <?php endif; ?>
           
           <?php $fields = CFS()->find_fields( array( 'field_name' => $slug.'-structure' ))['0']['options']['choices']; if($fields):?>
+             <div class="filter__box">
           <div class="filter__title" data-type="structure">Материал</div>
-          <div class="filter__item hidden_type_min-md" data-type="structure">
+          <div class="filter__item hidden" data-type="structure">
             <?php foreach ($fields as $key => $value) { if($key != "empty"){?>
             <div class="filter__one">
               <input class="filter__input" type="checkbox" name="<?php echo $slug; ?>-structure[]" value="<?php echo $key; ?>" id="structure<?php echo $key; ?>"  <?php checkbox($slug.'-structure',$key);?>>
@@ -165,8 +196,10 @@ if(get_queried_object()->parent != 0 && get_term( get_queried_object()->parent )
             </div>
             <?php }} ?>
           </div>
+             </div>
           <?php endif; ?>
           
           <div class="filter__show hidden_type_max-md">Показать</div>
         </form>
-        <div class="filter__call hidden_type_max-md">Открыть фильтр<i class="fa fa-filter" aria-hidden="true"></i></div>
+        <div class="content__box">
+        <div class="filter__call hidden_type_max-md">Открыть фильтр<i class="fa fa-filter" aria-hidden="true"></i></div></div>

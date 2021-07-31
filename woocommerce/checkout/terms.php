@@ -28,10 +28,11 @@ if ( apply_filters( 'woocommerce_checkout_show_terms', true ) && function_exists
 			<p class="form-row validate-required">
 				<label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
 				<input type="checkbox" class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" name="terms" checked id="terms" />
-					<span class="woocommerce-terms-and-conditions-checkbox-text">Я прочитал(а) и принимаю</span</label>&nbsp;<a style="text-decoration: underline;" href="https://wheelhousedesign.ru/kompaniya/pokupatelyam/obrabotka-dannyh/" target="_blank">Договор публичной оферты</a><span class="required">*</span>
+					<span class="woocommerce-terms-and-conditions-checkbox-text">Я прочитал(а) и принимаю</span></label>&nbsp;<a style="text-decoration: underline;" href="https://wheelhousedesign.ru/kompaniya/pokupatelyam/obrabotka-dannyh/" target="_blank">Договор публичной оферты</a><span class="required">*</span>
 				
 				<input type="hidden" name="terms-field" value="1" />
 			</p>
+			<p><img style="width: 15px;margin-right: 5px;margin-bottom: -2px;" src="/wp-content/themes/questsight/assets/images/unlock.png">Безопасная покупка через защищенный протокол SSL</p>
 		<?php endif; ?>
 	</div>
 	<?php

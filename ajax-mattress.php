@@ -72,7 +72,8 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
     jQuery('.cloth__popup').addClass('hidden');
   });
   jQuery('#choice-mattress').on('click', function(){
-    jQuery('#product__mattress').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-mattress .product__add-item').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-mattress').removeClass('hidden');
     jQuery('#add-mattress').attr('name','add-more-to-cart[]');
     jQuery('#add-mattress').attr('value',ids);
     jQuery('#add-mattress-deposit').attr('name',mid+'-deposit-radio');
@@ -92,6 +93,5 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size']) {
     jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp+price) + " ₽");
     jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp+price) + " ₽");
     jQuery('#product__mattress').parent('.product__variation').addClass('choice');
-    jQuery('#product__mattress').parent('.product__variation').children('.product__delete').removeClass('hidden');
   });
 </script>

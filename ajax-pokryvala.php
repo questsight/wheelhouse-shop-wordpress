@@ -54,7 +54,8 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size'] && $_REQUEST['c
     jQuery('.cloth__popup').addClass('hidden');
   });
   jQuery('#choice-mattress').on('click', function(){
-    jQuery('#product__pokryvala').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-pokryvala .product__add-item').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-pokryvala').removeClass('hidden');
     jQuery('#add-pokryvala').attr('name','add-more-to-cart[]');
     jQuery('#add-pokryvala').attr('value',ids);
     jQuery('#add-pokryvala-deposit').attr('name',mid+'-deposit-radio');

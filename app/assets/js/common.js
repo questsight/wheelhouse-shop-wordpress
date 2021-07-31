@@ -1,54 +1,4 @@
 jQuery(document).ready(function () {
-  jQuery('.product__cloth').on('click', function(){
-    jQuery('.cloth').removeClass('hidden');
-    var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div class="spinner"></div>');
-    jQuery.ajax({
-        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth.php',
-        data: str,
-        method: 'POST',
-        success: function(data){
-          jQuery("#result-cloth").html(data);
-        }
-    });
-    jQuery('#result-cloth').removeClass('hidden');
-  });
-  jQuery('.cloth__close').on('click', function(){
-    price = "";
-    jQuery('.cloth__popup').addClass('hidden');
-    jQuery('#result-cloth').addClass('hidden');
-    jQuery('.cloth').addClass('hidden');
-  });
-  jQuery(this).keydown(function(eventObject){
-    if (eventObject.which == 27){
-      jQuery('.cloth__close').click();
-    }
-  });
-  jQuery('.product__cloth-add').on('click', function(){
-    jQuery('.cloth').removeClass('hidden');
-    jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
-    var str = jQuery("#filter-cloth").serialize();
-    jQuery("#result-cloth").html('<div class="spinner"></div>');
-    jQuery.ajax({
-        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth-add.php',
-        data: str,
-        method: 'POST',
-        success: function(data){
-          jQuery("#result-cloth").html(data);
-        }
-    });
-    jQuery('#result-cloth').removeClass('hidden');
-  });
-  jQuery('.product__cloth-fix').on('click', function(){
-    jQuery('#popup-fix img').attr('src',jQuery(this).attr('data-fix'));
-    jQuery('#popup-fix').removeClass('hidden');
-  });
-  jQuery('#popup-fix .popup__content .listing__close').on('click', function(){
-    jQuery('#popup-fix').addClass('hidden');
-    jQuery('#popup-fix img').attr('src','');
-  })
-})
-jQuery(document).ready(function () {
   jQuery('#product__colors').on('click', function(){
     jQuery('.colors').removeClass('hidden');
     var str = jQuery("#product-colors").serialize();
@@ -69,18 +19,65 @@ jQuery(document).ready(function () {
   });
 })
 jQuery(document).ready(function () {
+  jQuery('.product__cloth').on('click touchend', function(){
+    jQuery('.cloth').removeClass('hidden');
+    var str = jQuery("#filter-cloth").serialize();
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-cloth").html(data);
+        }
+    });
+    jQuery('#result-cloth').removeClass('hidden');
+  });
+  jQuery('.cloth__close').on('click touchend', function(){
+    price = "";
+    jQuery('.cloth__popup').addClass('hidden');
+    jQuery('#result-cloth').addClass('hidden');
+    jQuery('.cloth').addClass('hidden');
+  });
+  jQuery(this).keydown(function(eventObject){
+    if (eventObject.which == 27){
+      jQuery('.cloth__close').click();
+    }
+  });
+  jQuery('.product__cloth-add').on('click touchend', function(){
+    jQuery('.cloth').removeClass('hidden');
+    jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
+    var str = jQuery("#filter-cloth").serialize();
+    jQuery("#result-cloth").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-cloth-add.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-cloth").html(data);
+        }
+    });
+    jQuery('#result-cloth').removeClass('hidden');
+  });
+  jQuery('.product__cloth-fix').on('click touchend', function(){
+    jQuery('#popup-fix img').attr('src',jQuery(this).attr('data-fix'));
+    jQuery('#popup-fix').removeClass('hidden');
+  });
+  jQuery('#popup-fix .popup__content .listing__close').on('click touchend', function(){
+    jQuery('#popup-fix').addClass('hidden');
+    jQuery('#popup-fix img').attr('src','');
+  })
+})
+jQuery(document).ready(function () {
   jQuery('.filter__title').on('click', function(){
-    if ( window.matchMedia( '(max-width: 991px)' ).matches ) {
       var type = jQuery(this).attr('data-type');
-      jQuery('.filter__item').addClass('hidden_type_min-md');
       if(!jQuery(this).hasClass('open')){
-        jQuery('.filter__item[data-type='+type+']').removeClass('hidden_type_min-md');
-        jQuery('.filter__title').removeClass('open');
+        jQuery('.filter__item[data-type='+type+']').removeClass('hidden');
         jQuery(this).addClass('open');
       } else {
-        jQuery('.filter__title').removeClass('open');
+        jQuery(this).removeClass('open');
+        jQuery('.filter__item[data-type='+type+']').addClass('hidden');
       }
-    }
   });
   jQuery('.filter__close').on('click', function(){
     jQuery('.filter').addClass('hidden_type_min-md');
@@ -310,73 +307,8 @@ jQuery(document).bind('touchmove', function (e){
   }
   lastX = currentX;
 });
-jQuery( document ).ready( function() {
-  jQuery('.navigation__call-buyer > a').on('click', function(){
-    jQuery('#box-cooperation').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').addClass('hidden_type_min-md');
-    jQuery('#box-buyer').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('.navigation__call-cooperation > a').on('click', function(){
-    jQuery('#box-buyer').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').addClass('hidden_type_min-md');
-    jQuery('#box-cooperation').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('.navigation__call-contacts > a').on('click', function(){
-    jQuery('#box-buyer').addClass('hidden_type_min-md');
-    jQuery('#box-cooperation').addClass('hidden_type_min-md');
-    jQuery('#box-contacts').removeClass('hidden_type_min-md');
-    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
-    return false;
-  });
-  jQuery('#navigation .navigation__list .menu-item-has-children').hover(function(){
-    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
-      var $images = jQuery('img',this);
-      $images.each(function(){
-        var $img = jQuery(this),
-            src = $img.attr('data-src');
-        jQuery($img).attr('src',src);
-        jQuery($img).removeAttr('data-spai');
-      });
-      jQuery('.product__variation').addClass('product__variation-block');
-    }
-  },function(){
-    jQuery('.product__variation').removeClass('product__variation-block');
-  });;
-  jQuery('#navigation .navigation__list .menu-item-has-children > a', this).on('click', function(){
-    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
-      return false;
-    }
-  });
-});
-jQuery(document).ready(function () {
-  jQuery('.product__pillar').on('click', function(){
-    jQuery('.pillar').removeClass('hidden');
-    var str = jQuery("#product-pillar").serialize();
-    jQuery("#result-pillar").html('<div class="spinner"></div>');
-    jQuery.ajax({
-        url: window.location.origin+'/wp-content/themes/questsight/ajax-pillar.php',
-        data: str,
-        method: 'POST',
-        success: function(data){
-          jQuery("#result-pillar").html(data);
-        }
-    });
-    jQuery('#result-pillar').removeClass('hidden');
-  });
-  jQuery('.pillar__close').on('click', function(){
-    jQuery('#result-pillar').addClass('hidden');
-    jQuery('.pillar').addClass('hidden');
-  });
-  jQuery(this).keydown(function(eventObject){
-    if (eventObject.which == 27){
-      jQuery('.pillar__close').click();
-    }
-  });
-})
+//let vh = window.innerHeight * 0.01;
+//document.documentElement.style.setProperty('--vh', vh + 'px');
 jQuery(document).ready(function () {
   jQuery('#pa_size-krd').change(function() {
     jQuery('[name="mattress-size"]').attr('value',jQuery(this).val());
@@ -438,7 +370,7 @@ jQuery(document).ready(function () {
   jQuery('.variation_id').change( function(){
     jQuery('[name="mattress-size"]').attr('value',jQuery('#pa_size-krd').val());
   });
-  jQuery('#product__mattress').on('click', function(){
+  jQuery('#product__mattress').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -453,7 +385,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__namatrasniki').on('click', function(){
+  jQuery('#product__namatrasniki').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -468,7 +400,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__chehly-na-matras').on('click', function(){
+  jQuery('#product__chehly-na-matras').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     var str = jQuery("#mattress-size").serialize();
     jQuery("#result-mattress").html('<div class="spinner"></div>');
@@ -482,7 +414,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__pokryvala').on('click', function(){
+  jQuery('#product__pokryvala').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -497,7 +429,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__podushki').on('click', function(){
+  jQuery('#product__podushki').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     var str = jQuery("#mattress-size").serialize();
     jQuery("#result-mattress").html('<div class="spinner"></div>');
@@ -511,14 +443,14 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('.mattress__close').on('click', function(){
+  jQuery('.mattress__close').on('click touchend', function(){
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-mattress').addClass('hidden');
     jQuery('.mattress').addClass('hidden');
   });
-  jQuery('.product__delete').on('click', function(){
+  jQuery('.product__delete').on('click touchend', function(){
     var cat = jQuery(this).attr("id").replace('del-', '');
-    if(cat=='mattress'){
+    /*if(cat=='mattress'){
       if(jQuery('#product__mattress').attr('data-fix')){
         jQuery('#product__mattress').html('Выбрать матрас');
       }else{
@@ -532,7 +464,7 @@ jQuery(document).ready(function () {
       jQuery('#product__pokryvala').html('Добавить покрывало');
     }else if (cat=='podushki') {
       jQuery('#product__podushki').html('Добавить подушки');
-    }
+    }*/
     if(cat=='podushki'){
       jQuery('[data-deposit="podushki"]').remove();
       jQuery('[data-type="add-podushki"]').remove();
@@ -550,11 +482,78 @@ jQuery(document).ready(function () {
     jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp) + " ₽");
     jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp) + " ₽");
     jQuery('#product__'+cat).parent('.product__variation').removeClass('choice');
-    jQuery('#product__'+cat).parent('.product__variation').children('.product__delete').addClass('hidden');
+    jQuery('#additional-'+cat+' .product__add-item').html('');
+    jQuery('#additional-'+cat).addClass('hidden');
+    jQuery('#product-'+cat).removeClass('active');  //jQuery('#product__'+cat).parent('.product__variation').children('.product__delete').addClass('hidden');
   });
 })
-//let vh = window.innerHeight * 0.01;
-//document.documentElement.style.setProperty('--vh', vh + 'px');
+jQuery( document ).ready( function() {
+  jQuery('.navigation__call-buyer > a').on('click', function(){
+    jQuery('#box-cooperation').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').addClass('hidden_type_min-md');
+    jQuery('#box-buyer').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('.navigation__call-cooperation > a').on('click', function(){
+    jQuery('#box-buyer').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').addClass('hidden_type_min-md');
+    jQuery('#box-cooperation').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('.navigation__call-contacts > a').on('click', function(){
+    jQuery('#box-buyer').addClass('hidden_type_min-md');
+    jQuery('#box-cooperation').addClass('hidden_type_min-md');
+    jQuery('#box-contacts').removeClass('hidden_type_min-md');
+    jQuery('html, body').animate({scrollTop: jQuery(document).height() - jQuery(window).height()}, 100);
+    return false;
+  });
+  jQuery('#navigation .navigation__list .menu-item-has-children').hover(function(){
+    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
+      var $images = jQuery('img',this);
+      $images.each(function(){
+        var $img = jQuery(this),
+            src = $img.attr('data-src');
+        jQuery($img).attr('src',src);
+        jQuery($img).removeAttr('data-spai');
+      });
+      jQuery('.product__variation').addClass('product__variation-block');
+    }
+  },function(){
+    jQuery('.product__variation').removeClass('product__variation-block');
+  });;
+  jQuery('#navigation .navigation__list .menu-item-has-children > a', this).on('click', function(){
+    if ( window.matchMedia( '(min-width: 992px)' ).matches ) {
+      return false;
+    }
+  });
+});
+jQuery(document).ready(function () {
+  jQuery('.product__pillar').on('click touchend', function(){
+    jQuery('.pillar').removeClass('hidden');
+    var str = jQuery("#product-pillar").serialize();
+    jQuery("#result-pillar").html('<div class="spinner"></div>');
+    jQuery.ajax({
+        url: window.location.origin+'/wp-content/themes/questsight/ajax-pillar.php',
+        data: str,
+        method: 'POST',
+        success: function(data){
+          jQuery("#result-pillar").html(data);
+        }
+    });
+    jQuery('#result-pillar').removeClass('hidden');
+  });
+  jQuery('.pillar__close').on('click', function(){
+    jQuery('#result-pillar').addClass('hidden');
+    jQuery('.pillar').addClass('hidden');
+  });
+  jQuery(this).keydown(function(eventObject){
+    if (eventObject.which == 27){
+      jQuery('.pillar__close').click();
+    }
+  });
+})
 jQuery( document ).ready( function() {
   jQuery( '.popup__exit' ).click( function() {
     jQuery('.popup').addClass('hidden');
@@ -576,7 +575,7 @@ jQuery( document ).ready( function() {
 });
 jQuery( document ).ready( function() {
   var scheme = false;
-  jQuery(".product__img").on('click', function(){
+  jQuery(".product__img").on('click touchend', function(){
     jQuery('.product__first img').attr('src',jQuery(this).attr('data-src'));
     if(jQuery(this).attr('data-scheme')){
       scheme = true;
@@ -675,7 +674,7 @@ jQuery( document ).ready( function() {
     mouseMove.apply(this, arguments);
     ui.glass.on('mousemove', mouseMove);
   }});
-  jQuery('.product__variation-choice span').on('click', function(){
+  jQuery('.product__variation-choice span').on('click touchend', function(){
     jQuery('>.product__variation-select',jQuery(this).parent('.product__variation-choice')).toggleClass('hidden');
   });
   jQuery( ".product__variation-input input" ).change(function() {
@@ -688,20 +687,24 @@ jQuery( document ).ready( function() {
       jQuery('#'+ids).change();
     }
   });
+jQuery('.wc-pao-addon-name').each(function() {
+  jQuery(this).attr("data-position",jQuery(this).position().top);
+})
 jQuery('.ajax_add_to_cart').on('click', function(){
   var validation = true;
   jQuery('select.product__variation-choice').each(function() {
     if(!jQuery(this).val()){
-      jQuery(this).addClass("accent");
+      jQuery(this).parent().parent().children('.wc-pao-addon-name').addClass("accent");
       validation = false;
       jQuery(this).change(function() {
-        jQuery(this).removeClass("accent");
+        jQuery(this).parent().parent().children('.wc-pao-addon-name').removeClass("accent");
       });
     }
   });
   jQuery('[name="_material[]"]').each(function() {
     if(!jQuery(this).val()){
-      if(jQuery(".choice__basic").hasClass('hidden')&&jQuery(".choice__color").hasClass('hidden')){
+      jQuery('#_material-title').addClass("accent");
+      /*if(jQuery(".choice__basic").hasClass('hidden')&&jQuery(".choice__color").hasClass('hidden')){
         jQuery('#product__colors').addClass("accent").on('click', function(){
           jQuery(this).removeClass("accent");
         });
@@ -723,22 +726,78 @@ jQuery('.ajax_add_to_cart').on('click', function(){
         jQuery('.choice__pillar').children('.product__pillar').addClass("accent").on('click', function(){
           jQuery(this).removeClass("accent");
         });
-      }
+      }*/
       validation = false;
-      jQuery(this).change(function() {
-        jQuery(this).removeClass("accent");
-      });
     }
   });
   if(!validation){
-    
-    jQuery('html, body').animate({
-        scrollTop: jQuery(".accent").offset().top - 20
-    }, 0);
+    if ( window.matchMedia( '(min-width: 768px)' ).matches ) {
+      jQuery('html,body').animate({
+        scrollTop: jQuery(".product__form-scroll").offset().top - 20,
+      }, 0);
+      jQuery('.product__form-scroll').animate({
+        scrollTop: jQuery(".accent").attr('data-position') - 30,
+      }, 0);
+    }else{
+      jQuery('html,body').animate({
+        scrollTop: jQuery(".accent").position().top - 20,
+      }, 0); 
+    }
+    jQuery('[name="_material[]"]').each(function() {
+      if(!jQuery(this).val()){
+        acc = 0;
+      }
+    })
     return false;
   }
 });
+jQuery('.product__sidebar-option').on('click touchend', function(){
+  jQuery('.product__sidebar-option').removeClass('active');
+  jQuery(this).addClass('active');
+  jQuery('.product__sidebar').addClass('hidden');
+  jQuery('.product__sidebar[data-type="'+jQuery(this).attr('data-call')+'"]').removeClass("hidden");
 });
+jQuery('.product__variation-text').on('click', function(){
+  if(jQuery(this).attr('data-select')){
+    jQuery('#'+jQuery(this).attr('data-select')).children('[value='+jQuery(this).attr('data-option')+']').prop('selected',true).change();
+    
+    jQuery('[data-select="'+jQuery(this).attr("data-select")+'"]').parent().removeClass('active');
+    jQuery(this).parent().addClass('active');
+  }
+});
+jQuery('.wc-pao-addon-osnovanie-spalnogo-mesta p .wc-pao-addon-image-swatch').on("click touchend", function(){
+  jQuery('[data-slug="wc-pao-addon-osnovanie-spalnogo-mesta"]').html('- '+jQuery(this).attr('data-item'));
+});
+jQuery('.wc-pao-addon-vybrat-formu-opor p .wc-pao-addon-image-swatch').on("click touchend", function(){
+  jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch').addClass('hidden');
+  if(jQuery(this).attr('data-item')!='Скользящий подпятник'){
+    jQuery('.wc-pao-addon-vybrat-czvet-opor').removeClass('hidden');
+  }else{
+    jQuery('.wc-pao-addon-vybrat-czvet-opor').addClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor select option').prop('selected', false);
+    jQuery('.wc-pao-addon-vybrat-czvet-opor select option:last').prop('selected', true);
+  }
+  if(jQuery(this).attr('data-item')=='Пирамида 45 мм'||jQuery(this).attr('data-item')=='Пирамида 100 мм'||jQuery(this).attr('data-item')=='Пирамида 120 мм'||jQuery(this).attr('data-item')=='Сфера 45 мм'||jQuery(this).attr('data-item')=='Фигурная 100 мм'){
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет белый"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет серый"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет натуральный бук"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет орех"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет венге"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет черный"]').removeClass('hidden');
+  }
+});
+if(jQuery('iframe#v3d_iframe')){
+    var hC = jQuery('iframe#v3d_iframe').width() / 3 * 2;
+    jQuery('iframe#v3d_iframe').height(hC);
+  } 
+});
+jQuery( window).resize(function() {
+  if(jQuery('iframe#v3d_iframe')){
+    var hC = jQuery('iframe#v3d_iframe').width() / 3 * 2;
+    jQuery('iframe#v3d_iframe').height(hC);
+  } 
+})
+
 jQuery( document ).ready( function() {
   var calc = 9;
   var item = 1;

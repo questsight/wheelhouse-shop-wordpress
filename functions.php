@@ -59,9 +59,9 @@ add_action( 'after_setup_theme', 'questsight_content_width', 0 );
 
 function questsight_scripts() {
   wp_enqueue_style( 'questsight-style', get_stylesheet_uri() );
-  wp_enqueue_style('questsight-common-css', get_template_directory_uri() . '/assets/css/common_v220421.min.css', array(), null, false);
+  wp_enqueue_style('questsight-common-css', get_template_directory_uri() . '/assets/css/common_v150721.min.css', array(), null, false);
   wp_enqueue_script( 'jquery' );
-  wp_enqueue_script('questsight-common-js', get_template_directory_uri() . '/assets/js/common_v220421.min.js', array('jquery'), null, true);
+  wp_enqueue_script('questsight-common-js', get_template_directory_uri() . '/assets/js/common_090721.min.js', array('jquery'), null, true);
   if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
       wp_enqueue_script( 'comment-reply' );
     }
@@ -148,15 +148,17 @@ function go_filter_shop() {
   global $wp_query;
   foreach ($_GET as $key => $value) {
     $type = array('relation' => 'OR');
-    if($key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'category' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved' && $key != 'orderby' && $key != 'post_type' && is_array( $value )){
+    if($key != 'combination' && $key != 'cat' && $key != 'v' && $key != 'product_cat' && $key != 'category' && $key != 'customize_changeset_uuid'  && $key != 'customize_theme' && $key != 'customize_messenger_channel' && $key != 'customize_autosaved' && $key != 'orderby' && $key != 'post_type' && is_array( $value ) && !in_array("false", $value)){
         foreach($value as $val){
-          $type[] = array(
+          if($val!='false'){
+            $type[] = array(
 			    'key' => $key, 
 			    'compare_key' => 'LIKE',
-			    'value' => $val,
-          'type' => 'text',
+			 'value' => $val,
+              'type' => 'text',
           'compare' => 'IN'
 		    );
+          }
         }
     $args['meta_query'][] = $type;
     }
@@ -339,7 +341,7 @@ function woocommerce_get_product_thumbnail( $size = 'woocommerce_thumbnail', $de
 //страница общего каталога
 function woocommerce_template_loop_category_link_open( $category ) {
   if(strpos($category->slug,'konfigurator')!== false){
-    echo '<a href="' . esc_url( get_term_link( $category, 'product_cat' ) ) . '" class="listing__item" data-konfigurator="'.$category->slug.'">';
+    echo '<a href="' . esc_url( get_term_link( $category, 'product_cat' ) ) . '" class="listing__item" data-konfigurator="konfigurator-'.get_term( get_queried_object()->parent )->slug.'">';
   }else{
     echo '<a href="' . esc_url( get_term_link( $category, 'product_cat' ) ) . '" class="listing__item">';
   }
@@ -432,120 +434,96 @@ function woocommerce_breadcrumb( $args = array() ) {
 //Товар
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
-	function wc_dropdown_variation_attribute_options( $args = array() ) {
-		$args = wp_parse_args(
-			apply_filters( 'woocommerce_dropdown_variation_attribute_options_args', $args ),
-			array(
-				'options'          => false,
-				'attribute'        => false,
-				'product'          => false,
-				'selected'         => false,
-				'name'             => '',
-				'id'               => '',
-				'class'            => '',
-				'show_option_none' => __( 'Choose an option', 'woocommerce' ),
-			)
-		);
 
-		// Get selected value.
-		if ( false === $args['selected'] && $args['attribute'] && $args['product'] instanceof WC_Product ) {
-			$selected_key     = 'attribute_' . sanitize_title( $args['attribute'] );
-			$args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) : $args['product']->get_variation_default_attribute( $args['attribute'] ); // WPCS: input var ok, CSRF ok, sanitization ok.
-		}
-		$slug                  = $args['slug'];
-    $aksessuary            = $args['aksessuary'];
-		$options               = $args['options'];
-		$product               = $args['product'];
-		$attribute             = $args['attribute'];
-		$name                  = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
-		$id                    = $args['id'] ? $args['id'] : sanitize_title( $attribute );
-		$class                 = $args['class'];
-		$show_option_none      = (bool) $args['show_option_none'];
-		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' ); // We'll do our best to hide the placeholder, but we'll need to show something when resetting options.
-		if ( empty( $options ) && ! empty( $product ) && ! empty( $attribute ) ) {
-			$attributes = $product->get_variation_attributes();
-			$options    = $attributes[ $attribute ];
-		}
-    if($name  == "attribute_pa_kategoriya-tkani"){
-      $html;
-      $colors = CFS()->get( 'colors' );
-      $baisColors = CFS()->get( 'basic-colors' );
-      if($colors){
-        if($_GET['color']){
-          foreach($colors as $key => $value ){
-            if($value['color-name']==$_GET['color']){
-              $fields = $value['materials'];
-              break;
-            }
+
+
+function wc_dropdown_variation_attribute_options( $args = array() ) {
+  $args = wp_parse_args(
+    apply_filters( 'woocommerce_dropdown_variation_attribute_options_args', $args ),
+    array(
+      'options'          => false,
+      'attribute'        => false,
+      'product'          => false,
+      'selected'         => false,
+      'name'             => '',
+      'id'               => '',
+      'class'            => '',
+      'show_option_none' => __( 'Choose an option', 'woocommerce' ),
+    )
+  );
+
+// Get selected value.
+  if ( false === $args['selected'] && $args['attribute'] && $args['product'] instanceof WC_Product ) {
+    $selected_key     = 'attribute_' . sanitize_title( $args['attribute'] );
+    $args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) : $args['product']->get_variation_default_attribute( $args['attribute'] ); // WPCS: input var ok, CSRF ok, sanitization ok.
+  }
+  $slug                  = $args['slug'];
+  $aksessuary            = $args['aksessuary'];
+  $options               = $args['options'];
+  $product               = $args['product'];
+  $attribute             = $args['attribute'];
+  $name                  = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
+  $id                    = $args['id'] ? $args['id'] : sanitize_title( $attribute );
+  $class                 = $args['class'];
+  $show_option_none      = (bool) $args['show_option_none'];
+  $show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' ); // We'll do our best to hide the placeholder, but we'll need to show something when resetting options.
+  if ( empty( $options ) && ! empty( $product ) && ! empty( $attribute )) {
+    $attributes = $product->get_variation_attributes();
+    $options    = $attributes[ $attribute ];
+  }
+  if($name  == "attribute_pa_kategoriya-tkani"){
+    $html;
+    $materials = CFS()->get( 'materials' );
+    if(!$_GET['color']&&$slug!='v-nalichii'){
+      foreach ( $materials as $k => $val ){
+        if($key == 0){
+          $html .= '<div><br><p class="wc-pao-addon-name" id="_material-title">Выбрать материал и цвет</p><br>';
+          $html .= '<div style="display: flex;flex-wrap: wrap;"><div class="product__variation wc-pao-addon-image-swatch add" title="' . $val['material_name'] . '">';
+          if($val['material_icon']){
+            $html .= '<img src="'.$val['material_icon'] .'" alt="' . $val['material_name'] . '" width="65" height="65"'. 'class="choice__basic product__cloth">';
+          }else{
+            $html .= '<div class="product__variation-text choice__basic product__cloth">'.$val['material_name'].'</div>';
           }
+          $html .= '</div>';
+        }elseif($key == 1 && $slug == 'pokryvala'){
+          //$html .= '<div class="product__variation"><div class="product__variation-text" style="width:130px;">Стёганое полотно из микрофибры</div></div>';
         }else{
-          $fields = $colors[array_key_first($colors)]['materials'];
-        }
-      }
-      $materials = CFS()->get( 'materials' );
-      if(CFS()->get( 'basic-description' )){
-        $basic = true;
-      }else{
-        $basic = false;
-      }
-      if(!$basic && $colors && count($colors) == 1 || $_GET['color']){
-        $fix = true;
-      }else {
-        $fix = false;
-      }
-      $hidden;
-      if(($colors && count($colors) > 0 && $basic || $baisColors && count($baisColors) > 0 || $colors && count($colors) > 1) && !$fix) {
-        $hidden = 'hidden ';
-        $html .= '<div class="product__variation"><div class="product__variation-text"></div><div class="product__variation-choice" id="product__colors">Выбрать цвет</div></div>';
-      }
-      if($colors && count($colors) > 0 || !$basic){
-        $html .= '<div id="popup-fix" class="popup hidden" style="background: rgba(255, 255, 255, 0.7);"><div class="popup__content"><div class="listing__close" style="top: -25px;right: -10px;">&times;</div><img src=""></div></div>';
-      }
-      $key = 0;
-      if($fix){
-        foreach ( $fields as $k => $val ){
-          $html .= '<div class="'.$hidden.'product__variation-size choice__color"><div class="product__variation-text">' . $materials[$key]['material_name'] . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. $val['material_img'] .'" data-item="'.$key.'">' . $val['material'] . '</div></div>';
-          $key++;
-        }
-      }else{
-        foreach ( $materials as $k => $val ){
-          if($colors && count($colors) > 0 || $basic){
-            if($key == 0){
-              $html .= '<div class="'.$hidden.'product__variation choice__basic"><div class="product__variation-text">' . $val['material_name'] . '</div><div class="product__variation-choice product__cloth">Выбрать материал и цвет</div></div>';
-            }elseif($key == 1 && $slug == 'pokryvala'){
-              $html .= '<div class="'.$hidden.'product__variation-size choice__basic"><div class="product__variation-text">' . $val['material_name'] . '</div><div class="product__variation-choice" data-item="'.$key.'">Стёганое полотно из микрофибры</div></div>';
-            }else{
-              $html .= '<div class="'.$hidden.'product__variation choice__basic"><div class="product__variation-text">' . $val['material_name'] . '</div><div class="product__variation-choice product__cloth-add" data-item="'.$key.'">Выбрать материал и цвет</div></div>';
-            }
+          $html .= '<div class="product__variation wc-pao-addon-image-swatch add" title="' . $val['material_name'] . '">';
+          if($val['material_icon']){
+            $html .= '<img src="'.$val['material_icon'] .'" alt="' . $val['material_name'] . '" width="65" height="65"'. 'class="choice__basic product__cloth-add" data-item="'.$key.'">';
+          }else{
+            $html .= '<div class="product__variation-text choice__basic product__cloth-add" data-item="'.$key.'">'.$val['material_name'].'</div>';
           }
-          if($colors && count($colors) > 0 || !$basic){
-            $html .= '<div class="'.$hidden.'product__variation-size choice__color"><div class="product__variation-text">' . $val['material_name'] . '</div><div class="product__variation-choice product__cloth-fix" data-fix="'. $fields[0]['material_img'] .'" data-item="'.$key.'">Выбрать материал и цвет</div></div>';
-          }
-          $key++;
+          $html .= '</div>';
         }
+        $key++;
       }
-      if(!$aksessuary && CFS()->get($slug.'-collection',$post->ID) && (array_key_first(CFS()->get($slug.'-collection',$post->ID))==3 || array_key_first(CFS()->get($slug.'-collection',$post->ID))==12)){
-        $html .= '<div class="'.$hidden.'product__variation choice__pillar"><div class="product__variation-text">Опоры</div><div class="product__variation-choice product__pillar">Выбрать форму и цвет опор</div></div>';
-      }
-      $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">';
-    }elseif(count($options) == 1){
-      $terms = wc_get_product_terms(
-			 $product->get_id(),
-			 $attribute,
-			 array(
-			   'fields' => 'all',
-			 )
-			);
-      $html = '<div class="product__variation-size"><div class="product__variation-text"></div><div class="product__variation-choice">' . $terms[0]->name. '</div><select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
-    }elseif($slug == "matrasy" || $slug == "namatrasniki"){
-      $html = '<div class="product__variation-size"><select style="width:auto" class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
     }else{
-      $html = '<div class="product__variation"><div class="product__variation-text"></div><select class="product__variation-choice" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+      $html .= '<div><div>';
     }
-		$html .= '<option value="">' . wc_attribute_label( $attribute )  . '</option>';
+    $html .= '<select class="hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">';  
+  }else{
+    if($slug!='v-nalichii'){
+    $html = '<div><p class="wc-pao-addon-name">'.wc_attribute_label( $attribute ).'</p><br><div>';
+      if($name  == "attribute_pa_size-krd"){
+        $style=' style="width:55px;min-width:55px;padding:0"';
+      }
+      foreach ( $options as $option ) {
+        if($name  == "attribute_pa_size-krd"&&$_GET['attribute_pa_size-krd']&&$_GET['attribute_pa_size-krd']==$option){
+          $html    .= '<div class="product__variation active"><div class="product__variation-text" data-select="' . esc_attr( $id ) . '" data-option="' . esc_attr( $option ) . '"'.$style.'>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product ) ) . '</div></div>';
+        }else{
+          $html    .= '<div class="product__variation"><div class="product__variation-text" data-select="' . esc_attr( $id ) . '" data-option="' . esc_attr( $option ) . '"'.$style.'>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option, null, $attribute, $product ) ) . '</div></div>';
+        }
+      }
+    }else{
+      $html = '<div><div>';
+    }
+      $html .= '<select class="product__variation-choice hidden" id="' . esc_attr( $id ) . '" class="' . esc_attr( $class ) . '" name="' . esc_attr( $name ) . '" data-attribute_name="attribute_' . esc_attr( sanitize_title( $attribute ) ) . '" data-show_option_none="' . ( $show_option_none ? 'yes' : 'no' ) . '">'; 
+  }
+  $html .= '<option value="">' . wc_attribute_label( $attribute )  . '</option>';
 
-		if ( ! empty( $options ) ) {
-			if ( $product && taxonomy_exists( $attribute ) ) {
+      if ( ! empty( $options ) ) {
+        if ( $product && taxonomy_exists( $attribute ) ) {
 				// Get terms if this is a taxonomy - ordered. We need the names too.
 				$terms = wc_get_product_terms(
 					$product->get_id(),
@@ -570,15 +548,14 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 			}
 		}
 
-		if(in_array('false',$options) || $name  == "attribute_pa_kategoriya-tkani"){
-           $html .= '</select>';
-		    
-		}else{
-           $html .= '</select></div>';
-		}
-
+        $html .= '</select></div></div>';
 		echo apply_filters( 'woocommerce_dropdown_variation_attribute_options_html', $html, $args ); // WPCS: XSS ok.
-	}
+        if($name  == "attribute_pa_size-krd"&&$slug!='v-nalichii'){
+           do_action( 'woocommerce_product_additional_information', $product );
+		    
+		}
+  
+}
 
 add_filter('woocommerce_variable_price_html', 'my_woocommerce_variable_price_html', 10, 2); 
 function my_woocommerce_variable_price_html( $price, $product ) {
@@ -659,7 +636,6 @@ function replace_variation_single_price(){
           }else{
             var matrasy = 0;
           }
-          console.log(matrasy);
           if(jQuery('.variation_id').attr('data-namatrasniki')){
             var namatrasniki = parseInt(jQuery('.variation_id').attr('data-namatrasniki'), 10);
           }else{
@@ -685,6 +661,17 @@ function replace_variation_single_price(){
           jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(sp) + " ₽");
         });
         let previous;
+        jQuery('.wc-pao-addon-image-swatch').on("click touchend", function(e) {
+            var elemVal = $( this ).attr('data-value');
+            var elemParent = jQuery( '.wc-pao-addon-field option[value="'+elemVal+'"]' ).parent();
+            if(jQuery(elemParent).attr('data-previous')){
+                previous = jQuery(elemParent).attr('data-previous');
+            }else{
+                previous="";
+            }
+            jQuery('.wc-pao-addon-field option[value="'+elemVal+'"]').prop('selected',true).change();
+            jQuery(elemParent).attr('data-previous',elemVal);
+        });
         $('.wc-pao-addon-field').on('focus', e => previous = e.target.value).change(function(e){
             if(jQuery(this).attr('data-change') && jQuery(this).attr('data-price')){
               if(jQuery(this).is(':checked')){
@@ -828,6 +815,7 @@ function ctrlv_material(){
     $pokryvala = false;
     $aksessuary = false;
     $krovati = false;
+    $basic = true;
 		foreach ($categories as $category) {
       if($category->slug == 'pokryvala'){
         $pokryvala = true;
@@ -842,15 +830,22 @@ function ctrlv_material(){
           $more = true;
           break;
         }
+      if($category->slug == 'v-nalichii'){
+          $basic = false;
+          break;
+        }
     }
     if($_GET['color']){
       foreach(CFS()->get( 'colors' ) as $key => $value ){
         if($value['color-name']==$_GET['color']){
           $fields = $value['gallery'];
+          $noName = $value['no-name'];
           break;
         }
       }
-    printf( '<input type="hidden" name="_color" value="'.$_GET['color'].'" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+    if(!$noName){
+      printf( '<input type="hidden" name="_color" value="'.$_GET['color'].'" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
+    }
     echo( '<input type="hidden" name="_link" value="'. ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http'). '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'].'" />' );
     printf( '<input type="hidden" name="_img" value="'.array_shift($fields)['img-jpg'].'" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
     }else{
@@ -863,7 +858,7 @@ function ctrlv_material(){
       $k = 0;
       foreach ( $fields as $key => $val ){
         $value = isset( $_POST['_material[]'] ) ? sanitize_text_field( $_POST['_material[]'] ) : '';
-        if($colors && count($colors)==1 && !CFS()->get( 'basic-description' ) &&!$_GET['color']){
+        if($colors && count($colors)==1 && !$basic &&!$_GET['color']){
           $name = $colors[0]['materials'][$k]['material'];
         }elseif($_GET['color']){
             foreach($colors as $color){
@@ -880,10 +875,6 @@ function ctrlv_material(){
         printf( '<input type="hidden" data-key="'.$key.'" name="_material[]" value="'.$name.'" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
         printf( '<input type="hidden" name="_material-name[]" value="' . $val['material_name'] . '" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
         $k++;
-      }
-      if(!$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==3 || !$aksessuary && CFS()->get($slug.'-collection',$post->ID) && array_key_first(CFS()->get($slug.'-collection',$post->ID))==12){
-        printf( '<input type="hidden" data-key="pillar" name="_material[]" value="" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) );
-        printf( '<input type="hidden" name="_material-name[]" value="Опоры" />', __( '', 'ctrlv-plugin-textdomain' ), esc_attr( $value ) ); 
       }
     }
     if($more){
@@ -1028,7 +1019,7 @@ function ctrlv_get_item_data( $other_data, $cart_item ) {
         break;
       }
     }
-    if(!$cart_item['add-more'] || $more){
+    if(!array_key_exists("add-more",$cart_item) || !$cart_item['add-more'] || $more){
     $test=$cart_item['material-name'];
     if ( !empty( $cart_item['material'] ) ){
       foreach ( $cart_item['material'] as $key => $val ){
@@ -1488,6 +1479,7 @@ function misha_remove_my_account_links( $menu_links ){
 			$html = $args['before'] . implode( $args['separator'], $strings ) . $args['after'];
 			$html = str_replace("<p>", '', $html);
 			$html = str_replace("</p>", '', $html);
+            $html = str_replace("Выбрать форму", 'Форма', $html);
 			$html = str_replace("Выбрать", '', $html);
 			$html = str_replace("выбрать", '', $html);
 		}
@@ -1778,7 +1770,7 @@ add_filter( 'woocommerce_short_description', 'wplife_filter_woocommerce_short_de
 //Экран каталога (товары или категории)
 	function woocommerce_get_loop_display_mode() {
 		// Only return products when filtering things.
-		if ( wc_get_loop_prop( 'is_search' ) || wc_get_loop_prop( 'is_filtered' ) || $_REQUEST['collection'] || $_REQUEST['purpose']) {
+		if ( wc_get_loop_prop( 'is_search' ) || wc_get_loop_prop( 'is_filtered' ) || $_GET && ($_GET['collection'] || $_GET['purpose'])) {
 			return 'products';
 		}
 
@@ -1840,10 +1832,24 @@ function priceColor($category,$ids){
     if($_REQUEST['mattress-size']){
       foreach ($available_variations as $key => $value){
         if($value['attributes']['attribute_pa_kategoriya-tkani'] == $category && $value['attributes']['attribute_pa_size-krd']==$_REQUEST['mattress-size']){
-          return $value['price_html'];
+          return $value['display_price'];
           break;
         }
-      } 
+      }
+    }else if($_REQUEST['detskie-krovati-size']&&!in_array('false', $_REQUEST['detskie-krovati-size'])){
+      foreach ($available_variations as $key => $value){
+        if($value['attributes']['attribute_pa_kategoriya-tkani'] == $category && $value['attributes']['attribute_pa_size-krd']==$_REQUEST['detskie-krovati-size'][0]){
+          return $value['display_price'];
+          break;
+        }
+      }
+    }else if($_REQUEST['krovati-size']&&!in_array('false', $_REQUEST['krovati-size'])){
+      foreach ($available_variations as $key => $value){
+        if($value['attributes']['attribute_pa_kategoriya-tkani'] == $category && $value['attributes']['attribute_pa_size-krd']==$_REQUEST['krovati-size'][0]){
+          return $value['display_price'];
+          break;
+        }
+      }
     }else{
       $items = array();
       foreach ($available_variations as $key => $value){
@@ -1852,7 +1858,7 @@ function priceColor($category,$ids){
         }
       }
       sort($items);
-      return number_format($items[0], 0, ',', ' ').' ₽';
+      return $items[0];
     }
   }
 }
@@ -1935,6 +1941,8 @@ add_action( 'woocommerce_new_booking', 'auto_create_followup_booking' );
 function auto_update_followup_booking( $booking_id ) {
 	$booking = get_wc_booking( $booking_id );
     if($booking->product_id != 27485){
+      //27428 встреча в шоуруме
+      
 	   $booking_children_id = $booking_id + 1;
 	   $prev_booking = get_wc_booking( $booking_children_id );
         if($prev_booking && $prev_booking->get_parent_id() == $booking_id){
@@ -1972,4 +1980,18 @@ function autocomplete_all_orders($order_id) {
     if($order->get_status() != 'processing' && $order->get_status() != 'partially-paid'){
         $order->update_status('processing');
     }
+}
+
+//Письмо о статусе Ожидание оплаты
+add_action( 'woocommerce_checkout_order_processed', 'pending_new_order_notification', 20, 1 );
+function pending_new_order_notification( $order_id ) {
+
+    // Get an instance of the WC_Order object
+    $order = wc_get_order( $order_id );
+
+    // Only for "pending" order status
+    if( ! $order->has_status( 'pending' ) ) return;
+
+    // Send "New Email" notification (to admin)
+    WC()->mailer()->get_emails()['WC_Email_New_Order']->trigger( $order_id );
 }

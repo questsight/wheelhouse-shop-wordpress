@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
     <link rel="preload" href="/wp-content/themes/questsight/assets/fonts/geometria-regular.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="/wp-content/themes/questsight/assets/fonts/geometria-bold.woff2" as="font" crossorigin="anonymous">
     <link rel="preload" href="/wp-content/themes/questsight/assets/fonts/geometria-medium.woff2" as="font" crossorigin="anonymous">

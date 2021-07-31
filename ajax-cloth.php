@@ -17,7 +17,7 @@ foreach($collection as $val):
                   $price = 0;
                   $item['name'] = $field['name-color'];
                   $item['jpg'] = $field['icon-jpg'];
-                  $item['webp'] = $field['icon-webp'];
+                  $item['texture'] = $field['texture'];
                   $item['link'] = get_the_permalink();
                   $item['ids'] = get_the_ID();
                   foreach ( get_the_category() as $key => $label ) {
@@ -43,7 +43,7 @@ ksort($result['price']);
 <div class="cloth__title">Категория №<?php echo $k;?></div>
 <?php foreach ( $value as $key => $val ):?>
 <div class="cloth__item" data-price="<?php echo $k;?>" data-ids='<?php echo $val['ids'] ;?>'>
-    <img class="listing__foto" src="<?php echo $val['jpg'];?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+    <img class="listing__foto" src="<?php echo $val['jpg'];?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>" data-texture="<?php echo $val['texture'];?>">
     <div class="listing__title"><?php echo $val['cat'];?> - <?php echo $val['name'];?></div>
 </div>
  <?php endforeach; endforeach;?>
@@ -64,13 +64,15 @@ ksort($result['price']);
      price = jQuery(this).attr('data-price');
      material = jQuery(this).children('.listing__title').html();
      ids = jQuery(this).attr('data-ids');
+     url = jQuery(this).children('.listing__foto').attr('data-texture');
      jQuery('.cloth__popup-title').html(material);
-    jQuery('.cloth__popup').removeClass('hidden');
+     jQuery('.cloth__popup').removeClass('hidden');
   });
   jQuery('#exit').on('click', function(){
     price = "";
     material = "";
     ids = "";
+    url="";
     jQuery('.cloth__popup').addClass('hidden');
   });
   jQuery('#choice').on('click', function(){
@@ -83,11 +85,17 @@ ksort($result['price']);
     });
     jQuery('[data-key="0"]').attr('value',material);
     jQuery('[name="cloth-price"]').attr('value',jQuery('#pa_kategoriya-tkani').val());
-    jQuery('.product__cloth').html(jQuery('.cloth__popup-title').html());
-    jQuery('.product__cloth-add').html("Выбрать материал и цвет");
+    //jQuery('.product__cloth').html(jQuery('.cloth__popup-title').html());
+    //jQuery('.product__cloth-add').html("Выбрать материал и цвет");
+    jQuery('.product__cloth').parent().addClass('choice');
+    jQuery('.product__cloth-add').parent().removeClass('choice');
+    jQuery('[data-slug="material0"]').html(jQuery('.cloth__popup-title').html());
     jQuery('[data-ids]').attr('value',ids);
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-cloth').addClass('hidden');
     jQuery('.cloth').addClass('hidden');
+    jQuery('iframe#v3d_iframe').contents().find('#material0').focus();
+    jQuery('iframe#v3d_iframe').contents().find('#material0').val(url);
+    jQuery('iframe#v3d_iframe').contents().find('#material0').blur();
   });
 </script>

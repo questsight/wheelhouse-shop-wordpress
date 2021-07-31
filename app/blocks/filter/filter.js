@@ -1,16 +1,13 @@
 jQuery(document).ready(function () {
   jQuery('.filter__title').on('click', function(){
-    if ( window.matchMedia( '(max-width: 991px)' ).matches ) {
       var type = jQuery(this).attr('data-type');
-      jQuery('.filter__item').addClass('hidden_type_min-md');
       if(!jQuery(this).hasClass('open')){
-        jQuery('.filter__item[data-type='+type+']').removeClass('hidden_type_min-md');
-        jQuery('.filter__title').removeClass('open');
+        jQuery('.filter__item[data-type='+type+']').removeClass('hidden');
         jQuery(this).addClass('open');
       } else {
-        jQuery('.filter__title').removeClass('open');
+        jQuery(this).removeClass('open');
+        jQuery('.filter__item[data-type='+type+']').addClass('hidden');
       }
-    }
   });
   jQuery('.filter__close').on('click', function(){
     jQuery('.filter').addClass('hidden_type_min-md');

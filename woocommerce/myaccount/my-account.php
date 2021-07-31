@@ -34,6 +34,7 @@ $customer_orders = get_posts(
 <div class="shop">
     <div class="shop__main">
 <?php if ( $customer_orders ) : ?>
+      <h2 class="title">Заказы</h2><br>
 	<table class="account__table shop_table shop_table_responsive my_account_orders">
 
 		<thead>
@@ -90,7 +91,15 @@ $customer_orders = get_posts(
 			<?php endforeach; ?>
 		</tbody>
 	</table>
-<?php endif; ?>        
+<?php endif; ?>
+      
+      
+      <?php $all_bookings = WC_Booking_Data_Store::get_bookings_for_user( $user_id );
+
+			if ( ! empty( $all_bookings ) ) {
+				wc_get_template( 'myaccount/my-bookings.php', array( 'bookings' => $all_bookings ), 'woocommerce-bookings/', WC_BOOKINGS_TEMPLATE_PATH );
+			}?>
+      
     </div>
     <div class="shop__sidebar">
         <?php do_action( 'woocommerce_account_navigation' );?>

@@ -11,7 +11,7 @@ get_header();?>
             <img class="main__name-logo" src="<?php echo CFS()->get('name-logo'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             <img class="main__name-image" src="<?php echo CFS()->get('name-image'); ?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
             <h1 class="main__name-title"><?php echo get_bloginfo('description'); ?></h1>
-            <p class="main__name-subtitle">Екатерины Ушаковой</p>
+            <p class="main__name-subtitle">Интернет-магазин от производителя</p>
           </div>
         </div>
 

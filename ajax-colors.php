@@ -4,14 +4,14 @@ $html;
 if(CFS()->get( 'basic-description', $_REQUEST['product-ids'])):?>
  <div class="listing__item colors__item colors__basic" data-item="basic" data-type="basic">
    <img class="listing__foto" src="<?php if(CFS()->get( 'basic-img', $_REQUEST['product-ids'])){echo CFS()->get( 'basic-img', $_REQUEST['product-ids']);}else{echo CFS()->get( 'main-gallery', $_REQUEST['product-ids'])[0]['img-jpg'];}?>">
-   <div class="listing__price"><?php echo priceColor(CFS()->get( 'price', $_REQUEST['product-ids']),$_REQUEST['product-ids']);?></div>
+   <div class="listing__price"><?php echo number_format(priceColor(CFS()->get( 'price', $_REQUEST['product-ids']),$_REQUEST['product-ids']), 0, ',', ' ').' ₽';?></div>
    <div class="listing__title">Basic</div>
   </div>
 <?php endif;
 foreach ( $colors as $key => $value ):?>
 <div class="listing__item colors__item colors__color" data-item="<?php echo $key;?>" data-type="color" data-price="<?php echo array_key_first(CFS()->get( 'price', $value['material-price'][0]));?>">
   <img class="listing__foto" src="<?php echo array_shift($value['gallery'])['img-jpg'];?>">
-  <div class="listing__price"><?php echo priceColor(CFS()->get( 'price', $value['material-price'][0]),$_REQUEST['product-ids']); ?></div>
+  <div class="listing__price"><?php echo number_format(priceColor(CFS()->get( 'price', $value['material-price'][0]),$_REQUEST['product-ids']), 0, ',', ' ').' ₽'; ?></div>
   <div class="listing__title"><?php echo $value['color-name']; ?></div>
 </div>
 <?php endforeach;?>

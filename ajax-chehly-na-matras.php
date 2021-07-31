@@ -54,7 +54,8 @@ if ($_REQUEST && !empty($_REQUEST) && $_REQUEST['mattress-size'] && $_REQUEST['c
     jQuery('.cloth__popup').addClass('hidden');
   });
   jQuery('#choice-mattress').on('click', function(){
-    jQuery('#product__chehly-na-matras').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-chehly-na-matras .product__add-item').html(jQuery('.cloth__popup-title').html());
+    jQuery('#additional-chehly-na-matras').removeClass('hidden');
     jQuery('#add-chehly-na-matras').attr('name','add-more-to-cart[]');
     jQuery('#add-chehly-na-matras').attr('value',ids);
     jQuery('#add-chehly-na-matras-deposit').attr('name',mid+'-deposit-radio');

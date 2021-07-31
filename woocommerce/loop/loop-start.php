@@ -19,4 +19,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="listing" <?php if(!is_shop()&&!is_product()&&!is_product_category('aksessuary')&&!is_product_category('services')){echo 'data-size="big"';} if(!is_shop()&&!is_product()&&!is_product_category('aksessuary')&&!is_product_category('v-nalichii')&&!is_product_category('services')){echo 'data-box="box" id="result-product"';} if(is_product()){echo 'data-related';}?>>
+<div class="listing" <?php if(!is_shop()&&!is_product()&&!is_product_category('aksessuary')&&!is_product_category('v-nalichii')&&!is_product_category('services')){echo 'id="result-product"';} if(is_product()){echo 'data-related';} if(!is_product_category('services')){echo 'data-transform="uppercase"';}?>>

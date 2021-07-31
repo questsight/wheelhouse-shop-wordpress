@@ -1,6 +1,6 @@
 jQuery( document ).ready( function() {
   var scheme = false;
-  jQuery(".product__img").on('click', function(){
+  jQuery(".product__img").on('click touchend', function(){
     jQuery('.product__first img').attr('src',jQuery(this).attr('data-src'));
     if(jQuery(this).attr('data-scheme')){
       scheme = true;
@@ -99,7 +99,7 @@ jQuery( document ).ready( function() {
     mouseMove.apply(this, arguments);
     ui.glass.on('mousemove', mouseMove);
   }});
-  jQuery('.product__variation-choice span').on('click', function(){
+  jQuery('.product__variation-choice span').on('click touchend', function(){
     jQuery('>.product__variation-select',jQuery(this).parent('.product__variation-choice')).toggleClass('hidden');
   });
   jQuery( ".product__variation-input input" ).change(function() {
@@ -112,20 +112,24 @@ jQuery( document ).ready( function() {
       jQuery('#'+ids).change();
     }
   });
+jQuery('.wc-pao-addon-name').each(function() {
+  jQuery(this).attr("data-position",jQuery(this).position().top);
+})
 jQuery('.ajax_add_to_cart').on('click', function(){
   var validation = true;
   jQuery('select.product__variation-choice').each(function() {
     if(!jQuery(this).val()){
-      jQuery(this).addClass("accent");
+      jQuery(this).parent().parent().children('.wc-pao-addon-name').addClass("accent");
       validation = false;
       jQuery(this).change(function() {
-        jQuery(this).removeClass("accent");
+        jQuery(this).parent().parent().children('.wc-pao-addon-name').removeClass("accent");
       });
     }
   });
   jQuery('[name="_material[]"]').each(function() {
     if(!jQuery(this).val()){
-      if(jQuery(".choice__basic").hasClass('hidden')&&jQuery(".choice__color").hasClass('hidden')){
+      jQuery('#_material-title').addClass("accent");
+      /*if(jQuery(".choice__basic").hasClass('hidden')&&jQuery(".choice__color").hasClass('hidden')){
         jQuery('#product__colors').addClass("accent").on('click', function(){
           jQuery(this).removeClass("accent");
         });
@@ -147,19 +151,74 @@ jQuery('.ajax_add_to_cart').on('click', function(){
         jQuery('.choice__pillar').children('.product__pillar').addClass("accent").on('click', function(){
           jQuery(this).removeClass("accent");
         });
-      }
+      }*/
       validation = false;
-      jQuery(this).change(function() {
-        jQuery(this).removeClass("accent");
-      });
     }
   });
   if(!validation){
-    
-    jQuery('html, body').animate({
-        scrollTop: jQuery(".accent").offset().top - 20
-    }, 0);
+    if ( window.matchMedia( '(min-width: 768px)' ).matches ) {
+      jQuery('html,body').animate({
+        scrollTop: jQuery(".product__form-scroll").offset().top - 20,
+      }, 0);
+      jQuery('.product__form-scroll').animate({
+        scrollTop: jQuery(".accent").attr('data-position') - 30,
+      }, 0);
+    }else{
+      jQuery('html,body').animate({
+        scrollTop: jQuery(".accent").position().top - 20,
+      }, 0); 
+    }
+    jQuery('[name="_material[]"]').each(function() {
+      if(!jQuery(this).val()){
+        acc = 0;
+      }
+    })
     return false;
   }
 });
+jQuery('.product__sidebar-option').on('click touchend', function(){
+  jQuery('.product__sidebar-option').removeClass('active');
+  jQuery(this).addClass('active');
+  jQuery('.product__sidebar').addClass('hidden');
+  jQuery('.product__sidebar[data-type="'+jQuery(this).attr('data-call')+'"]').removeClass("hidden");
 });
+jQuery('.product__variation-text').on('click', function(){
+  if(jQuery(this).attr('data-select')){
+    jQuery('#'+jQuery(this).attr('data-select')).children('[value='+jQuery(this).attr('data-option')+']').prop('selected',true).change();
+    
+    jQuery('[data-select="'+jQuery(this).attr("data-select")+'"]').parent().removeClass('active');
+    jQuery(this).parent().addClass('active');
+  }
+});
+jQuery('.wc-pao-addon-osnovanie-spalnogo-mesta p .wc-pao-addon-image-swatch').on("click touchend", function(){
+  jQuery('[data-slug="wc-pao-addon-osnovanie-spalnogo-mesta"]').html('- '+jQuery(this).attr('data-item'));
+});
+jQuery('.wc-pao-addon-vybrat-formu-opor p .wc-pao-addon-image-swatch').on("click touchend", function(){
+  jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch').addClass('hidden');
+  if(jQuery(this).attr('data-item')!='Скользящий подпятник'){
+    jQuery('.wc-pao-addon-vybrat-czvet-opor').removeClass('hidden');
+  }else{
+    jQuery('.wc-pao-addon-vybrat-czvet-opor').addClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor select option').prop('selected', false);
+    jQuery('.wc-pao-addon-vybrat-czvet-opor select option:last').prop('selected', true);
+  }
+  if(jQuery(this).attr('data-item')=='Пирамида 45 мм'||jQuery(this).attr('data-item')=='Пирамида 100 мм'||jQuery(this).attr('data-item')=='Пирамида 120 мм'||jQuery(this).attr('data-item')=='Сфера 45 мм'||jQuery(this).attr('data-item')=='Фигурная 100 мм'){
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет белый"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет серый"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет натуральный бук"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет орех"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет венге"]').removeClass('hidden');
+    jQuery('.wc-pao-addon-vybrat-czvet-opor p .wc-pao-addon-image-swatch[data-item="Цвет черный"]').removeClass('hidden');
+  }
+});
+if(jQuery('iframe#v3d_iframe')){
+    var hC = jQuery('iframe#v3d_iframe').width() / 3 * 2;
+    jQuery('iframe#v3d_iframe').height(hC);
+  } 
+});
+jQuery( window).resize(function() {
+  if(jQuery('iframe#v3d_iframe')){
+    var hC = jQuery('iframe#v3d_iframe').width() / 3 * 2;
+    jQuery('iframe#v3d_iframe').height(hC);
+  } 
+})

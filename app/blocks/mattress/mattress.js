@@ -59,7 +59,7 @@ jQuery(document).ready(function () {
   jQuery('.variation_id').change( function(){
     jQuery('[name="mattress-size"]').attr('value',jQuery('#pa_size-krd').val());
   });
-  jQuery('#product__mattress').on('click', function(){
+  jQuery('#product__mattress').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -74,7 +74,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__namatrasniki').on('click', function(){
+  jQuery('#product__namatrasniki').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -89,7 +89,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__chehly-na-matras').on('click', function(){
+  jQuery('#product__chehly-na-matras').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     var str = jQuery("#mattress-size").serialize();
     jQuery("#result-mattress").html('<div class="spinner"></div>');
@@ -103,7 +103,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__pokryvala').on('click', function(){
+  jQuery('#product__pokryvala').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     //jQuery('[name="item"]').attr('value',jQuery(this).attr('data-item'));
     var str = jQuery("#mattress-size").serialize();
@@ -118,7 +118,7 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('#product__podushki').on('click', function(){
+  jQuery('#product__podushki').on('click touchend', function(){
     jQuery('.mattress').removeClass('hidden');
     var str = jQuery("#mattress-size").serialize();
     jQuery("#result-mattress").html('<div class="spinner"></div>');
@@ -132,14 +132,14 @@ jQuery(document).ready(function () {
     });
     jQuery('#result-mattress').removeClass('hidden');
   });
-  jQuery('.mattress__close').on('click', function(){
+  jQuery('.mattress__close').on('click touchend', function(){
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-mattress').addClass('hidden');
     jQuery('.mattress').addClass('hidden');
   });
-  jQuery('.product__delete').on('click', function(){
+  jQuery('.product__delete').on('click touchend', function(){
     var cat = jQuery(this).attr("id").replace('del-', '');
-    if(cat=='mattress'){
+    /*if(cat=='mattress'){
       if(jQuery('#product__mattress').attr('data-fix')){
         jQuery('#product__mattress').html('Выбрать матрас');
       }else{
@@ -153,7 +153,7 @@ jQuery(document).ready(function () {
       jQuery('#product__pokryvala').html('Добавить покрывало');
     }else if (cat=='podushki') {
       jQuery('#product__podushki').html('Добавить подушки');
-    }
+    }*/
     if(cat=='podushki'){
       jQuery('[data-deposit="podushki"]').remove();
       jQuery('[data-type="add-podushki"]').remove();
@@ -171,6 +171,8 @@ jQuery(document).ready(function () {
     jQuery('.summary .price del .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+rp) + " ₽");
     jQuery('.summary .price ins .woocommerce-Price-amount bdi').html(new Intl.NumberFormat('ru-RU').format(+sp) + " ₽");
     jQuery('#product__'+cat).parent('.product__variation').removeClass('choice');
-    jQuery('#product__'+cat).parent('.product__variation').children('.product__delete').addClass('hidden');
+    jQuery('#additional-'+cat+' .product__add-item').html('');
+    jQuery('#additional-'+cat).addClass('hidden');
+    jQuery('#product-'+cat).removeClass('active');  //jQuery('#product__'+cat).parent('.product__variation').children('.product__delete').addClass('hidden');
   });
 })

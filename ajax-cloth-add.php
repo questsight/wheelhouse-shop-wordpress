@@ -13,7 +13,7 @@ foreach ( get_the_category() as $key => $label ) {
 }
 foreach ( $fields as $field ){?>        
 <div class="cloth__item">
-    <img class="listing__foto" src="<?php echo $field['icon-jpg'];?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>">
+    <img class="listing__foto" src="<?php echo $field['icon-jpg'];?>" loading="lazy" alt="<?php echo get_bloginfo('description'); ?> <?php echo get_bloginfo('name'); ?>"  data-texture="<?php echo $field['texture'];?>">
     <div class="listing__title"><?php echo $cat;?> - <?php echo  $field['name-color'];;?></div>
 </div>
 <?php } endif;?> 
@@ -23,7 +23,7 @@ foreach ( $fields as $field ){?>
     <div class="cloth__button" id="choice">Выбрать</div>
     <div class="cloth__button" id="exit">Посмотреть еще</div>
 </div>
-<?}else{
+<?php }else{
     if($_REQUEST['product_cat'] == 'krovati'){
         $n = 'изголовья';
     }elseif($_REQUEST['product_cat'] == 'detskie-krovati'){
@@ -38,20 +38,36 @@ foreach ( $fields as $field ){?>
   var material;
   jQuery('#result-cloth .cloth__item').on('click', function(){
      material = jQuery(this).children('.listing__title').html();
+     url = jQuery(this).children('.listing__foto').attr('data-texture');
      jQuery('.cloth__popup-title').html(material);
     jQuery('.cloth__popup').removeClass('hidden');
   });
   jQuery('#exit').on('click', function(){
     material = "";
+    url ="";
     jQuery('.cloth__popup').addClass('hidden');
   });
-    jQuery('#choice').on('click', function(){
+  jQuery('#choice').on('click', function(){
     jQuery('[data-key="<?php echo $item;?>"]').attr('value',material);
-    jQuery('[data-item="<?php echo $item;?>"]').html(jQuery('.cloth__popup-title').html());
+    //jQuery('[data-item="<?php echo $item;?>"]').html(jQuery('.cloth__popup-title').html());
+    jQuery('[data-item="<?php echo $item;?>"]').parent().addClass('choice');
+    jQuery('[data-slug="material<?php echo $item;?>"]').html(jQuery('.cloth__popup-title').html());
     jQuery('.cloth__popup').addClass('hidden');
     jQuery('#result-cloth').addClass('hidden');
     jQuery('#cloth__color').removeClass('hidden');
     jQuery('.cloth__color').removeClass('hidden');
     jQuery('.cloth').addClass('hidden');
+    jQuery('iframe#v3d_iframe').contents().find('#material<?php echo $item;?>').focus();
+    jQuery('iframe#v3d_iframe').contents().find('#material<?php echo $item;?>').val(url);
+    jQuery('iframe#v3d_iframe').contents().find('#material<?php echo $item;?>').blur();
+    var acc = 1;
+    jQuery('[name="_material[]"]').each(function() {
+      if(!jQuery(this).val()){
+        acc = 0;
+      }
+    })
+    if(acc==1){
+      jQuery('#_material-title').removeClass("accent");
+    }
   });
 </script>

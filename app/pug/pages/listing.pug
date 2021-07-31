@@ -1,11 +1,11 @@
 extends ../layouts/default.pug
 
 block site__content
-  .content__box
-    form#filter-materialy.filter.hidden_type_min-md
-      .filter__close.hidden_type_max-md &times;
+  form#filter-materialy.filter.hidden_type_min-md
+    .filter__close.hidden_type_max-md &times;
+    .filter__box
       .filter__title(data-type="producer") Поставщик
-      .filter__item.hidden_type_min-md(data-type="producer")
+      .filter__item.hidden(data-type="producer")
         .filter__one
           input.filter__input(type="checkbox" name="producer[]" value="CKMF" id="CKMF")
           label.filter__label(for="CKMF") CKMF
@@ -33,8 +33,9 @@ block site__content
         .filter__one
           input.filter__input(type="checkbox" name="producer[]" value="Souz-m" id="Souz-m")
           label.filter__label(for="Souz-m") Souz-m
+    .filter__box
       .filter__title(data-type="price") Ценовая категория
-      .filter__item.hidden_type_min-md(data-type="price")
+      .filter__item.hidden(data-type="price")
         .filter__one
           input.filter__input(type="checkbox" name="price[]" value="1" id="price-1")
           label.filter__label(for="price-1") Категория 1
@@ -50,8 +51,9 @@ block site__content
         .filter__one
           input.filter__input(type="checkbox" name="price[]" value="5" id="price-5")
           label.filter__label(for="price-5") Категория 5
+    .filter__box
       .filter__title(data-type="collection") Подходит для коллекции
-      .filter__item.hidden_type_min-md(data-type="collection")
+      .filter__item.hidden(data-type="collection")
         .filter__one
           input.filter__input(type="checkbox" name="collection[]" value="FRAME" id="FRAME")
           label.filter__label(for="FRAME") FRAME
@@ -79,8 +81,9 @@ block site__content
         .filter__one
           input.filter__input(type="checkbox" name="collection[]" value="TRIANGLE" id="TRIANGLE")
           label.filter__label(for="TRIANGLE") TRIANGLE
+    .filter__box
       .filter__title(data-type="marker") Цвет
-      .filter__item.hidden_type_min-md(data-type="marker")
+      .filter__item.hidden(data-type="marker")
         .filter__one
           input.filter__input(type="checkbox" name="marker[]" value="neutral" id="neutral")
           label.filter__label(for="neutral") Нейтральный
@@ -108,78 +111,33 @@ block site__content
         .filter__one
           input.filter__input(type="checkbox" name="marker[]" value="yellow" id="yellow")
           label.filter__label(for="yellow") Жёлтый, горчичный
-      .filter__show.hidden_type_max-md Показать
-    .filter__call.hidden_type_max-md Открыть фильтр
-        i.fa.fa-filter(aria-hidden="true")
-    .listing(data-box='box' data-size="big" data-flip='flip')
-      a.listing__item.flip(href="#" data-item="1" data-description="test")
-        .flip__front
-          picture
-            source(srcset='assets/images/komanda-wh-ushakova.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
-            img.listing__foto(src='assets/images/komanda-wh-ushakova.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-          .listing__title имя 1
-        .flip__back test
-      .listing__item(data-item="2" data-description="<p>test2</p")
+    .filter__show.hidden_type_max-md Показать
+  .filter__call.hidden_type_max-md Открыть фильтр
+      i.fa.fa-filter(aria-hidden="true")
+  .listing(data-box='box' data-size="big" data-flip='flip')
+    a.listing__item.flip(href="#" data-item="1" data-description="test")
+      .flip__front
         picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 2
-      a(href="#" data-item="3").listing__item
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 3
-      .listing__item(data-item="4")
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 4
-      a(href="#" data-item="5").listing__item
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 5
-      .listing__item(data-item="6")
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 6
-      a(href="#" data-item="7").listing__item
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 7
-      .listing__item(data-item="8")
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 8
-      a(href="#" data-item="9").listing__item
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 9
-      .listing__item(data-item="10")
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 10
-      a(href="#" data-item="11").listing__item
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 11
-      .listing__item(data-item="12")
-        picture
-          source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
-          img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
-        .listing__title имя 12
-      .listing__popup.hidden
-        .listing__close &times;
-        .listing__arrow-left &laquo;
-        .listing__arrow-right &raquo;
-        .listing__popup-text
-          .listing__popup-title
-          .listing__popup-description
-        .listing__popup-foto
-          img(src='' alt="Студия авторской мебели WheelHouse")
+          source(srcset='assets/images/komanda-wh-ushakova.webp' type='image/webp' alt="Студия авторской мебели WheelHouse")
+          img.listing__foto(src='assets/images/komanda-wh-ushakova.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+        .listing__title имя 1
+      .flip__back test
+    .listing__item(data-item="2" data-description="<p>test2</p")
+      picture
+        source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 2
+    a(href="#" data-item="3").listing__item
+      picture
+        source(srcset='assets/images/komanda-wh-icon.jpg' type='image/webp' alt="Студия авторской мебели WheelHouse")
+        img.listing__foto(src='assets/images/komanda-wh-icon.jpg' loading="lazy" alt="Студия авторской мебели WheelHouse")
+      .listing__title имя 3
+    .listing__popup.hidden
+      .listing__close &times;
+      .listing__arrow-left &laquo;
+      .listing__arrow-right &raquo;
+      .listing__popup-text
+        .listing__popup-title
+        .listing__popup-description
+      .listing__popup-foto
+        img(src='' alt="Студия авторской мебели WheelHouse")

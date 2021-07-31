@@ -34,13 +34,13 @@ defined( 'ABSPATH' ) || exit;
                 }else{
                     $mattress = false;
                 }
-                if ($cart_item['color']){
+                if (array_key_exists("color",$cart_item)&&$cart_item['color']){
                     $prName = $_product->get_name() . '&nbsp;' .$cart_item['color'];
                 }else{
                     $prName = $_product->get_name();
                 }
 				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
-                    if ($cart_item['link']){
+                    if (array_key_exists("link",$cart_item)&&$cart_item['link']){
                         $product_permalink = $cart_item['link'];
                     }else{
                         $product_permalink = strtok(apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key ), '?');
@@ -50,7 +50,7 @@ defined( 'ABSPATH' ) || exit;
 					<div class="cart__item woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
             <div class="catr__product product-thumbnail">
 						<?php
-                        if ($cart_item['img']){
+                        if (array_key_exists("img",$cart_item)&&$cart_item['img']){
                             $thumbnail = '<img width="450" height="300" src="'.$cart_item['img'].'" class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail" alt="" loading="lazy">';
                         }else{
                             $thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );   

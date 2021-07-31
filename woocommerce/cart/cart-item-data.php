@@ -21,7 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="cart__meta">
 	<?php foreach ( $item_data as $data ) :
 	    if($data['display'] != 'false' && $data['key'] != "категория ткани" && $data['key'] !="Deposit Amount" && $data['key'] !="Первый платёж:" && $data['key'] !="Второй платеж:" && $data['key'] !="Second Payment Amount" && $data['key'] !='Duration' && $data['key'] !='Booking Type' && $data['key'] !='Time Zone'):
-	        $key = str_replace("Выбрать", "", $data['key']);
+	        $key = str_replace("Выбрать форму", "Форма", $data['key']);
+            $key = str_replace("Выбрать", "", $key);
             $key = str_replace("Booking Date", "Дата", $key);
             $key = str_replace("Booking Time", "Время", $key);
 	        $key = str_replace("выбрать", "", $key);?>

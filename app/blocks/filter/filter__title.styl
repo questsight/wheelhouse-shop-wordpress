@@ -1,13 +1,18 @@
 .filter__title
   text-transform uppercase
   font-family subtitleFont
-  font-size 16px
-  padding 30px 0 10px
+  font-size 13px
+  display flex
+  align-items center
+  cursor pointer
 .filter__title:after
   content "\02C5"
-  padding-left 5px
-  @media only screen and (min-width: navigationBreakPoint)
-    content ''
+  padding-left: 7px;
+  padding-top: 7px;
+  font-size 30px
 .filter__title.open:after   
-   content "\02C4" 
+  content "\02C4" 
+  padding-left: 7px;
+  padding-top: 7px;
+  font-size 30px
     

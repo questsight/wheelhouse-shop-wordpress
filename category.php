@@ -4,14 +4,14 @@ if ($_REQUEST && !empty($_REQUEST)) {
   $cat="&cat=" . $_REQUEST['cat'];
 }
 ?>
-      <div class="content__box">
         <form class="filter hidden_type_min-md" id="filter-materialy">
           <div class="filter__close hidden_type_max-md">&times;</div>
           <input type="hidden" name="cat" value="<?php $category=get_queried_object(); echo $category->term_id;?>">
           <?php
             if (current_user_can('manage_options'))  { ?>
+            <div class="filter__box">
           <div class="filter__title" data-type="producer">Поставщик</div>
-          <div class="filter__item hidden_type_min-md" data-type="producer">
+          <div class="filter__item hidden" data-type="producer">
             <?php $fields = CFS()->find_fields( array( 'field_name' => 'producer' ))['0']['options']['choices'];
             foreach ($fields as $key => $value) {
             ?>
@@ -21,9 +21,11 @@ if ($_REQUEST && !empty($_REQUEST)) {
             </div>
             <?php } ?>
           </div>
+            </div>
           <?php } ?>
+            <div class="filter__box">
           <div class="filter__title" data-type="price">Ценовая категория</div>
-          <div class="filter__item hidden_type_min-md" data-type="price">
+          <div class="filter__item hidden" data-type="price">
             <?php 
             if(get_queried_object()->slug != 'alcantara'){
             $fields = CFS()->find_fields( array( 'field_name' => 'price' ))['0']['options']['choices'];
@@ -45,8 +47,10 @@ if ($_REQUEST && !empty($_REQUEST)) {
             </div>
             <?php } ?>
           </div>
+            </div>
+            <div class="filter__box">
           <div class="filter__title" data-type="collection">Подходит для коллекции</div>
-          <div class="filter__item hidden_type_min-md" data-type="collection">
+          <div class="filter__item hidden" data-type="collection">
             <?php $fields = CFS()->find_fields( array( 'field_name' => 'collection' ))['0']['options']['choices'];
             foreach ($fields as $key => $value) { if($key != "empty"){
             ?>
@@ -56,8 +60,10 @@ if ($_REQUEST && !empty($_REQUEST)) {
             </div>
             <?php }} ?>
           </div>
+                </div>
+            <div class="filter__box">
           <div class="filter__title" data-type="marker">Цвет</div>
-          <div class="filter__item hidden_type_min-md" data-type="marker">
+          <div class="filter__item hidden" data-type="marker">
             <?php $fields = CFS()->find_fields( array( 'field_name' => 'marker' ))['0']['options']['choices'];
             foreach ($fields as $key => $value) {
             ?>
@@ -67,10 +73,13 @@ if ($_REQUEST && !empty($_REQUEST)) {
             </div>
             <?php } ?>
           </div>
+                </div>
           <div class="filter__show hidden_type_max-md">Показать</div>
         </form>
+        <div class="content__box">
         <div class="filter__call hidden_type_max-md">Открыть фильтр<i class="fa fa-filter" aria-hidden="true"></i></div>
-        <div class="listing" id="result-materialy" data-box='box'>
+        </div>
+        <div class="listing" id="result-materialy">
         <?php
         if ($_REQUEST && !empty($_REQUEST)) {
           $cat="&cat=" . $_REQUEST['cat'];
@@ -85,7 +94,6 @@ if ($_REQUEST && !empty($_REQUEST)) {
           </a>
           <?php endwhile; endif; ?>
         </div>
-      </div>
 
 
 <?php get_footer();?>
